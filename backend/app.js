@@ -11,10 +11,6 @@ const { environment } = require('./config');
 const isProduction = environment === 'production'
 
 const app = express();
-// backend/app.js
-
-
-// ...
 
 
 app.use(morgan('dev'));

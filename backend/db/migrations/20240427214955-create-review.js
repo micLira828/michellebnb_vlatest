@@ -13,10 +13,16 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       userId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: 
+        { model: 'Users'
+      } // plural form }
       },
       spotId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: { 
+          model: 'Spots'
+        } 
       },
       review: {
         type: Sequelize.TEXT

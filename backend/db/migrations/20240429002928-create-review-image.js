@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('spotImages', {
+    await queryInterface.createTable('ReviewImages', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -15,11 +15,11 @@ module.exports = {
       url: {
         type: Sequelize.BLOB
       },
-      preview: {
-        type: Sequelize.BOOLEAN
-      },
-      spotId: {
-        type: Sequelize.INTEGER
+      reviewId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Reviews' 
+       }
       },
       createdAt: {
         allowNull: false,
@@ -32,6 +32,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('spotImages');
+    await queryInterface.dropTable('ReviewImages');
   }
 };

@@ -15,14 +15,10 @@ module.exports = (sequelize, DataTypes) => {
       Spot.hasMany(models.SpotImage, {foreignKey: "spotId" });
       Spot.hasMany(models.Booking, { foreignKey: "spotId" });
       Spot.hasMany(models.Review, { foreignKey: "spotId" });
+      Spot.belongsTo(models.User, { foreignKey: "ownerId" });
     }
   }
   Spot.init({
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
     latitude: DataTypes.DECIMAL,
     longitude: DataTypes.DECIMAL,
     ownerId: DataTypes.INTEGER,

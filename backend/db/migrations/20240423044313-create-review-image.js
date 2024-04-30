@@ -1,8 +1,12 @@
 'use strict';
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
+}
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Bookings', {
+    await queryInterface.createTable('ReviewImages', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,21 +16,14 @@ module.exports = {
       id: {
         type: Sequelize.INTEGER
       },
-      userId: {
+      url: {
+        type: Sequelize.BLOB
+      },
+      reviewId: {
         type: Sequelize.INTEGER,
-        references: { 
-          model: 'Users'
-         } // plural form }
-      },
-      spotId: {
-        type: Sequelize.INTEGER,
-        references: { model: 'Spots' } // plural form }
-      },
-      startDate: {
-        type: Sequelize.DATE
-      },
-      endDate: {
-        type: Sequelize.DATE
+        references: {
+          model: 'Reviews' 
+       }
       },
       createdAt: {
         allowNull: false,
@@ -39,6 +36,7 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Bookings');
+    options.tableName = "ReviewImages";
+    return queryInterface.dropTable(options);
   }
 };

@@ -18,6 +18,12 @@ router.get('/:spotId', async(req, res) => {
    res.json(spot);
 });
 
+router.get('/:spotId/reviews', async(req, res) => {
+   const spot_id = req.params.spotId;
+   const spot = await Spot.findByPk(spot_id);
+   const spot_reviews = spot.getReviews();
+   res.json(spot_reviews);
+});
 
 router.post('/', async(req, res) => {
      const spot = await Spot.create(

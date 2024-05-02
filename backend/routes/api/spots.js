@@ -1,7 +1,7 @@
 // backend/routes/api/session.js
 const express = require('express');
 const { Op } = require('sequelize');
-const { Spot, Review } = require('../../db/models');
+const { Spot, Review, Booking } = require('../../db/models');
 const { kMaxLength } = require('buffer');
 
 const router = express.Router();
@@ -16,6 +16,18 @@ router.get('/:spotId', async(req, res) => {
    const spot_id = req.params.spotId;
    const spot = await Spot.findByPk(spot_id);
    res.json(spot);
+});
+
+router.get('/:spotId/bookings', async(req, res) => {
+   const {spotId} = req.params;
+   //const spot = await Spot.findByPk(spot_id);
+   const spot_bookings = await Booking.findAll({
+      where: {
+         spotId: spotId
+      }
+   });
+  
+   res.json(spot_bookings);
 });
 
 router.get('/:spotId/reviews', async(req, res) => {

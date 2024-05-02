@@ -80,6 +80,22 @@ router.post('/', async(req, res) => {
    res.json(spot_booking);
 });
 
+router.post('/:spotId/reviews', async(req, res) => {
+   const {spotId} = req.params;
+   //const spot = await Spot.findByPk(spot_id);
+   const spot_review = await Review.create(
+      { 
+       userId: req.body.userId, 
+       spotId: spotId,
+       review: req.body.review,
+       stars: req.body.stars
+      }
+  );
+  
+   res.json(spot_review);
+});
+
+
  router.put('/:spotId', async(req, res) => {
    const spot_id = req.params.spotId;
    const spot= await Spot.findByPk(spot_id);

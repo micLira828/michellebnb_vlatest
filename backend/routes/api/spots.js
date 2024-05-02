@@ -62,6 +62,24 @@ router.post('/', async(req, res) => {
     res.json(spot);
  });
 
+
+
+
+ router.post('/:spotId/bookings', async(req, res) => {
+   const {spotId} = req.params;
+   //const spot = await Spot.findByPk(spot_id);
+   const spot_booking = await Booking.create(
+      { 
+       userId: req.body.userId, 
+       spotId: spotId,
+       startDate: req.body.startDate,
+       endDate: req.body.endDate
+      }
+  );
+  
+   res.json(spot_booking);
+});
+
  router.put('/:spotId', async(req, res) => {
    const spot_id = req.params.spotId;
    const spot= await Spot.findByPk(spot_id);

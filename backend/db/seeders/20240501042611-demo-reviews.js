@@ -37,6 +37,13 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
+
+    options.tableName = 'Reviews';
+    const Op = Sequelize.Op;
+    return queryInterface.bulkDelete(options, {
+      review: { [Op.in]: ['Beautiful place!', 'Cozy, but could not figure out coffee machine and wifi', 'Great location, cozy room, great, amnenities, and polite staff. Overall great experience!'] }
+    }, {});
+  
  
   }
 };

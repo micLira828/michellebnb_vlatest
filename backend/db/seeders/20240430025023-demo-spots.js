@@ -54,6 +54,6 @@ module.exports = {
      * Example:
      * 
      */
-    await queryInterface.bulkDelete('Spots', null, {});
+   
   }
 };

@@ -1,7 +1,7 @@
 // backend/routes/api/session.js
 const express = require('express');
 const { Op } = require('sequelize');
-const { Spot, Review, Booking, SpotImage } = require('../../db/models');
+const { Spot, Review, Booking, SpotImage, User } = require('../../db/models');
 const { kMaxLength } = require('buffer');
 
 const router = express.Router();
@@ -10,6 +10,26 @@ const router = express.Router();
 router.get('/', async(req, res) => {
     const spots = await Spot.findAll();
     res.json(spots);
+});
+
+router.get('/current', async(req, res) => {
+     
+   console.log(req.url);
+   const { user } = req;
+   
+   if (user) {
+     const safeUser = {
+       id: user.id,
+       email: user.email,
+       username: user.username,
+     };
+     const usersSpots = await Spot.findAll({
+      where: {
+         ownerId: safeUser.id
+      }
+  });
+    res.json(usersSpots);
+   }
 });
 
 router.get('/:spotId', async(req, res) => {
@@ -43,12 +63,7 @@ router.get('/:spotId/reviews', async(req, res) => {
 });
 
 
-// router.get('/current', async(req, res) => {
-//    const usersSpots = await Spot.findAll({
 
-//    });
-//    res.json(usersSpots);
-// });
 
 
 router.post('/', async(req, res) => {

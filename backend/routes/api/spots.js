@@ -1,9 +1,6 @@
 // backend/routes/api/session.js
 const express = require('express');
-const { Op } = require('sequelize');
 const { Spot, Review, Booking, SpotImage, User } = require('../../db/models');
-const { kMaxLength } = require('buffer');
-
 const router = express.Router();
 
 //Gets all of the spots
@@ -91,12 +88,13 @@ router.post('/', async(req, res) => {
    const spotImage = await SpotImage.create(
      { 
        url: req.body.url,
-       reviewId: spotId
+       spotId: spotId
      }
  );
-    res.json(spotImage);
+    res.json({"url":spotImage.url});
  });
 
+ 
 
  router.post('/:spotId/bookings', async(req, res) => {
    const {spotId} = req.params;

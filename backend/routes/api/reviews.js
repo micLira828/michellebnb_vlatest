@@ -35,14 +35,15 @@ router.get('/current', async(req, res) => {
 
 router.post('/:reviewId/images', async(req, res, next) =>{
   const {reviewId} = req.params;
+  //https://testingtraveler.com/wp-content/uploads/2021/03/review.jpg
   // const review = await Review.findByPk(reviewId)
   const reviewImage = await ReviewImage.create(
     { 
       url: req.body.url,
-      reviewId: reviewId
+      reviewId: parseInt(reviewId)
     }
 );
-   res.json(reviewImage);
+   res.json({"url": reviewImage.url});
 });
 
 router.put('/:reviewId', async(req, res, next) =>{

@@ -8,10 +8,10 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('Reviews', {
       id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
       },
       userId: {
         type: Sequelize.INTEGER,
@@ -29,14 +29,14 @@ module.exports = {
         },
         onDelete: 'CASCADE' // plural form }
       },
-      review: {
+      review:{
         type: Sequelize.TEXT
-      },
+      } ,
       stars: {
-        type: Sequelize.DECIMAL
-      },
+        type:Sequelize.DECIMAL},
       createdAt: {
         allowNull: false,
+        type: Sequelize.DATE,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
       },
       updatedAt: {

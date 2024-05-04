@@ -9,6 +9,12 @@ router.get('/', async(req, res) => {
    size = parseInt(size)
    page = parseInt(page) 
 
+   if(size === undefined || page === undefined){
+      const spots = await Spot.findAll();
+      
+      res.json(spots);
+   }
+
     const spots = await Spot.findAll({
         limit: size,
         offset: (page - 1) * size

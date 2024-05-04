@@ -12,6 +12,27 @@ const { append } = require('vary');
 
 const router = express.Router();
 
+router.get('/current', async(req, res) => {
+     
+  console.log(req.url);
+  const { user } = req;
+  
+  if (user) {
+    const safeUser = {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+    };
+    const usersReviews = await Review.findAll({
+     where: {
+        userId: safeUser.id
+     }
+ });
+   res.json(usersReviews);
+  }
+});
+
+
 router.post('/:reviewId/images', async(req, res, next) =>{
   const {reviewId} = req.params;
   // const review = await Review.findByPk(reviewId)

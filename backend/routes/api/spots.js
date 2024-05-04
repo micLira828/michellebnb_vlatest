@@ -5,7 +5,15 @@ const router = express.Router();
 
 //Gets all of the spots
 router.get('/', async(req, res) => {
-    const spots = await Spot.findAll();
+   let {page, size} = req.query
+   size = parseInt(size)
+   page = parseInt(page) 
+
+    const spots = await Spot.findAll({
+        limit: size,
+        offset: (page - 1) * size
+    });
+
     res.json(spots);
 });
 

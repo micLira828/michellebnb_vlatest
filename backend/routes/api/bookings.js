@@ -35,6 +35,11 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res, next) =>
        });
       }
 
+      const userId = req.user.id;
+      if(userId !== booking.userId){
+        return res.status(403).json({message: "Forbidden"})
+     }
+
       await booking.update(
         { 
          userId: req.body.userId, 
@@ -57,9 +62,13 @@ router.delete('/:bookingId', requireAuth, async(req, res) =>{
          message: "Booking couldn't be found"
        });
       }
+      const userId = req.user.id;
+      if(userId !== user.Id){
+        return res.status(403).json({message: "Forbidden"})
+     }
     booking.destroy();
 
-    res.json({"message": "Success! "})
+    res.json({"message": "Successfully deleted"})
 
 });
 

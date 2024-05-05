@@ -2,16 +2,20 @@
 const express = require('express');
 const { SpotImage, Spot} = require('../../db/models');
 const { Model } = require('sequelize');
-
+const { setTokenCookie, requireAuth } = require('../../utils/auth');
 
 const router = express.Router();
 
-router.delete('/:imageId', async(req, res, next) =>{
+router.delete('/:imageId', requireAuth, async(req, res, next) =>{
    const {imageId} = req.params;
    console.log(imageId);
 
    const spotImage = await SpotImage.findByPk(imageId);
-   console.log(spotImage);
+   if(!spotImage){
+      res.status(404).json({
+       message: "Spot image couldn't be found"
+     });
+    }
    
    await spotImage.destroy();
     return res.json({'message': 'Deleted successfully!'});

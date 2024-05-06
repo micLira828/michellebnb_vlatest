@@ -48,8 +48,9 @@ router.get('/current', requireAuth, validateReview, async(req, res) => {
 });
 
 
-router.post('/:reviewId/images', requireAuth, validateReview, async(req, res, next) =>{
+router.post('/:reviewId/images', requireAuth, async(req, res, next) =>{
   const {reviewId} = req.params;
+  
   const review = await Review.findByPk(reviewId)
   //https://testingtraveler.com/wp-content/uploads/2021/03/review.jpg
   // const review = await Review.findByPk(reviewId)
@@ -72,7 +73,7 @@ router.post('/:reviewId/images', requireAuth, validateReview, async(req, res, ne
   const reviewImage = await ReviewImage.create(
     { 
       url: req.body.url,
-      reviewId: parseInt(reviewId)
+      reviewId: reviewId
     }
 );
    res.json({"url": reviewImage.url});
@@ -111,7 +112,6 @@ router.delete('/:reviewId', requireAuth, async(req, res) =>{
  if(userId !== review.userId){
   return res.status(403).json({message: "Forbidden"})
 }
- 
   review.destroy();
 
   res.json({message: "Successfully Deleted"})

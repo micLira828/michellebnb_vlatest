@@ -149,7 +149,7 @@ router.get('/current', requireAuth, async(req, res) => {
    const { user } = req;
 
    const userId = req.user.id;
-   if(userId !== user.Id){
+   if(userId !== user.id){
       return res.status(403).json({message: "Forbidden"})
    }
   

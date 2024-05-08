@@ -105,7 +105,7 @@ router.get('/', async(req, res) => {
    } 
       
    if (minLong !== undefined && maxLong !== undefined){
-      where.longitude = {[Op.gt]: minLat, [Op.lt]:maxLat }
+      where.longitude = {[Op.gt]: minLong, [Op.lt]:maxLong}
    } 
 
    else if(minLong !== undefined) {

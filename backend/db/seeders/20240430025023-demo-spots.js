@@ -12,7 +12,7 @@ module.exports = {
       latitude: 15.0,
       longitude: 10.0,
       ownerId: 1,
-      address: '9707 Red Oak Avenue',
+      address: '9706 Red Oak Avenue',
       name: 'Nessies Retreat',
       country: 'USA',
       city: 'Albany',

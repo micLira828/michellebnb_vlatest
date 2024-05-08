@@ -48,9 +48,9 @@ const validateSpot= [
      .isString()
      .withMessage('City is required.'),
     check('state')
-     .not()
+     .exists({ checkFalsy: true })
      .isString()
-     .withMessage('Username cannot be an email.'),
+     .withMessage('State is required.'),
     check('country')
      .exists({ checkFalsy: true })
      .isLength({ min: 6 })

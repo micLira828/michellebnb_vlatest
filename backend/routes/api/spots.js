@@ -57,12 +57,12 @@ const validateSpot= [
      .withMessage('Country is required.'),
      check('latitude')
      .exists({ checkFalsy: true })
-     .isDecimal({min:-90.0, max: 90.0})
+     .isDecimal({min:-90.0, max:90.0})
      .withMessage('Latitude must be within -90 and 90'),
      check('longitude')
      .exists({ checkFalsy: true })
-     .isDecimal({min:-90.0, max: 90.0})
-     .withMessage('Latitude must be within -90 and 90'),
+     .isDecimal({min:-180.0, max: 180.0})
+     .withMessage('Latitude must be within -180 and 180'),
       check('name')
      .exists({ checkFalsy: true })
      .isLength({ max: 50 })

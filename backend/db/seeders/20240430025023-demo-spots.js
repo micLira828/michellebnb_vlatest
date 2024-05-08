@@ -9,7 +9,7 @@ module.exports = {
   async up (queryInterface, Sequelize) {
    
     await Spot.bulkCreate([{
-      latitide: 15.0,
+      latitude: 15.0,
       longitude: 10.0,
       ownerId: 1,
       address: '9707 Red Oak Avenue',
@@ -21,7 +21,7 @@ module.exports = {
       price: 55.00
      },
      {
-      latitide: 16.0,
+      latitude: 16.0,
       longitude: 11.0,
       ownerId: 1,
       address: '4670 Agee Street',
@@ -33,7 +33,7 @@ module.exports = {
       price: 68.00
      },
      {
-      latitide: 12.0,
+      latitude: 12.0,
       longitude: 11.0,
       ownerId: 1,
       address: '5090 West Colton Avenue',

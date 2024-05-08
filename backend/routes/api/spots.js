@@ -49,7 +49,7 @@ const validateSpot= [
      .withMessage('City is required.'),
     check('state')
      .not()
-     .isEmail()
+     .isString()
      .withMessage('Username cannot be an email.'),
     check('country')
      .exists({ checkFalsy: true })

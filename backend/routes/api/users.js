@@ -11,6 +11,14 @@ const router = express.Router();
 // backend/routes/api/users.js
 // ...
 const validateSignup = [
+  check('firstName')
+  .exists({ checkFalsy: true })
+  .isString()
+  .withMessage('Please provide a valid first name.'),
+  check('lastName')
+  .exists({ checkFalsy: true })
+  .isString()
+  .withMessage('Please provide a valid last name.'),
   check('email')
     .exists({ checkFalsy: true })
     .isEmail()

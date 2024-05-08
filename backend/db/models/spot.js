@@ -19,8 +19,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Spot.init({
-    latitude: DataTypes.DECIMAL,
-    longitude: DataTypes.DECIMAL,
+    lat: DataTypes.DECIMAL,
+    lng: DataTypes.DECIMAL,
     ownerId: DataTypes.INTEGER,
     address: DataTypes.TEXT,
     name: DataTypes.TEXT,

@@ -55,14 +55,14 @@ const validateSpot= [
      .exists({ checkFalsy: true })
      .isLength({ min: 6 })
      .withMessage('Country is required.'),
-     check('latitude')
+     check('lat')
      .exists({ checkFalsy: true })
      .isDecimal({min:-90.0, max:90.0})
      .withMessage('Latitude must be within -90 and 90'),
-     check('longitude')
+     check('lng')
      .exists({ checkFalsy: true })
      .isDecimal({min:-180.0, max: 180.0})
-     .withMessage('Latitude must be within -180 and 180'),
+     .withMessage('Longitude must be within -180 and 180'),
       check('name')
      .exists({ checkFalsy: true })
      .isLength({ max: 50 })
@@ -93,34 +93,29 @@ router.get('/', async(req, res) => {
    }
 
    if(minLat !== undefined && maxLat !== undefined) {
-      where.latitude = {[Op.gt]: minLat, [Op.lt]:maxLat }
+      where.lat = {[Op.gt]: minLat, [Op.lt]:maxLat }
    } 
 
     else if(minLat !== undefined) {
-      where.latitude = {[Op.gt]: minLat}
+      where.lat = {[Op.gt]: minLat}
    } 
 
    else if(maxLat !== undefined) {
-      where.latitude = {[Op.lt]: maxLat}
+      where.lat = {[Op.lt]: maxLat}
    } 
       
    if (minLong !== undefined && maxLong !== undefined){
-      where.longitude = {[Op.gt]: minLong, [Op.lt]:maxLong}
+      where.lng = {[Op.gt]: minLong, [Op.lt]:maxLong}
    } 
 
    else if(minLong !== undefined) {
-      where.latitude = {[Op.gt]: minLong}
+      where.lng = {[Op.gt]: minLong}
    } 
 
    else if(maxLong !== undefined) {
-      where.longitude = {[Op.lt]: maxLong}
+      where.lng = {[Op.lt]: maxLong}
    } 
 
-   else if(minLong !== undefined) {
-      where.longitude = {[Op.gt]: minLong}
-   } 
-
-  
    if (minPrice !== undefined && maxPrice !== undefined){
       where.price = {[Op.gt]: minPrice, [Op.lt]: maxPrice}
    } 

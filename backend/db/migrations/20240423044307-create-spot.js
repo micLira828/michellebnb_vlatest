@@ -14,10 +14,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      latitude: {
+      lat: {
         type: Sequelize.DECIMAL
       },
-      longitude: {
+      lng: {
         type: Sequelize.DECIMAL
       },
       ownerId: {

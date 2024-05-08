@@ -215,25 +215,26 @@ router.get('/:spotId/reviews', async(req, res) => {
 
 
 router.post('/', requireAuth, validateSpot, async(req, res) => {
-     const spot = await Spot.create(
-        { 
-         latitude: req.body.latitude, 
-         longitude: req.body.longitude,
-         ownerId: req.body.ownerId,
-         address: req.body.address,
-         name: req.body.name,
-         country: req.body.country,
-         city: req.body.city,
-         state: req.body.state,
-         description: req.body.description,
-         price: req.body.price
-        }
-    );
+      const {user} = req;
 
-    const userId = req.user.id;
-    if(userId !== spot.userId){
-       return res.status(403).json({message: "Forbidden"})
+    if(!user){
+       return res.status(401).json({message: "Authentication required"})
     }
+
+    const spot = await Spot.create(
+      { 
+       latitude: req.body.latitude, 
+       longitude: req.body.longitude,
+       ownerId: req.body.ownerId,
+       address: req.body.address,
+       name: req.body.name,
+       country: req.body.country,
+       city: req.body.city,
+       state: req.body.state,
+       description: req.body.description,
+       price: req.body.price
+      }
+  );
 
     if(!spot){
       res.status(404).json({

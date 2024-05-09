@@ -268,7 +268,6 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
      });
 
     res.json({
-    "id": spotImage.id,
     "url":spotImage.url, 
     "preview": spotImage.preview});
  });

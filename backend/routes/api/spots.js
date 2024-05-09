@@ -255,7 +255,7 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
        });
    }
    
-   const userId = user.id;
+   const userId = req.user.id;
    if(userId !== spot.ownerId){
       return res.status(403).json({message: "Forbidden"})
    }

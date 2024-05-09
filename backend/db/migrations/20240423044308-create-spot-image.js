@@ -15,7 +15,10 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       url: {
-        type: Sequelize.BLOB
+        type: Sequelize.STRING
+      },
+      preview: {
+        type: Sequelize.BOOLEAN
       },
       spotId: {
         type: Sequelize.INTEGER

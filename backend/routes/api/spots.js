@@ -170,7 +170,7 @@ router.get('/:spotId', async(req, res) => {
    });
 
    if(!spot){
-      return res.status(401).json({message: "Spot couldn't be found"})
+      return res.status(404).json({message: "Spot couldn't be found"})
    }
    res.json(spot);
 });
@@ -215,12 +215,7 @@ router.get('/:spotId/reviews', async(req, res) => {
 
 
 router.post('/', requireAuth, validateSpot, async(req, res) => {
-      const {user} = req;
-
-    if(!user){
-       return res.status(401).json({message: "Authentication required"})
-    }
-
+   const {user} = req;
     const spot = await Spot.create(
       { 
        lat: req.body.lat, 
@@ -236,30 +231,27 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
       }
   );
 
-    if(!spot){
-      res.status(404).json({
-       message: "Spot couldn't be found"
-     });
-    }
+  
     res.json(spot);
  });
 
  router.post('/:spotId/images', requireAuth, async(req, res, next) =>{
    const {spotId} = req.params;
-   const {user} = req.body;
+   const {user} = req;
+
+
    
    const spot = Spot.findByPk(spotId);
+  
+   if(user.id !== spot.ownerId){
+      return res.status(403).json({message: "Forbidden"})
+   }
+
    if(!spotId){
       res.status(404).json({
          message: "Spot couldn't be found"
        });
    }
-   
-   const userId = req.user.id;
-   if(userId !== spot.ownerId){
-      return res.status(403).json({message: "Forbidden"})
-   }
-   
    const spotImage = await SpotImage.create(
      { 
        url: req.body.url,

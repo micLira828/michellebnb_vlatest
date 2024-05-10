@@ -1,31 +1,34 @@
 'use strict';
 
+
+const {Booking} = require('../models');
 let options = {};
-const {Review} = require('../db/models');
 if (process.env.NODE_ENV === 'production') {
   options.schema = process.env.SCHEMA;  // define your schema in options object
 }
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-      await Review.bulkCreate([{
-        userId: 1,
-        spotId: 3,
-        review: 'Beautiful place!',
-        stars: 4.5
+    
+     
+    await Booking.bulkCreate([{
+      spotId: 1,
+      userId: 1,
+      startDate: '2024-11-11',
+      endDate: '2024-11-12'
       },
       {
-        userId: 1,
-        spotId: 1,
-        review: 'Cozy, but could not figure out coffee machine and wifi',
-        stars: 3.5
-      },
-      {
-        userId: 1,
         spotId: 3,
-        review: 'Great location, cozy room, great, amnenities, and polite staff. Overall great experience!',
-        stars: 5.0
-      },
+        userId: 1,
+        startDate: '2024-3-11',
+        endDate: '2024-3-12'
+        },
+        {
+          spotId: 1,
+          userId: 1,
+          startDate:'2024-4-06',
+          endDate: '2024-4-08'
+          }
     ], {});
     
   },
@@ -37,13 +40,12 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-
-    options.tableName = 'Reviews';
+    options.tableName = 'Bookings';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-  
+
     }, {});
   
- 
+   
   }
 };

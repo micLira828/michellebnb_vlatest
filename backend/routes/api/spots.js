@@ -257,7 +257,7 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
    }
 
    else{
-      return res.status(403).json({message: "Forbidden"}, user.id, spot.ownerId);
+      return res.status(403).json({message: "Forbidden", "userId": user.id, "spotOwner": spot.ownerId});
    }
 
    if(!spotId){

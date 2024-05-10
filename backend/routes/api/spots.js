@@ -239,19 +239,21 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
    const {spotId} = req.params;
    const {user} = req;
 
+
+   
    const spot = Spot.findByPk(spotId);
   
    if(user.id === spot.ownerId){
-      const spotImage = await SpotImage.create(
-         { 
-           url: req.body.url,
-           preview: req.body.preview,
-           spotId: spotId
-         });
-    
-        res.json({
-        "url":spotImage.url, 
-        "preview": spotImage.preview});
+      const spotImage = SpotImage.create({
+         url: req.body.url,
+         preview: req.body.preview,
+         spotId: spotId
+      });
+
+      res.json({
+            url: req.body.url,
+            preview: req.body.preview
+      });
    }
 
    else{
@@ -263,7 +265,8 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
          message: "Spot couldn't be found"
        });
    }
-  
+   
+ });
 
  
 

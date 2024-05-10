@@ -251,13 +251,13 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
       });
 
       res.json({
-            url: req.body.url,
-            preview: req.body.preview
+            url: spotImage.url,
+            preview: spotImage.preview
       });
    }
 
    else{
-      return res.status(403).json({message: "Forbidden"})
+      return res.status(403).json({message: "Forbidden"}, user.id, spot.ownerId);
    }
 
    if(!spotId){

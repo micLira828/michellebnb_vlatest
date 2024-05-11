@@ -340,7 +340,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
     }
 
     const userId = req.user.id;
-    if(userId === spot.ownerId){
+    if(userId !== spot.ownerId){
        return res.status(403).json({message: "Forbidden"})
     }
    await spot.update(

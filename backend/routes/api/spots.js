@@ -166,7 +166,7 @@ router.get('/current', requireAuth, async(req, res) => {
 router.get('/:spotId', async(req, res) => {
    const spot_id = req.params.spotId;
    const spot = await Spot.findByPk(spot_id, {
-      include: [SpotImage, User]
+      include: [{model: SpotImage}, {as: 'Owner', model: User}]
    });
 
    if(!spot){
@@ -245,13 +245,10 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
       const spotImage = await SpotImage.create({
          url: req.body.url,
          preview: req.body.preview,
-         spotId: spotId
+         /*spotId: spotId*/
       });
 
-      res.json({
-            url: spotImage.url,
-            preview: spotImage.preview
-      });
+      res.json(spotImage);
    }
 
    else{

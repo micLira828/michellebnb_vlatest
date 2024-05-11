@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
 
       User.hasMany(models.Booking, { foreignKey: "userId" });
 
-      User.hasMany(models.Spot, { foreignKey: "ownerId" });
+      User.hasMany(models.Spot, {as: 'Owner', foreignKey: "ownerId" });
     }
   };
 

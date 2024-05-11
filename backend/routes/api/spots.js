@@ -239,8 +239,6 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
    const {spotId} = req.params;
    const {user} = req;
 
-
-   
    const spot = Spot.findByPk(spotId);
   
    if(user.id === spot.ownerId){
@@ -257,7 +255,7 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
    }
 
    else{
-      return res.status(403).json({message: "Forbidden", "userId": user.id, "spotOwner": spot.ownerId});
+      return res.status(403).json(spot);
    }
 
    if(!spotId){

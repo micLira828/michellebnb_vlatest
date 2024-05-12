@@ -245,10 +245,10 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
       const spotImage = await SpotImage.create({
          url: req.body.url,
          preview: req.body.preview,
-         /*spotId: spotId*/
+         spotId: spotId
       });
 
-      res.json(spotImage);
+      res.json({"id":spotImage.id, "url":spotImage.url, "preview": spotImage.preview});
    }
 
    else{

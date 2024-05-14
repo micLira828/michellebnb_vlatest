@@ -298,7 +298,7 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
 router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => {
    const {spotId} = req.params;
    //const spot = await Spot.findByPk(spot_id);
-  const spot = Spot.findByPk(spotId);
+  const spot = await Spot.findByPk(spotId);
 
   if(!spot){
    res.status(404).json({
@@ -306,10 +306,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
   });
  }
 
- const userId = req.user.id;
- if(userId === spot_review.userId){
-    return res.status(403).json({message: "Forbidden"})
- }
+
   
    const spot_review = await Review.create(
       { 
@@ -321,7 +318,10 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
   );
 
 
-
+ const userId = req.user.id;
+ if(userId === spot_review.userId){
+    return res.status(403).json({message: "Forbidden"})
+ }
 
    res.json(spot_review);
 });

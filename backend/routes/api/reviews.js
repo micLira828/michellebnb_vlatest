@@ -26,7 +26,7 @@ const validateReview = [
 ];
 
 
-router.get('/current', requireAuth, validateReview, async(req, res) => {
+router.get('/current', requireAuth, async(req, res) => {
      
   console.log(req.url);
   const { user } = req;

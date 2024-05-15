@@ -8,7 +8,6 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('ReviewImages', {
       id: {
-        allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
@@ -19,7 +18,8 @@ module.exports = {
       reviewId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Reviews' 
+          model: 'Reviews',
+          key: 'id'
        }
       },
       createdAt: {

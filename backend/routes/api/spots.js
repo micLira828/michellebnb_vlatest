@@ -6,7 +6,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { parseTwoDigitYear } = require('moment');
-const { Op, Sequelize} = require('sequelize');
+const { Op, Sequelize, where} = require('sequelize');
 
 
 const router = express.Router();
@@ -309,6 +309,11 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
 
    const userId = req.user.id;
    
+   const usersReview = await Review.findOne({where: {userId: userId, spotId: spotId}});
+
+   if(usersReview){
+      res.status(500).json({message: "User already has a review for this spot"});
+   }
 
    const spot_review = await Review.create(
       { 

@@ -38,7 +38,7 @@ router.get('/current', requireAuth, async(req, res) => {
       username: user.username,
     };
     const usersReviews = await Review.findAll({
-    include: [Review, User, Spot, ReviewImage],
+    include: [User, Spot, ReviewImage],
      where: {
         userId: safeUser.id
      }

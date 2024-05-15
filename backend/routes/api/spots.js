@@ -6,7 +6,7 @@ const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { parseTwoDigitYear } = require('moment');
-const { Op } = require('sequelize');
+const { Op, Sequelize} = require('sequelize');
 
 
 const router = express.Router();
@@ -166,13 +166,8 @@ router.get('/current', requireAuth, async(req, res) => {
 router.get('/:spotId', async(req, res) => {
    const spot_id = req.params.spotId;
 
-   // const reviews = Review.findAll(
-   //    {  attributes: [[sequelize.fn('COUNT', sequelize.col('review')), 'numReviews'], [sequelize.fn('AVG', sequelize.col('stars')), 'avgRating']],
-   //       where: {spotId: spot_id}}
-   // );
-
    const spot = await Spot.findByPk(spot_id, {
-      include: [{model: SpotImage}, {as: 'Owner', model: User}, {model: Review, attributes: [[sequelize.fn('COUNT', sequelize.col('review')), 'numReviews'], [sequelize.fn('AVG', sequelize.col('stars')), 'avgRating']], where: {spotId: spot_id}}]
+      include: [{model: SpotImage}, {as: 'Owner', model: User}, {model: Review, attributes: [[Sequelize.fn('COUNT', Sequelize.col('review')), 'numReviews'], [Sequelize.fn('AVG', sequelize.col('stars')), 'avgRating']], where: {spotId: spot_id}}]
    });
 
    if(!spot){

@@ -140,8 +140,7 @@ router.get('/', async(req, res) => {
 
 router.get('/current', requireAuth, async(req, res) => {
      
-   console.log(req.url);
-   const { user } = req;
+   const {user} = req;
 
    const userId = req.user.id;
    if(userId !== user.id){
@@ -175,8 +174,6 @@ router.get('/:spotId', async(req, res) => {
    }
    res.json(spot);
 });
-
-
 
 
 router.get('/:spotId/bookings', async(req, res) => {

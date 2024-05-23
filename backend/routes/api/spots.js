@@ -176,7 +176,7 @@ router.get('/:spotId', async(req, res) => {
 });
 
 
-router.get('/:spotId/bookings', async(req, res) => {
+router.get('/:spotId/bookings', requireAuth, async(req, res) => {
    const {spotId} = req.params;
    const spot = await Spot.findByPk(spotId);
    if(spot){

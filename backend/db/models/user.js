@@ -5,6 +5,11 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       // define association here
+      User.hasMany(models.Review, { foreignKey: "userId" });
+
+      User.hasMany(models.Booking, { foreignKey: "userId" });
+
+      User.hasMany(models.Spot, {as: 'Owner', foreignKey: "ownerId" });
     }
   };
 
@@ -21,6 +26,9 @@ module.exports = (sequelize, DataTypes) => {
       username: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: {
+          message: 'User with that username already exists'
+        },
         validate: {
           len: [4, 30],
           isNotEmail(value) {
@@ -33,6 +41,9 @@ module.exports = (sequelize, DataTypes) => {
       email: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: {
+          message: 'User with that email already exists'
+        },
         validate: {
           len: [3, 256],
           isEmail: true

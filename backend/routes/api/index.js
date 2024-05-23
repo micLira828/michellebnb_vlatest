@@ -2,6 +2,11 @@
 const router = require('express').Router();
 const sessionRouter = require('./session.js');
 const usersRouter = require('./users.js');
+const spotsRouter = require('./spots.js');
+const ratingsRouter = require('./reviews.js');
+const bookingsRouter = require('./bookings.js');
+const spotImageRouter = require('./spot-images.js');
+const reviewImageRouter = require('./review-images.js');
 const { restoreUser } = require("../../utils/auth.js");
 // GET /api/set-token-cookie
 const { setTokenCookie } = require('../../utils/auth.js');
@@ -16,12 +21,19 @@ router.use('/session', sessionRouter);
 
 router.use('/users', usersRouter);
 
+router.use('/spots', spotsRouter);
+
+router.use('/spot-images', spotImageRouter);
+
+router.use('/reviews', ratingsRouter);
+
+router.use('/review-images', reviewImageRouter);
+
+router.use('/bookings', bookingsRouter);
+
 router.post('/test', (req, res) => {
   res.json({ requestBody: req.body });
 });
-
-// backend/routes/api/index.js
-// ...
 
 
 router.get('/set-token-cookie', async (_req, res) => {

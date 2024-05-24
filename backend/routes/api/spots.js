@@ -134,22 +134,36 @@ router.get('/', async(req, res) => {
 
    // const spotImages = spot.getSpotImages
    const spots = await Spot.findAll({
-        include: {model: SpotImage},
+        include: [{model: SpotImage}, {model: Review}],
         where,
         limit: size,
         offset: (page - 1) * size
 
     });
     const result = [];
+    let ratingsAverage = 0;
+    let ratingsCount = 0;
     for (let spot of spots){
-      const {SpotImages, ...rest} = await spot.toJSON();
-      console.log(SpotImages);
+      const {SpotImages, Reviews, ...rest} = await spot.toJSON();
+       
        const prettyRes = {...rest}
+       
       for (let img of SpotImages){
         if(img.preview === true){
          prettyRes.previewImage = img.url
         }
       }
+
+      for (let rev of Reviews){
+         ratingsCount++;
+         ratingsAverage += rev.stars;
+       }
+
+      //  if(ratingsCount !== 0){
+         prettyRes.avgStarRating = (ratingsAverage/ratingsCount).toFixed(1);
+      //   }
+   
+        prettyRes.avgStarRating = 'No Ratings Yet';
     
       result.push(prettyRes);
     }
@@ -175,11 +189,42 @@ router.get('/current', requireAuth, async(req, res) => {
        username: user.username,
      };
      const usersSpots = await Spot.findAll({
+      include: [{model: SpotImage}, {model: Review}],
       where: {
          ownerId: safeUser.id
       }
   });
-    res.json(usersSpots);
+
+  const result = [];
+  for (let spot of usersSpots){
+    const {SpotImages, Reviews, ...rest} = await spot.toJSON();
+    console.log(SpotImages);
+     const prettyRes = {...rest}
+    for (let img of SpotImages){
+      if(img.preview === true){
+       prettyRes.previewImage = img.url
+      }
+    }
+
+    let ratingsAverage = 0;
+    let ratingsCount = 0;
+    for (let rev of Reviews){
+      ratingsCount++;
+      ratingsAverage += rev.stars;
+    }
+
+    if(ratingsCount < 1){
+      prettyRes.avgRating = 'No Ratings Yet';
+     }
+
+    else{
+     prettyRes.avgRating = (ratingsAverage/ratingsCount).toFixed(1);
+    }
+
+    result.push(prettyRes);
+  }
+
+    res.json(result);
    }
 });
 
@@ -187,13 +232,40 @@ router.get('/:spotId', async(req, res) => {
    const spot_id = req.params.spotId;
 
    const spot = await Spot.findByPk(spot_id, {
-      include: [{model: SpotImage}, {as: 'Owner', model: User}]
+      include: [{model: SpotImage, attributes: ['id', 'url', 'preview']}, {model: Review}, {as: 'Owner', model: User}]
    });
 
    if(!spot){
       return res.status(404).json({message: "Spot couldn't be found"})
    }
-   res.json(spot);
+
+   const result = [];
+  
+     const {Reviews, ...rest} = await spot.toJSON();
+    
+      const prettyRes = {...rest}
+  
+    let ratingsAverage = 0;
+    let ratingsCount = 0;
+     for (let rev of Reviews){
+       ratingsCount++;
+       ratingsAverage += rev.stars;
+     }
+     
+     prettyRes.numReviews = ratingsCount;
+     if(ratingsCount >= 1){
+      prettyRes.avgStarRating = (ratingsAverage/ratingsCount).toFixed(1);
+     }
+
+     else{
+     prettyRes.avgStarRating = 'No Ratings Yet';
+     }
+   
+     result.push(prettyRes);
+   
+ 
+     res.json(result);
+  
 });
 
 

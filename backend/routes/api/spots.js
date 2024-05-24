@@ -128,14 +128,35 @@ router.get('/', async(req, res) => {
       where.price = {[Op.gt]: minPrice}
    } 
 
-   
-    const spots = await Spot.findAll({
+   const previewImage = await SpotImage.findOne(
+      {where: {preview: true}});
+
+
+   // const spotImages = spot.getSpotImages
+   const spots = await Spot.findAll({
+        include: {model: SpotImage},
         where,
         limit: size,
         offset: (page - 1) * size
-    });
 
-    res.json(spots);
+    });
+    const result = [];
+    for (let spot of spots){
+      const {SpotImages, ...rest} = await spot.toJSON();
+      console.log(SpotImages);
+       const prettyRes = {...rest}
+      for (let img of SpotImages){
+        if(img.preview === true){
+         prettyRes.previewImage = img.url
+        }
+      }
+    
+      result.push(prettyRes);
+    }
+
+   
+   
+    res.json(result);
 });
 
 router.get('/current', requireAuth, async(req, res) => {

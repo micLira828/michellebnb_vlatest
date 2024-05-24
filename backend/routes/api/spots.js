@@ -159,11 +159,11 @@ router.get('/', async(req, res) => {
          ratingsAverage += rev.stars;
        }
 
-      //  if(ratingsCount !== 0){
-         prettyRes.avgStarRating = (ratingsAverage/ratingsCount).toFixed(1);
-      //   }
+      if(ratingsCount < 1){
+         prettyRes.avgStarRating = 'No Ratings Yet';
+       }
    
-        prettyRes.avgStarRating = 'No Ratings Yet';
+       prettyRes.avgRating = (ratingsAverage/ratingsCount).toFixed(1);
     
       result.push(prettyRes);
     }

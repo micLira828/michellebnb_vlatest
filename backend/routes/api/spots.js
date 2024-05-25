@@ -464,7 +464,7 @@ router.delete('/:spotId', requireAuth, async(req, res) => {
     }
 
     const userId = req.user.id;
-    if(userId === spot.ownerId){
+    if(userId !== spot.ownerId){
        return res.status(403).json({message: "Forbidden"})
     }
     

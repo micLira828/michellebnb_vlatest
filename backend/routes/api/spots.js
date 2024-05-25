@@ -42,15 +42,18 @@ const validateSpot= [
    check('address')
      .exists({ checkFalsy: true })
      .isString()
-     .withMessage('Street address is required. Please provide a valid email.'),
+     .notEmpty()
+     .withMessage('Street address is required'),
     check('city')
      .exists({ checkFalsy: true })
      .isString()
-     .withMessage('City is required.'),
+     .notEmpty()
+     .withMessage('City is required'),
     check('state')
      .exists({ checkFalsy: true })
      .isString()
-     .withMessage('State is required.'),
+     .notEmpty()
+     .withMessage('State is required'),
     check('country')
      .exists({ checkFalsy: true })
      .isLength({ min: 6 })
@@ -69,10 +72,10 @@ const validateSpot= [
      .withMessage('Name must be less than 50 characters'),
       check('description')
      .exists({ checkFalsy: true })
-     .withMessage('Description is Required.'),
+     .withMessage('Description is Required'),
       check('price')
      .exists({ checkFalsy: true })
-     .isLength({ min: 1 })
+     .isDecimal({ min: 1.0, max: 2000.0 })
      .withMessage('Price per day must be a positive number'),
    handleValidationErrors
  ];
@@ -323,7 +326,7 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
   );
 
   
-    res.json(spot);
+    res.status(201).json(spot);
  });
 
  router.post('/:spotId/images', requireAuth, async(req, res, next) =>{
@@ -331,6 +334,12 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
    const {user} = req;
 
    const spot = await Spot.findByPk(spotId);
+
+   if(!spot){
+      res.status(404).json({
+         message: "Spot couldn't be found"
+       });
+   }
   
    if(user.id === spot.ownerId){
       const spotImage = await SpotImage.create({
@@ -345,13 +354,7 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
    else{
       return res.status(403).json({message: "Forbidden"});
    }
-
-   if(!spotId){
-      res.status(404).json({
-         message: "Spot couldn't be found"
-       });
-   }
-   
+ 
  });
 
  

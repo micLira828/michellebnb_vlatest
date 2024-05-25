@@ -53,42 +53,7 @@ var today = new Date();
    handleValidationErrors
  ];
 
-// const checkIfInRange = (req, res, next) => {
-//    const errors = [];
-  
-//   /**
 
-//    */
-//    try {
-//       // console.log(req);
-//       const {address, lat, lng, price} = req.body;
-//       console.log(`${lat}, ${lng}, ${price}`)
-//       const errors = [];
-//       if(!address || address.length === 0){
-//          errors.push({address: 'Street address is required'})
-//       }
-//       if(lat < -90 || lat > 90){
-//          errors.push({Latitude: 'Latitude must be within -90 and 90'})
-//       }
-//       if(errors.length > 0){
-//          const customError = new ValidationError();
-//          customError.errors = errors;
-//          throw errors;
-//       }
-//       next();
-//    } catch (error) {
-//       const customError = new ValidationError();
-//       customError.errors = error;
-//       //error.status = 400;
-//       next(customError);
-//    }
-// }
-
-// const checkIfInRange = (val, minVal, maxVal, msg) => {
-//    if(val < minVal || val > maxVal){
-//       err.message = msg
-//    }
-// }
 
 router.use((err, req, res, next) => {
    console.error(err);
@@ -467,7 +432,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
    res.json(spot_review);
 });
 
-
+//Just another comment to push something to dev
  router.put('/:spotId', requireAuth, validateSpot, async(req, res) => {
    const spot_id = req.params.spotId;
    const spot= await Spot.findByPk(spot_id);

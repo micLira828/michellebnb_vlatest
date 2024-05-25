@@ -3,14 +3,66 @@ const express = require('express');
 const { Spot, Review, Booking, SpotImage, ReviewImage, User } = require('../../db/models');
 const bcrypt = require('bcryptjs');
 const { check } = require('express-validator');
-const { handleValidationErrors } = require('../../utils/validation');
+const {handleValidationErrors } = require('../../utils/validation');
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { parseTwoDigitYear } = require('moment');
-const { Op, Sequelize, where} = require('sequelize');
+const { Op, Sequelize, where, ValidationError} = require('sequelize');
 
 
 const router = express.Router();
 var today = new Date();
+
+   const validateSpot= [
+   check('address')
+     .exists({ checkFalsy: true })
+     .isString()
+     .notEmpty()
+     .withMessage('Street address is required'),
+    check('city')
+     .exists({ checkFalsy: true })
+     .isString()
+     .notEmpty()
+     .withMessage('City is required'),
+    check('state')
+     .exists({ checkFalsy: true })
+     .isString()
+     .notEmpty()
+     .withMessage('State is required'),
+    check('country')
+     .exists({ checkFalsy: true })
+     .isLength({ min: 6 })
+     .withMessage('Country is required.'),
+     check('lat')
+     .exists({ checkFalsy: true })
+     .isFloat({ min: -90, max: 90 })
+     .withMessage('Latitude must be within -90 and 90'),
+     check('lng')
+     .exists({ checkFalsy: true })
+     .isFloat({ min: -180, max: 180 })
+     .withMessage('Longitude must be within -180 and 180'),
+      check('name')
+     .exists({ checkFalsy: true })
+     .isLength({ max: 50 })
+     .withMessage('Name must be less than 50 characters'),
+      check('description')
+     .exists({ checkFalsy: true })
+     .withMessage('Description is Required'),
+     check('price')
+     .isFloat({ min: 0, max: 2000})
+     .withMessage('Price per day must be a positive number'),
+   handleValidationErrors
+ ];
+
+
+
+router.use((err, req, res, next) => {
+   console.error(err);
+   res.status(err.status || 500);
+   res.send('An error occurred! Please check the url, or wait a few minutes and try again.');
+   next(err);
+ });
+
+ 
 
 const validateReview = [
    check('review')
@@ -38,47 +90,7 @@ const validateReview = [
  ];
 
 
-const validateSpot= [
-   check('address')
-     .exists({ checkFalsy: true })
-     .isString()
-     .notEmpty()
-     .withMessage('Street address is required'),
-    check('city')
-     .exists({ checkFalsy: true })
-     .isString()
-     .notEmpty()
-     .withMessage('City is required'),
-    check('state')
-     .exists({ checkFalsy: true })
-     .isString()
-     .notEmpty()
-     .withMessage('State is required'),
-    check('country')
-     .exists({ checkFalsy: true })
-     .isLength({ min: 6 })
-     .withMessage('Country is required.'),
-     check('lat')
-     .exists({ checkFalsy: true })
-     .isDecimal({min:-90.0, max:90.0})
-     .withMessage('Latitude must be within -90 and 90'),
-     check('lng')
-     .exists({ checkFalsy: true })
-     .isDecimal({min:-180.0, max: 180.0})
-     .withMessage('Longitude must be within -180 and 180'),
-      check('name')
-     .exists({ checkFalsy: true })
-     .isLength({ max: 50 })
-     .withMessage('Name must be less than 50 characters'),
-      check('description')
-     .exists({ checkFalsy: true })
-     .withMessage('Description is Required'),
-      check('price')
-     .exists({ checkFalsy: true })
-     .isDecimal({min:1.0, max:2000.0})
-     .withMessage('Price per day must be a positive number'),
-   handleValidationErrors
- ];
+
 //Gets all of the spots
 router.get('/', async(req, res) => {
    let {page, size, minLat, maxLat, minLong, maxLong, minPrice, maxPrice} = req.query
@@ -325,7 +337,6 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
       }
   );
 
-  
     res.status(201).json(spot);
  });
 
@@ -421,7 +432,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
    res.json(spot_review);
 });
 
-
+//Just another comment to push something to dev
  router.put('/:spotId', requireAuth, validateSpot, async(req, res) => {
    const spot_id = req.params.spotId;
    const spot= await Spot.findByPk(spot_id);

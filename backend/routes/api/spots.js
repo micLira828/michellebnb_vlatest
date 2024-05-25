@@ -75,7 +75,7 @@ const validateSpot= [
      .withMessage('Description is Required'),
       check('price')
      .exists({ checkFalsy: true })
-     .isDecimal({ min: 1.0, max: 2000.0 })
+     .isDecimal({min:1.0, max:2000.0})
      .withMessage('Price per day must be a positive number'),
    handleValidationErrors
  ];
@@ -464,7 +464,7 @@ router.delete('/:spotId', requireAuth, async(req, res) => {
     }
 
     const userId = req.user.id;
-    if(userId === spot.ownerId){
+    if(userId !== spot.ownerId){
        return res.status(403).json({message: "Forbidden"})
     }
     

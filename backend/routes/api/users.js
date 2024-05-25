@@ -13,16 +13,18 @@ const router = express.Router();
 // ...
 const validateSignup = [
   check('firstName')
-  .exists({ checkFalsy: true })
   .isString()
+  .withMessage('First Name must be a string')
+  .notEmpty()
   .withMessage('First Name is required'),
   check('lastName')
-  .exists({ checkFalsy: true })
   .isString()
+  .withMessage('Last Name must be a string')
+  .notEmpty()
   .withMessage('Last Name is required'),
   check('email')
     .exists({ checkFalsy: true })
-    .isEmail()
+    //.isEmail()
     .withMessage('Invalid email'),
   check('username')
     .exists({ checkFalsy: true })
@@ -36,6 +38,7 @@ const validateSignup = [
   //   .exists({ checkFalsy: true })
   //   .isLength({ min: 6 })
   //   .withMessage('Password must be 6 characters or more.'),
+
   handleValidationErrors
 ];
 
@@ -49,8 +52,21 @@ router.post(
   async (req, res) => {
     const { firstName, lastName, email, password, username } = req.body;
     const hashedPassword = bcrypt.hashSync(password);
-    const user = await User.create({firstName, lastName, email, username, hashedPassword });
+    
+    
+    const userWithExistingEmail = await User.findOne({where: {email: email}});
 
+    const userWithExistingUserName = await User.findOne({where: {username: username}});
+
+    if(userWithExistingEmail){
+      res.json({message: "User already exists", errors: {email:  "User with that email already exists"}});
+    }
+
+    if(userWithExistingUserName){
+      res.json({message: "User already exists", errors: {username:  "User with that username already exists"}});
+    }
+
+    const user = await User.create({firstName, lastName, email, username, hashedPassword });
     const safeUser = {
       id: user.id,
       firstName: user.firstName,

@@ -52,12 +52,18 @@ app.use((_req, _res, next) => {
   next(err);
 });
 
+//Create a new error
+//Make message bad request- will have to attach
+//it to handleValidationError
+//Get the message to say what I want it to:
+//but thats already handled in the validation
 
 // Process sequelize errors
 app.use((err, _req, _res, next) => {
   // check if error is a Sequelize error:
   if (err instanceof ValidationError) {
     let errors = {};
+    console.log(errors);
     for (let error of err.errors) {
       errors[error.path] = error.message;
     }
@@ -66,6 +72,7 @@ app.use((err, _req, _res, next) => {
   }
   next(err);
 });
+
 // Error formatter
 app.use((err, _req, res, _next) => {
   res.status(err.status || 500);

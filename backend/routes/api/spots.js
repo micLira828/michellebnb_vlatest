@@ -3,14 +3,101 @@ const express = require('express');
 const { Spot, Review, Booking, SpotImage, ReviewImage, User } = require('../../db/models');
 const bcrypt = require('bcryptjs');
 const { check } = require('express-validator');
-const { handleValidationErrors } = require('../../utils/validation');
+const {handleValidationErrors } = require('../../utils/validation');
 const { setTokenCookie, requireAuth } = require('../../utils/auth');
 const { parseTwoDigitYear } = require('moment');
-const { Op, Sequelize, where} = require('sequelize');
+const { Op, Sequelize, where, ValidationError} = require('sequelize');
 
 
 const router = express.Router();
 var today = new Date();
+
+   const validateSpot= [
+   check('address')
+     .exists({ checkFalsy: true })
+     .isString()
+     .notEmpty()
+     .withMessage('Street address is required'),
+    check('city')
+     .exists({ checkFalsy: true })
+     .isString()
+     .notEmpty()
+     .withMessage('City is required'),
+    check('state')
+     .exists({ checkFalsy: true })
+     .isString()
+     .notEmpty()
+     .withMessage('State is required'),
+    check('country')
+     .exists({ checkFalsy: true })
+     .isLength({ min: 6 })
+     .withMessage('Country is required.'),
+     check('lat')
+     .exists({ checkFalsy: true })
+     .isFloat({ min: -90, max: 90 })
+     .withMessage('Latitude must be within -90 and 90'),
+     check('lng')
+     .exists({ checkFalsy: true })
+     .isFloat({ min: -180, max: 180 })
+     .withMessage('Longitude must be within -180 and 180'),
+      check('name')
+     .exists({ checkFalsy: true })
+     .isLength({ max: 50 })
+     .withMessage('Name must be less than 50 characters'),
+      check('description')
+     .exists({ checkFalsy: true })
+     .withMessage('Description is Required'),
+     check('price')
+     .isFloat({ min: 0, max: 2000})
+     .withMessage('Price per day must be a positive number'),
+   handleValidationErrors
+ ];
+
+// const checkIfInRange = (req, res, next) => {
+//    const errors = [];
+  
+//   /**
+
+//    */
+//    try {
+//       // console.log(req);
+//       const {address, lat, lng, price} = req.body;
+//       console.log(`${lat}, ${lng}, ${price}`)
+//       const errors = [];
+//       if(!address || address.length === 0){
+//          errors.push({address: 'Street address is required'})
+//       }
+//       if(lat < -90 || lat > 90){
+//          errors.push({Latitude: 'Latitude must be within -90 and 90'})
+//       }
+//       if(errors.length > 0){
+//          const customError = new ValidationError();
+//          customError.errors = errors;
+//          throw errors;
+//       }
+//       next();
+//    } catch (error) {
+//       const customError = new ValidationError();
+//       customError.errors = error;
+//       //error.status = 400;
+//       next(customError);
+//    }
+// }
+
+// const checkIfInRange = (val, minVal, maxVal, msg) => {
+//    if(val < minVal || val > maxVal){
+//       err.message = msg
+//    }
+// }
+
+router.use((err, req, res, next) => {
+   console.error(err);
+   res.status(err.status || 500);
+   res.send('An error occurred! Please check the url, or wait a few minutes and try again.');
+   next(err);
+ });
+
+ 
 
 const validateReview = [
    check('review')
@@ -38,44 +125,7 @@ const validateReview = [
  ];
 
 
-const validateSpot= [
-   check('address')
-     .exists({ checkFalsy: true })
-     .isString()
-     .withMessage('Street address is required. Please provide a valid email.'),
-    check('city')
-     .exists({ checkFalsy: true })
-     .isString()
-     .withMessage('City is required.'),
-    check('state')
-     .exists({ checkFalsy: true })
-     .isString()
-     .withMessage('State is required.'),
-    check('country')
-     .exists({ checkFalsy: true })
-     .isLength({ min: 6 })
-     .withMessage('Country is required.'),
-     check('lat')
-     .exists({ checkFalsy: true })
-     .isDecimal({min:-90.0, max:90.0})
-     .withMessage('Latitude must be within -90 and 90'),
-     check('lng')
-     .exists({ checkFalsy: true })
-     .isDecimal({min:-180.0, max: 180.0})
-     .withMessage('Longitude must be within -180 and 180'),
-      check('name')
-     .exists({ checkFalsy: true })
-     .isLength({ max: 50 })
-     .withMessage('Name must be less than 50 characters'),
-      check('description')
-     .exists({ checkFalsy: true })
-     .withMessage('Description is Required.'),
-      check('price')
-     .exists({ checkFalsy: true })
-     .isLength({ min: 1 })
-     .withMessage('Price per day must be a positive number'),
-   handleValidationErrors
- ];
+
 //Gets all of the spots
 router.get('/', async(req, res) => {
    let {page, size, minLat, maxLat, minLong, maxLong, minPrice, maxPrice} = req.query
@@ -128,14 +178,49 @@ router.get('/', async(req, res) => {
       where.price = {[Op.gt]: minPrice}
    } 
 
-   
-    const spots = await Spot.findAll({
+   const previewImage = await SpotImage.findOne(
+      {where: {preview: true}});
+
+
+   // const spotImages = spot.getSpotImages
+   const spots = await Spot.findAll({
+        include: [{model: SpotImage}, {model: Review}],
         where,
         limit: size,
         offset: (page - 1) * size
-    });
 
-    res.json(spots);
+    });
+    const result = [];
+    let ratingsAverage = 0;
+    let ratingsCount = 0;
+    for (let spot of spots){
+      const {SpotImages, Reviews, ...rest} = await spot.toJSON();
+       
+       const prettyRes = {...rest}
+       
+      for (let img of SpotImages){
+        if(img.preview === true){
+         prettyRes.previewImage = img.url
+        }
+      }
+
+      for (let rev of Reviews){
+         ratingsCount++;
+         ratingsAverage += rev.stars;
+       }
+
+      if(ratingsCount < 1){
+         prettyRes.avgStarRating = 'No Ratings Yet';
+       }
+   
+       prettyRes.avgRating = (ratingsAverage/ratingsCount).toFixed(1);
+    
+      result.push(prettyRes);
+    }
+
+   
+   
+    res.json(result);
 });
 
 router.get('/current', requireAuth, async(req, res) => {
@@ -154,11 +239,42 @@ router.get('/current', requireAuth, async(req, res) => {
        username: user.username,
      };
      const usersSpots = await Spot.findAll({
+      include: [{model: SpotImage}, {model: Review}],
       where: {
          ownerId: safeUser.id
       }
   });
-    res.json(usersSpots);
+
+  const result = [];
+  for (let spot of usersSpots){
+    const {SpotImages, Reviews, ...rest} = await spot.toJSON();
+    console.log(SpotImages);
+     const prettyRes = {...rest}
+    for (let img of SpotImages){
+      if(img.preview === true){
+       prettyRes.previewImage = img.url
+      }
+    }
+
+    let ratingsAverage = 0;
+    let ratingsCount = 0;
+    for (let rev of Reviews){
+      ratingsCount++;
+      ratingsAverage += rev.stars;
+    }
+
+    if(ratingsCount < 1){
+      prettyRes.avgRating = 'No Ratings Yet';
+     }
+
+    else{
+     prettyRes.avgRating = (ratingsAverage/ratingsCount).toFixed(1);
+    }
+
+    result.push(prettyRes);
+  }
+
+    res.json(result);
    }
 });
 
@@ -166,17 +282,44 @@ router.get('/:spotId', async(req, res) => {
    const spot_id = req.params.spotId;
 
    const spot = await Spot.findByPk(spot_id, {
-      include: [{model: SpotImage}, {as: 'Owner', model: User}]
+      include: [{model: SpotImage, attributes: ['id', 'url', 'preview']}, {model: Review}, {as: 'Owner', model: User}]
    });
 
    if(!spot){
       return res.status(404).json({message: "Spot couldn't be found"})
    }
-   res.json(spot);
+
+   const result = [];
+  
+     const {Reviews, ...rest} = await spot.toJSON();
+    
+      const prettyRes = {...rest}
+  
+    let ratingsAverage = 0;
+    let ratingsCount = 0;
+     for (let rev of Reviews){
+       ratingsCount++;
+       ratingsAverage += rev.stars;
+     }
+     
+     prettyRes.numReviews = ratingsCount;
+     if(ratingsCount >= 1){
+      prettyRes.avgStarRating = (ratingsAverage/ratingsCount).toFixed(1);
+     }
+
+     else{
+     prettyRes.avgStarRating = 'No Ratings Yet';
+     }
+   
+     result.push(prettyRes);
+   
+ 
+     res.json(result);
+  
 });
 
 
-router.get('/:spotId/bookings', async(req, res) => {
+router.get('/:spotId/bookings', requireAuth, async(req, res) => {
    const {spotId} = req.params;
    const spot = await Spot.findByPk(spotId);
    if(spot){
@@ -229,8 +372,7 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
       }
   );
 
-  
-    res.json(spot);
+    res.status(201).json(spot);
  });
 
  router.post('/:spotId/images', requireAuth, async(req, res, next) =>{
@@ -238,6 +380,12 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
    const {user} = req;
 
    const spot = await Spot.findByPk(spotId);
+
+   if(!spot){
+      res.status(404).json({
+         message: "Spot couldn't be found"
+       });
+   }
   
    if(user.id === spot.ownerId){
       const spotImage = await SpotImage.create({
@@ -252,13 +400,7 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
    else{
       return res.status(403).json({message: "Forbidden"});
    }
-
-   if(!spotId){
-      res.status(404).json({
-         message: "Spot couldn't be found"
-       });
-   }
-   
+ 
  });
 
  
@@ -368,7 +510,7 @@ router.delete('/:spotId', requireAuth, async(req, res) => {
     }
 
     const userId = req.user.id;
-    if(userId === spot.ownerId){
+    if(userId !== spot.ownerId){
        return res.status(403).json({message: "Forbidden"})
     }
     

@@ -17,10 +17,11 @@ const validateReview = [
   check('review')
     .exists({ checkFalsy: true })
     .isString()
-    .withMessage('Review text is required.'),
+    .notEmpty()
+    .withMessage('Review text is required'),
   check('stars')
-    .exists({ checkFalsy: true }).
-    isDecimal({min: 1.0, max: 5.0})
+    .exists({ checkFalsy: true })
+    .isFloat({min: 1.0, max: 5.0})
     .withMessage('Stars must be from 1 to 5'),
   handleValidationErrors
 ];
@@ -38,7 +39,7 @@ router.get('/current', requireAuth, async(req, res) => {
       username: user.username,
     };
     const usersReviews = await Review.findAll({
-    include: [User, Spot, ReviewImage],
+    include: [{model:User, attributes:['id', 'firstName', 'lastName']}, {model: Spot}, {model:ReviewImage, attributes:['id', 'url']}],
      where: {
         userId: safeUser.id
      }
@@ -64,19 +65,21 @@ router.post('/:reviewId/images', requireAuth, async(req, res, next) =>{
     return res.status(403).json({message: "Forbidden"})
  }
   const images = await review.getReviewImages();
-
+  console.log(images.length);
 
   if(images.length > 10){
-    res.status(403).json("Maximum number of images for this resource was reached");
+    res.status(403).json({message: "Maximum number of images for this resource was reached"});
   }
 
+  
   const reviewImage = await ReviewImage.create(
     { 
       url: req.body.url,
       reviewId: reviewId
     }
 );
-   res.json({"url": reviewImage.url});
+   res.json({"id": reviewImage.id, "url": reviewImage.url});
+
 });
 
 router.put('/:reviewId', requireAuth, validateReview, async(req, res, next) =>{
@@ -98,7 +101,7 @@ router.put('/:reviewId', requireAuth, validateReview, async(req, res, next) =>{
        stars: req.body.stars
       }
   );
-  res.json({"review": review.review, "stars": review.stars});
+  res.json(review);
 });
 
 router.delete('/:reviewId', requireAuth, async(req, res) =>{

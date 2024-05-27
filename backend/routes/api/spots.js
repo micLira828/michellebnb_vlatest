@@ -54,25 +54,16 @@ var today = new Date();
  ];
 
 
-
-router.use((err, req, res, next) => {
-   console.error(err);
-   res.status(err.status || 500);
-   res.send('An error occurred! Please check the url, or wait a few minutes and try again.');
-   next(err);
- });
-
- 
-
 const validateReview = [
    check('review')
      .exists({ checkFalsy: true })
      .isString()
-     .withMessage('Review text is required.'),
+     .notEmpty()
+     .withMessage('Review text is required'),
     check('stars')
      .exists({ checkFalsy: true })
-     .isDecimal({min: 1.0, max: 5.0})
-     .withMessage('Stars must be from 1.0 to 5.0'),
+     .isFloat({min: 1.0, max: 5.0})
+     .withMessage('Stars must be from 1 to 5'),
    handleValidationErrors
  ];
 
@@ -310,11 +301,17 @@ router.get('/:spotId/reviews', async(req, res) => {
       res.status(404).json({message: "Spot couldn't be found"})
    }
    const spot_reviews = await Review.findAll({
-      include: [User, ReviewImage],
+      include: [{model:User, attributes:['id', 'firstName', 'lastName']}, {model:ReviewImage, attributes:['id', 'url']}],
       where: {
          spotId: spotId
       }
    });
+
+   // for(rev of spot_reviews){
+   //  const {Users, ReviewImages, ...rest} = rev;
+   //  const reviewObject = {...rest};
+
+   // }
   
    res.json(spot_reviews);
 });
@@ -429,7 +426,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
   );
 
 
-   res.json(spot_review);
+   res.status(201).json(spot_review);
 });
 
 //Just another comment to push something to dev

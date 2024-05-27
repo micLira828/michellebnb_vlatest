@@ -310,11 +310,17 @@ router.get('/:spotId/reviews', async(req, res) => {
       res.status(404).json({message: "Spot couldn't be found"})
    }
    const spot_reviews = await Review.findAll({
-      include: [User, ReviewImage],
+      include: [{model:User, attributes:['id', 'firstName', 'lastName']}, {model:ReviewImage, attributes:['id', 'url']}],
       where: {
          spotId: spotId
       }
    });
+
+   // for(rev of spot_reviews){
+   //  const {Users, ReviewImages, ...rest} = rev;
+   //  const reviewObject = {...rest};
+
+   // }
   
    res.json(spot_reviews);
 });

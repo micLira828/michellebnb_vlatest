@@ -17,10 +17,11 @@ const validateReview = [
   check('review')
     .exists({ checkFalsy: true })
     .isString()
-    .withMessage('Review text is required.'),
+    .notEmpty()
+    .withMessage('Review text is required'),
   check('stars')
-    .exists({ checkFalsy: true }).
-    isDecimal({min: 1.0, max: 5.0})
+    .exists({ checkFalsy: true })
+    .isFloat({min: 1.0, max: 5.0})
     .withMessage('Stars must be from 1 to 5'),
   handleValidationErrors
 ];

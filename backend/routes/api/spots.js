@@ -426,7 +426,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
   );
 
 
-   res.json(spot_review);
+   res.status(201).json(spot_review);
 });
 
 //Just another comment to push something to dev

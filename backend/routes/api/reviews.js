@@ -65,19 +65,23 @@ router.post('/:reviewId/images', requireAuth, async(req, res, next) =>{
     return res.status(403).json({message: "Forbidden"})
  }
   const images = await review.getReviewImages();
-
+  console.log(images.length);
 
   if(images.length > 10){
-    res.status(403).json("Maximum number of images for this resource was reached");
+    res.status(403).json({message: "Maximum number of images for this resource was reached"});
   }
 
+  //a comment
+
+  
   const reviewImage = await ReviewImage.create(
     { 
       url: req.body.url,
       reviewId: reviewId
     }
 );
-   res.json({"url": reviewImage.url});
+   res.json({"id": reviewImage.id, "url": reviewImage.url});
+
 });
 
 router.put('/:reviewId', requireAuth, validateReview, async(req, res, next) =>{
@@ -99,7 +103,7 @@ router.put('/:reviewId', requireAuth, validateReview, async(req, res, next) =>{
        stars: req.body.stars
       }
   );
-  res.json({"review": review.review, "stars": review.stars});
+  res.json(review);
 });
 
 router.delete('/:reviewId', requireAuth, async(req, res) =>{

@@ -74,11 +74,14 @@ const validateReview = [
      .isAfter(today.toString())
      .withMessage('startDate cannot be in the past.'),
    check('endDate')
-   .custom((endDate, {req}) => {
+   .exists({ checkFalsy: true })
+   .custom(async(endDate, {req}) =>{
       const startDate = req.body.startDate;
-      if(endDate <= startDate){
+      if(endDate <= startDate.toString()){
          throw new Error("endDate cannot be on or before startDate")
-      }}),
+      }
+    })
+   .withMessage('Sorry, date does not exist'),
    handleValidationErrors
  ];
 
@@ -287,7 +290,7 @@ router.get('/:spotId/bookings', requireAuth, async(req, res) => {
 
    const userId = req.user.id;
    const spot_bookings = await Booking.findAll({
-      include: User,
+      include: {model:User, attributes: ['id', 'firstName', 'lastName']},
        where: {
         spotId: spotId
       }
@@ -304,7 +307,7 @@ router.get('/:spotId/bookings', requireAuth, async(req, res) => {
        prettyRes.startDate = startDate;
        prettyRes.endDate = endDate;
 
-       result.push(bookingObject);
+       result.push(prettyRes);
      }
      res.json({"Bookings":result});
    }
@@ -387,7 +390,7 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
  router.post('/:spotId/bookings', requireAuth, validateBooking,  async(req, res) => {
    const {spotId} = req.params;
  
-   const spot = Spot.findByPk(spotId);
+   const spot = await Spot.findByPk(spotId);
    if(!spot){
       return res.status(404).json({message: "Spot couldn't be found"})
    }
@@ -414,8 +417,7 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
  
 
 
-   res.json({"spotId":spotBooking.spotId ,"startDate": spotBooking.startDate, 
-   "endDate": spotBooking.endDate});
+   res.json(spotBooking);
 });
 
 router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => {

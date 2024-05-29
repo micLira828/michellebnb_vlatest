@@ -71,12 +71,15 @@ const validateReview = [
  const validateBooking = [
    check('startDate')
      .exists({ checkFalsy: true })
-     .isBefore(today)
+     .isAfter(today.toString())
      .withMessage('startDate cannot be in the past.'),
    check('endDate')
-     .exists({ checkFalsy: true })
-     .isAfter('startDate')
-     .withMessage('endDate cannot be on or before startDate'),
+   .custom((endDate) => {
+      if(endDate === startDate){
+        const err = new Error('endDate cannot be on or before startDate');
+        err.message = 'endDate cannot be on or before startDate'
+        res.json(err);
+      }}),
    handleValidationErrors
  ];
 
@@ -291,7 +294,7 @@ router.get('/:spotId/bookings', requireAuth, async(req, res) => {
       }
    });
    if(userId === spot.ownerId){
-      res.json(spot_bookings);
+      res.json({"Bookings": spot_bookings});
    }
    else{
       const result = [];
@@ -382,9 +385,9 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
 
  
 
- router.post('/:spotId/bookings', requireAuth, validateBooking, async(req, res) => {
+ router.post('/:spotId/bookings', requireAuth, validateBooking,  async(req, res) => {
    const {spotId} = req.params;
-  
+ 
    const spot = Spot.findByPk(spotId);
    if(!spot){
       return res.status(404).json({message: "Spot couldn't be found"})
@@ -395,7 +398,11 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
       return res.status(403).json({message: "Forbidden"});
    }
  
-  console.log(req.body.startDate, typeof req.body.startDate);
+  if(req.body.startDate.toString() >= req.body.endDate.toString()){
+    return res.status(400).json({
+      message: 'Bad Request',
+      errors: {endDate: 'endDate cannot be on or before startDate'}})
+  }
  
    const spotBooking = await Booking.create(
       { 
@@ -406,6 +413,8 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
       }
   );
  
+
+
    res.json({"spotId":spotBooking.spotId ,"startDate": spotBooking.startDate, 
    "endDate": spotBooking.endDate});
 });

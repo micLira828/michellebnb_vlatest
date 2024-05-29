@@ -19,9 +19,11 @@ const validateBooking = [
     .isBefore(today)
     .withMessage('startDate cannot be in the past.'),
   check('endDate')
-    .exists({ checkFalsy: true })
-    .isAfter('startDate')
-    .withMessage('endDate cannot be on or before startDate'),
+  .custom(endDate => {
+    if(endDate === startDate){
+      throw new Error('endDate cannot be on or before startDate')
+    }
+}),
   handleValidationErrors
 ];
 

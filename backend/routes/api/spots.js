@@ -290,7 +290,7 @@ router.get('/:spotId/bookings', requireAuth, async(req, res) => {
 
    const userId = req.user.id;
    const spot_bookings = await Booking.findAll({
-      include: User,
+      include: {model:User, attributes: ['id', 'firstName', 'lastName']},
        where: {
         spotId: spotId
       }
@@ -307,7 +307,7 @@ router.get('/:spotId/bookings', requireAuth, async(req, res) => {
        prettyRes.startDate = startDate;
        prettyRes.endDate = endDate;
 
-       result.push(bookingObject);
+       result.push(prettyRes);
      }
      res.json({"Bookings":result});
    }

@@ -4,7 +4,7 @@ const { Spot, Review, Booking, SpotImage, ReviewImage, User } = require('../../d
 const bcrypt = require('bcryptjs');
 const { check } = require('express-validator');
 const {handleValidationErrors } = require('../../utils/validation');
-const { setTokenCookie, requireAuth } = require('../../utils/auth');
+const { setTokenCookie, requireAuth, restoreUser } = require('../../utils/auth');
 const { parseTwoDigitYear } = require('moment');
 const { Op, Sequelize, where, ValidationError} = require('sequelize');
 
@@ -278,20 +278,34 @@ router.get('/:spotId', async(req, res) => {
 router.get('/:spotId/bookings', requireAuth, async(req, res) => {
    const {spotId} = req.params;
    const spot = await Spot.findByPk(spotId);
-   if(spot){
+   if(!spot){
       return res.status(404).json({message: "Spot couldn't be found"})
    }
 
- 
-   res.json(spot);
+   const userId = req.user.id;
    const spot_bookings = await Booking.findAll({
-      include: Spot,
-      where: {
-         spotId: spotId
+      include: User,
+       where: {
+        spotId: spotId
       }
    });
-   
-   res.json(spot_bookings);
+   if(userId === spot.ownerId){
+      res.json(spot_bookings);
+   }
+   else{
+      const result = [];
+     for (let booking of spot_bookings){
+      const {spotId, startDate, endDate} = booking;
+      const prettyRes = {};
+       prettyRes.spotId = spotId;
+       prettyRes.startDate = startDate;
+       prettyRes.endDate = endDate;
+
+       result.push(bookingObject);
+     }
+     return result;
+   }
+
 });
 
 router.get('/:spotId/reviews', async(req, res) => {
@@ -392,9 +406,25 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
       
   );
  
- 
-   res.json({"spotId":spot_booking.spotId ,"startDate": spot_booking.startDate, 
-   "endDate":spot_booking.endDate});
+  console.log(startDate);
+  const startDateArr = spot_booking.startDate.toString().split('-')
+  const endDateArr = spot_booking.endDate.toString().split('-')
+  const startDateString = '';
+  const endDateString = '';
+
+  for (let ch = 0; ch < startDateArr.length - 1; ch++){
+     startDateString += ch + '-';
+  }
+
+  for (let ch = 0; ch < endDateArr.length - 1; ch++){
+     endDateString += ch + '-';
+  }
+
+  console.log(startDateString);
+  console.log(endDateString)
+
+   res.json({"spotId":spot_booking.spotId ,"startDate": startDateString, 
+   "endDate": endDateString});
 });
 
 router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => {

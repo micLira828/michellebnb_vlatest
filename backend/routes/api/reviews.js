@@ -44,7 +44,7 @@ router.get('/current', requireAuth, async(req, res) => {
         userId: safeUser.id
      }
  });
-   res.json(usersReviews);
+   res.json({"Reviews" :usersReviews});
   }
 });
 
@@ -70,6 +70,8 @@ router.post('/:reviewId/images', requireAuth, async(req, res, next) =>{
   if(images.length > 10){
     res.status(403).json({message: "Maximum number of images for this resource was reached"});
   }
+
+  //a comment
 
   
   const reviewImage = await ReviewImage.create(

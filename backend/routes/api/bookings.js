@@ -8,7 +8,7 @@ const { requireAuth } = require('../../utils/auth');
 // ...
 
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
-const { Booking } = require('../../db/models');
+const { Booking, Spot } = require('../../db/models');
 const { append } = require('vary');
 
 const router = express.Router();
@@ -19,11 +19,37 @@ const validateBooking = [
     .isBefore(today)
     .withMessage('startDate cannot be in the past.'),
   check('endDate')
-    .exists({ checkFalsy: true })
-    .isAfter('startDate')
-    .withMessage('endDate cannot be on or before startDate'),
+  .exists({ checkFalsy: true })
+  .custom((endDate, {req}) => {
+    const startDate = req.body.startDate;
+    if(endDate <= startDate){
+       throw new Error("endDate cannot be on or before startDate")
+    }}),
   handleValidationErrors
 ];
+
+router.get('/current', requireAuth, async(req, res, next) =>{
+  const {user} = req;
+  const userId = req.user.id;
+  if(userId !== user.id){
+     return res.status(403).json({message: "Forbidden"})
+  }
+ 
+  if (user) {
+    const safeUser = {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+    }
+ 
+    const usersBookings = await Booking.findAll({
+     include: {model: Spot, where: {
+      ownerId: safeUser.id
+   }},
+ });
+   res.json({"Bookings":usersBookings});
+  }
+});
 
  
 router.put('/:bookingId', requireAuth, validateBooking, async(req, res, next) =>{

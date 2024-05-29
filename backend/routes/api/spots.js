@@ -4,13 +4,13 @@ const { Spot, Review, Booking, SpotImage, ReviewImage, User } = require('../../d
 const bcrypt = require('bcryptjs');
 const { check } = require('express-validator');
 const {handleValidationErrors } = require('../../utils/validation');
-const { setTokenCookie, requireAuth } = require('../../utils/auth');
+const { setTokenCookie, requireAuth, restoreUser } = require('../../utils/auth');
 const { parseTwoDigitYear } = require('moment');
 const { Op, Sequelize, where, ValidationError} = require('sequelize');
 
 
 const router = express.Router();
-var today = new Date();
+const today = new Date();
 
    const validateSpot= [
    check('address')
@@ -71,12 +71,17 @@ const validateReview = [
  const validateBooking = [
    check('startDate')
      .exists({ checkFalsy: true })
-     .isBefore(today)
+     .isAfter(today.toString())
      .withMessage('startDate cannot be in the past.'),
    check('endDate')
-     .exists({ checkFalsy: true })
-     .isAfter('startDate')
-     .withMessage('endDate cannot be on or before startDate'),
+   .exists({ checkFalsy: true })
+   .custom(async(endDate, {req}) =>{
+      const startDate = req.body.startDate;
+      if(endDate <= startDate.toString()){
+         throw new Error("endDate cannot be on or before startDate")
+      }
+    })
+   .withMessage('Sorry, date does not exist'),
    handleValidationErrors
  ];
 
@@ -153,7 +158,7 @@ router.get('/', async(req, res) => {
       const {SpotImages, Reviews, ...rest} = await spot.toJSON();
        
        const prettyRes = {...rest}
-       
+       prettyRes.previewImage = "No preview images yet"
       for (let img of SpotImages){
         if(img.preview === true){
          prettyRes.previewImage = img.url
@@ -176,7 +181,7 @@ router.get('/', async(req, res) => {
 
    
    
-    res.json(result);
+    res.json({"Spots":result});
 });
 
 router.get('/current', requireAuth, async(req, res) => {
@@ -206,6 +211,7 @@ router.get('/current', requireAuth, async(req, res) => {
     const {SpotImages, Reviews, ...rest} = await spot.toJSON();
     console.log(SpotImages);
      const prettyRes = {...rest}
+     prettyRes.previewImage = "No Preview Image yet.";
     for (let img of SpotImages){
       if(img.preview === true){
        prettyRes.previewImage = img.url
@@ -230,7 +236,7 @@ router.get('/current', requireAuth, async(req, res) => {
     result.push(prettyRes);
   }
 
-    res.json(result);
+    res.json({"Spots": result});
    }
 });
 
@@ -278,20 +284,34 @@ router.get('/:spotId', async(req, res) => {
 router.get('/:spotId/bookings', requireAuth, async(req, res) => {
    const {spotId} = req.params;
    const spot = await Spot.findByPk(spotId);
-   if(spot){
+   if(!spot){
       return res.status(404).json({message: "Spot couldn't be found"})
    }
 
- 
-   res.json(spot);
+   const userId = req.user.id;
    const spot_bookings = await Booking.findAll({
-      include: Spot,
-      where: {
-         spotId: spotId
+      include: User,
+       where: {
+        spotId: spotId
       }
    });
-   
-   res.json(spot_bookings);
+   if(userId === spot.ownerId){
+      res.json({"Bookings": spot_bookings});
+   }
+   else{
+      const result = [];
+     for (let booking of spot_bookings){
+      const {spotId, startDate, endDate} = booking;
+      const prettyRes = {};
+       prettyRes.spotId = spotId;
+       prettyRes.startDate = startDate;
+       prettyRes.endDate = endDate;
+
+       result.push(bookingObject);
+     }
+     res.json({"Bookings":result});
+   }
+
 });
 
 router.get('/:spotId/reviews', async(req, res) => {
@@ -313,7 +333,7 @@ router.get('/:spotId/reviews', async(req, res) => {
 
    // }
   
-   res.json(spot_reviews);
+   res.json({"Reviews":spot_reviews});
 });
 
 
@@ -367,9 +387,9 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
 
  
 
- router.post('/:spotId/bookings', requireAuth, validateBooking, async(req, res) => {
+ router.post('/:spotId/bookings', requireAuth, validateBooking,  async(req, res) => {
    const {spotId} = req.params;
-
+ 
    const spot = Spot.findByPk(spotId);
    if(!spot){
       return res.status(404).json({message: "Spot couldn't be found"})
@@ -377,24 +397,27 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
 
    const userId = req.user.id;
    if(userId === spot.ownerId){
-      return res.status(403).json({message: "Forbidden"})
+      return res.status(403).json({message: "Forbidden"});
    }
  
-   //const spot = await Spot.findByPk(spot_id);
-   const spot_booking = await Booking.create(
+  if(req.body.startDate.toString() >= req.body.endDate.toString()){
+    return res.status(400).json({
+      message: 'Bad Request',
+      errors: {endDate: 'endDate cannot be on or before startDate'}})
+  }
+ 
+   const spotBooking = await Booking.create(
       { 
        userId: req.body.userId, 
        spotId: spotId,
        startDate: req.body.startDate,
        endDate: req.body.endDate
       }
-
-      
   );
  
- 
-   res.json({"spotId":spot_booking.spotId ,"startDate": spot_booking.startDate, 
-   "endDate":spot_booking.endDate});
+
+
+   res.json(spotBooking);
 });
 
 router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => {

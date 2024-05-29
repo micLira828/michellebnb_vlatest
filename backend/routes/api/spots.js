@@ -68,6 +68,7 @@ const validateReview = [
  ];
 
 
+ 
  const validateBooking = [
    check('startDate')
      .exists({ checkFalsy: true })
@@ -75,15 +76,17 @@ const validateReview = [
      .withMessage('startDate cannot be in the past.'),
    check('endDate')
    .exists({ checkFalsy: true })
-   .custom(async(endDate, {req}) =>{
+   .custom(async(endDate, {req}) => {
       const startDate = req.body.startDate;
       if(endDate <= startDate.toString()){
          throw new Error("endDate cannot be on or before startDate")
       }
-    })
-   .withMessage('Sorry, date does not exist'),
+   }),
    handleValidationErrors
  ];
+
+
+ 
 
 
 
@@ -387,7 +390,7 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
 
  
 
- router.post('/:spotId/bookings', requireAuth, validateBooking,  async(req, res) => {
+ router.post('/:spotId/bookings', requireAuth, validateBooking, async(req, res) => {
    const {spotId} = req.params;
  
    const spot = await Spot.findByPk(spotId);
@@ -399,13 +402,50 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
    if(userId === spot.ownerId){
       return res.status(403).json({message: "Forbidden"});
    }
+
+   const newStartDate = req.body.startDate;
+   const newEndDate = req.body.endDate
+
+   const bookingWithExistingStartDate = await Booking.findOne({
+      where: {
+        spotId: spotId,
+        startDate: newStartDate
+      }
+   });
+
+   const bookingWithExistingEndDate = await Booking.findOne({
+      where: {
+         spotId: spotId,
+         endDate: newEndDate
+      }
+   });
+
+   if(bookingWithExistingStartDate !== undefined|| bookingWithExistingEndDate !== undefined){
+      const err = new Error();
+      err.message = "Sorry, this spot is already booked for the specified dates"
+      err.errors = {}
+   
+      if(bookingWithExistingStartDate !== undefined){
+         err.errors.startDate = "Start date conflicts with an existing booking"
+      }
+      if(bookingWithExistingEndDate !== undefined){
+         err.errors.endDate = "End date conflicts with an existing booking"
+      }
+          res.status(403).json(err);
+    }
  
-  if(req.body.startDate.toString() >= req.body.endDate.toString()){
-    return res.status(400).json({
-      message: 'Bad Request',
-      errors: {endDate: 'endDate cannot be on or before startDate'}})
-  }
- 
+   //  if(Date(newStartDate.toDateString()) < Date(today.toDateString()) || 
+   //    Date(newEndDate.toDateString()) <= Date(newStartDate.toDateString())){
+   //    const err = new Error('Bad Request');
+   //    err.errors = {};
+   //    err.status = 400;
+   //    if(req.body.startDate < today.toString()){
+   //       err.errors.startDate = "startDate cannot be in the past"
+   //    }
+   //    if(req.body.endDate <= req.body.startDate){
+   //       err.errors.endDate = "endDate cannot be on or before startDate"
+   //    }
+   // }
    const spotBooking = await Booking.create(
       { 
        userId: req.body.userId, 
@@ -414,10 +454,9 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
        endDate: req.body.endDate
       }
   );
+  res.json(spotBooking);
+
  
-
-
-   res.json(spotBooking);
 });
 
 router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => {

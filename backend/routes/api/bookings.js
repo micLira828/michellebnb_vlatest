@@ -16,16 +16,18 @@ var today = new Date();
 const validateBooking = [
   check('startDate')
     .exists({ checkFalsy: true })
-    .isAfter(today.toString())
+    .isBefore(today)
     .withMessage('startDate cannot be in the past.'),
   check('endDate')
+  .exists({ checkFalsy: true })
   .custom((endDate, {req}) => {
-     const startDate = req.body.startDate;
-     if(endDate <= startDate){
-        throw new Error("endDate cannot be on or before startDate")
-     }}),
+    const startDate = req.body.startDate;
+    if(endDate <= startDate){
+       throw new Error("endDate cannot be on or before startDate")
+    }}),
   handleValidationErrors
 ];
+
 router.get('/current', requireAuth, async(req, res, next) =>{
   const {user} = req;
   const userId = req.user.id;

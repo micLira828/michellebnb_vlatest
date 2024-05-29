@@ -74,11 +74,14 @@ const validateReview = [
      .isAfter(today.toString())
      .withMessage('startDate cannot be in the past.'),
    check('endDate')
-   .custom((endDate, {req}) => {
+   .exists({ checkFalsy: true })
+   .custom(async(endDate, {req}) =>{
       const startDate = req.body.startDate;
-      if(endDate <= startDate){
+      if(endDate <= startDate.toString()){
          throw new Error("endDate cannot be on or before startDate")
-      }}),
+      }
+    })
+   .withMessage('Sorry, date does not exist'),
    handleValidationErrors
  ];
 
@@ -414,8 +417,7 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
  
 
 
-   res.json({"spotId":spotBooking.spotId ,"startDate": spotBooking.startDate, 
-   "endDate": spotBooking.endDate});
+   res.json(spotBooking);
 });
 
 router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => {

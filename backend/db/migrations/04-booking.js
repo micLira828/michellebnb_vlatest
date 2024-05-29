@@ -30,10 +30,10 @@ module.exports = {
       },
       
       startDate: {
-        type: Sequelize.STRING
+        type: Sequelize.DATE
       },
       endDate: {
-        type: Sequelize.STRING
+        type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,

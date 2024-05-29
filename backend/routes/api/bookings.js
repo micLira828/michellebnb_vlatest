@@ -44,7 +44,7 @@ router.get('/current', requireAuth, async(req, res, next) =>{
       ownerId: safeUser.id
    }},
  });
-   res.json(usersBookings);
+   res.json({"Bookings":usersBookings});
   }
 });
 

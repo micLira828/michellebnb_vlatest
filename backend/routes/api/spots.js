@@ -10,7 +10,7 @@ const { Op, Sequelize, where, ValidationError} = require('sequelize');
 
 
 const router = express.Router();
-var today = new Date();
+const today = new Date();
 
    const validateSpot= [
    check('address')
@@ -304,7 +304,7 @@ router.get('/:spotId/bookings', requireAuth, async(req, res) => {
 
        result.push(bookingObject);
      }
-     return result;
+     res.json({"Bookings":result});
    }
 
 });
@@ -384,7 +384,7 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
 
  router.post('/:spotId/bookings', requireAuth, validateBooking, async(req, res) => {
    const {spotId} = req.params;
-
+  
    const spot = Spot.findByPk(spotId);
    if(!spot){
       return res.status(404).json({message: "Spot couldn't be found"})
@@ -392,11 +392,12 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
 
    const userId = req.user.id;
    if(userId === spot.ownerId){
-      return res.status(403).json({message: "Forbidden"})
+      return res.status(403).json({message: "Forbidden"});
    }
  
-   
-   const spot_booking = await Booking.create(
+  console.log(req.body.startDate, typeof req.body.startDate);
+ 
+   const spotBooking = await Booking.create(
       { 
        userId: req.body.userId, 
        spotId: spotId,
@@ -405,8 +406,8 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
       }
   );
  
-   res.json({"spotId":spot_booking.spotId ,"startDate": spot_booking.startDate, 
-   "endDate": spot_booking.endDate});
+   res.json({"spotId":spotBooking.spotId ,"startDate": spotBooking.startDate, 
+   "endDate": spotBooking.endDate});
 });
 
 router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => {

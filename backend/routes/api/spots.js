@@ -206,6 +206,7 @@ router.get('/current', requireAuth, async(req, res) => {
     const {SpotImages, Reviews, ...rest} = await spot.toJSON();
     console.log(SpotImages);
      const prettyRes = {...rest}
+     prettyRes.previewImage = "image url";
     for (let img of SpotImages){
       if(img.preview === true){
        prettyRes.previewImage = img.url

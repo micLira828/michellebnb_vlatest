@@ -74,11 +74,10 @@ const validateReview = [
      .isAfter(today.toString())
      .withMessage('startDate cannot be in the past.'),
    check('endDate')
-   .custom((endDate) => {
-      if(endDate === startDate){
-        const err = new Error('endDate cannot be on or before startDate');
-        err.message = 'endDate cannot be on or before startDate'
-        res.json(err);
+   .custom((endDate, {req}) => {
+      const startDate = req.body.startDate;
+      if(endDate <= startDate){
+         throw new Error("endDate cannot be on or before startDate")
       }}),
    handleValidationErrors
  ];

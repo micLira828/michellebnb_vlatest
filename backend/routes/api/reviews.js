@@ -44,7 +44,7 @@ router.get('/current', requireAuth, async(req, res) => {
         userId: safeUser.id
      }
  });
-   res.json(usersReviews);
+   res.json({"Reviews" :usersReviews});
   }
 });
 

@@ -153,7 +153,7 @@ router.get('/', async(req, res) => {
       const {SpotImages, Reviews, ...rest} = await spot.toJSON();
        
        const prettyRes = {...rest}
-       
+       prettyRes.previewImage = "No preview images yet"
       for (let img of SpotImages){
         if(img.preview === true){
          prettyRes.previewImage = img.url
@@ -176,7 +176,7 @@ router.get('/', async(req, res) => {
 
    
    
-    res.json(result);
+    res.json({"Spots":result});
 });
 
 router.get('/current', requireAuth, async(req, res) => {
@@ -206,7 +206,7 @@ router.get('/current', requireAuth, async(req, res) => {
     const {SpotImages, Reviews, ...rest} = await spot.toJSON();
     console.log(SpotImages);
      const prettyRes = {...rest}
-     prettyRes.previewImage = "image url";
+     prettyRes.previewImage = "No Preview Image yet.";
     for (let img of SpotImages){
       if(img.preview === true){
        prettyRes.previewImage = img.url
@@ -231,7 +231,7 @@ router.get('/current', requireAuth, async(req, res) => {
     result.push(prettyRes);
   }
 
-    res.json(result);
+    res.json({"Spots": result});
    }
 });
 
@@ -328,7 +328,7 @@ router.get('/:spotId/reviews', async(req, res) => {
 
    // }
   
-   res.json(spot_reviews);
+   res.json({"Reviews":spot_reviews});
 });
 
 
@@ -395,7 +395,7 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
       return res.status(403).json({message: "Forbidden"})
    }
  
-   //const spot = await Spot.findByPk(spot_id);
+   
    const spot_booking = await Booking.create(
       { 
        userId: req.body.userId, 
@@ -403,29 +403,10 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
        startDate: req.body.startDate,
        endDate: req.body.endDate
       }
-
-      
   );
  
-  console.log(startDate);
-  const startDateArr = spot_booking.startDate.toString().split('-')
-  const endDateArr = spot_booking.endDate.toString().split('-')
-  const startDateString = '';
-  const endDateString = '';
-
-  for (let ch = 0; ch < startDateArr.length - 1; ch++){
-     startDateString += ch + '-';
-  }
-
-  for (let ch = 0; ch < endDateArr.length - 1; ch++){
-     endDateString += ch + '-';
-  }
-
-  console.log(startDateString);
-  console.log(endDateString)
-
-   res.json({"spotId":spot_booking.spotId ,"startDate": startDateString, 
-   "endDate": endDateString});
+   res.json({"spotId":spot_booking.spotId ,"startDate": spot_booking.startDate, 
+   "endDate": spot_booking.endDate});
 });
 
 router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => {

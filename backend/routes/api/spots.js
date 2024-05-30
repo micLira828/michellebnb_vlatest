@@ -229,7 +229,7 @@ router.get('/current', requireAuth, async(req, res) => {
     }
 
     if(ratingsCount < 1){
-      prettyRes.avgRating = 'No Ratings Yet';
+      prettyRes.avgRating = 0.0;
      }
 
     else{

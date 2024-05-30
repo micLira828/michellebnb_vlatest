@@ -78,7 +78,7 @@ const validateReview = [
    .exists({ checkFalsy: true })
    .custom(async(endDate, {req}) => {
       const startDate = req.body.startDate;
-      if(endDate <= startDate.toString()){
+      if(Date.parse(endDate) <= Date.parse(startDate)){
          throw new Error("endDate cannot be on or before startDate")
       }
    }),
@@ -298,6 +298,7 @@ router.get('/:spotId/bookings', requireAuth, async(req, res) => {
         spotId: spotId
       }
    });
+
    if(userId === spot.ownerId){
       res.json({"Bookings": spot_bookings});
    }
@@ -403,49 +404,64 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
       return res.status(403).json({message: "Forbidden"});
    }
 
-   const newStartDate = req.body.startDate;
-   const newEndDate = req.body.endDate
+   const {startDate, endDate} = req.body;
+   const reqStartDate = Date.parse(startDate); 
+   const reqEndDate = Date.parse(endDate);
 
-   const bookingWithExistingStartDate = await Booking.findOne({
-      where: {
-        spotId: spotId,
-        startDate: newStartDate
+
+
+   const spot_bookings = await Booking.findAll({
+      where : {
+         spotId: spotId
       }
    });
 
-   const bookingWithExistingEndDate = await Booking.findOne({
-      where: {
-         spotId: spotId,
-         endDate: newEndDate
-      }
-   });
 
-   if(bookingWithExistingStartDate !== undefined|| bookingWithExistingEndDate !== undefined){
-      const err = new Error();
-      err.message = "Sorry, this spot is already booked for the specified dates"
-      err.errors = {}
-   
-      if(bookingWithExistingStartDate !== undefined){
+   for (let bkng of spot_bookings){
+      let {startDate, endDate} = bkng
+      startDate = Date.parse(startDate);
+      endDate = Date.parse(endDate);
+
+      if(reqStartDate === endDate){
+         err.message = "Sorry, this spot is already booked for the specified dates"
+         err.errors = {}
          err.errors.startDate = "Start date conflicts with an existing booking"
+         res.status(403).json(err);
       }
-      if(bookingWithExistingEndDate !== undefined){
-         err.errors.endDate = "End date conflicts with an existing booking"
+
+      if(reqEndDate === startDate){
+         err.message = "Sorry, this spot is already booked for the specified dates"
+         err.errors = {}
+         err.errors.endDate = "Enddate conflicts with an existing booking"
+         res.status(403).json(err);
       }
+
+      if( reqStartDate <= startDate 
+         && reqEndDate >= endDate){
+            const err = new Error();
+            err.message = "Sorry, this spot is already booked for the specified dates"
+            err.errors = {}
+            err.errors.startDate = "Start date conflicts with an existing booking"
+            err.errors.endDate = "End date conflicts with an existing booking";
+
+            res.status(403).json(err);
+      }
+     
+      if(startDate >= reqStartDate || endDate <= reqEndDate){
+         const err = new Error();
+         err.message = "Sorry, this spot is already booked for the specified dates"
+         err.errors = {}
+         
+         if(startDate >= reqStartDate){
+            err.errors.startDate = "Start date conflicts with an existing booking"
+         }
+         if(endDate <= reqEndDate){
+            err.errors.endDate = "End date conflicts with an existing booking"
+         }
           res.status(403).json(err);
-    }
- 
-   //  if(Date(newStartDate.toDateString()) < Date(today.toDateString()) || 
-   //    Date(newEndDate.toDateString()) <= Date(newStartDate.toDateString())){
-   //    const err = new Error('Bad Request');
-   //    err.errors = {};
-   //    err.status = 400;
-   //    if(req.body.startDate < today.toString()){
-   //       err.errors.startDate = "startDate cannot be in the past"
-   //    }
-   //    if(req.body.endDate <= req.body.startDate){
-   //       err.errors.endDate = "endDate cannot be on or before startDate"
-   //    }
-   // }
+      }
+   }
+
    const spotBooking = await Booking.create(
       { 
        userId: req.body.userId, 

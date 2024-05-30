@@ -161,12 +161,7 @@ router.get('/', async(req, res) => {
       const {SpotImages, Reviews, ...rest} = await spot.toJSON();
        
        const prettyRes = {...rest}
-       prettyRes.previewImage = "No preview images yet"
-      for (let img of SpotImages){
-        if(img.preview === true){
-         prettyRes.previewImage = img.url
-        }
-      }
+       
 
       for (let rev of Reviews){
          ratingsCount++;
@@ -174,10 +169,18 @@ router.get('/', async(req, res) => {
        }
 
       if(ratingsCount < 1){
-         prettyRes.avgStarRating = 'No Ratings Yet';
+         prettyRes.avgRating = 0.0;
        }
    
        prettyRes.avgRating = (ratingsAverage/ratingsCount).toFixed(1);
+
+       prettyRes.previewImage = "image url"
+      for (let img of SpotImages){
+        if(img.preview === true){
+         prettyRes.previewImage = img.url
+       }
+      } 
+        
     
       result.push(prettyRes);
     }
@@ -203,6 +206,7 @@ router.get('/current', requireAuth, async(req, res) => {
        username: user.username,
      };
      const usersSpots = await Spot.findAll({
+      // attributes: ['id', 'ownerId', 'address', 'city', 'state', 'country', ],
       include: [{model: SpotImage}, {model: Review}],
       where: {
          ownerId: safeUser.id
@@ -214,12 +218,7 @@ router.get('/current', requireAuth, async(req, res) => {
     const {SpotImages, Reviews, ...rest} = await spot.toJSON();
     console.log(SpotImages);
      const prettyRes = {...rest}
-     prettyRes.previewImage = "No Preview Image yet.";
-    for (let img of SpotImages){
-      if(img.preview === true){
-       prettyRes.previewImage = img.url
-      }
-    }
+    
 
     let ratingsAverage = 0;
     let ratingsCount = 0;
@@ -229,11 +228,18 @@ router.get('/current', requireAuth, async(req, res) => {
     }
 
     if(ratingsCount < 1){
-      prettyRes.avgRating = 'No Ratings Yet';
+      prettyRes.avgRating = 0.0;
      }
 
     else{
      prettyRes.avgRating = (ratingsAverage/ratingsCount).toFixed(1);
+    }
+
+    prettyRes.previewImage = "image url";
+    for (let img of SpotImages){
+      if(img.preview === true){
+       prettyRes.previewImage = img.url
+      }
     }
 
     result.push(prettyRes);
@@ -247,7 +253,7 @@ router.get('/:spotId', async(req, res) => {
    const spot_id = req.params.spotId;
 
    const spot = await Spot.findByPk(spot_id, {
-      include: [{model: SpotImage, attributes: ['id', 'url', 'preview']}, {model: Review}, {as: 'Owner', model: User}]
+      include: [{model: SpotImage, attributes: ['id', 'url', 'preview']}, {model: Review}, {as: 'Owner', model: User, attributes: ['id', 'firstName', 'lastName']}]
    });
 
    if(!spot){
@@ -273,7 +279,7 @@ router.get('/:spotId', async(req, res) => {
      }
 
      else{
-     prettyRes.avgStarRating = 'No Ratings Yet';
+     prettyRes.avgStarRating = 0.0;
      }
    
      result.push(prettyRes);
@@ -345,14 +351,15 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
    const {user} = req;
     const spot = await Spot.create(
       { 
-       lat: req.body.lat, 
-       lng: req.body.lng,
+       
        ownerId: user.id,
        address: req.body.address,
-       name: req.body.name,
-       country: req.body.country,
        city: req.body.city,
        state: req.body.state,
+       country: req.body.country,
+       lat: req.body.lat, 
+       lng: req.body.lng,
+       name: req.body.name,
        description: req.body.description,
        price: req.body.price
       }

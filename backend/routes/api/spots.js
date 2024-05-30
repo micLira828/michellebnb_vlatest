@@ -351,14 +351,15 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
    const {user} = req;
     const spot = await Spot.create(
       { 
-       lat: req.body.lat, 
-       lng: req.body.lng,
+       
        ownerId: user.id,
        address: req.body.address,
-       name: req.body.name,
-       country: req.body.country,
        city: req.body.city,
        state: req.body.state,
+       country: req.body.country,
+       lat: req.body.lat, 
+       lng: req.body.lng,
+       name: req.body.name,
        description: req.body.description,
        price: req.body.price
       }

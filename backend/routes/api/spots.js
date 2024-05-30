@@ -161,12 +161,7 @@ router.get('/', async(req, res) => {
       const {SpotImages, Reviews, ...rest} = await spot.toJSON();
        
        const prettyRes = {...rest}
-       prettyRes.previewImage = "image url"
-      for (let img of SpotImages){
-        if(img.preview === true){
-         prettyRes.previewImage = img.url
-        }
-      }
+       
 
       for (let rev of Reviews){
          ratingsCount++;
@@ -178,6 +173,14 @@ router.get('/', async(req, res) => {
        }
    
        prettyRes.avgRating = (ratingsAverage/ratingsCount).toFixed(1);
+
+       prettyRes.previewImage = "image url"
+      for (let img of SpotImages){
+        if(img.preview === true){
+         prettyRes.previewImage = img.url
+       }
+      } 
+        
     
       result.push(prettyRes);
     }
@@ -238,7 +241,7 @@ router.get('/current', requireAuth, async(req, res) => {
        prettyRes.previewImage = img.url
       }
     }
-    
+
     result.push(prettyRes);
   }
 

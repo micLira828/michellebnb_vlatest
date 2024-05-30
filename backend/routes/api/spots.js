@@ -279,7 +279,7 @@ router.get('/:spotId', async(req, res) => {
      }
 
      else{
-     prettyRes.avgStarRating = 'No Ratings Yet';
+     prettyRes.avgStarRating = 0.0;
      }
    
      result.push(prettyRes);

@@ -8,7 +8,7 @@ const { requireAuth } = require('../../utils/auth');
 // ...
 
 const { setTokenCookie, restoreUser } = require('../../utils/auth');
-const { Booking, Spot } = require('../../db/models');
+const { Booking, Spot, SpotImage } = require('../../db/models');
 const { append } = require('vary');
 
 const router = express.Router();
@@ -46,11 +46,40 @@ router.get('/current', requireAuth, async(req, res, next) =>{
     }
  
     const usersBookings = await Booking.findAll({
-     include: {model: Spot, where: {
-      ownerId: safeUser.id
-   }},
+    where: {
+      userId: safeUser.id
+   },
  });
-   res.json({"Bookings":usersBookings});
+
+ const result = [];
+ for (let booking of usersBookings){
+   const {...rest} = await booking.toJSON();
+
+   const prettyRes = {...rest};
+   let spot = await Spot.findOne({
+    include: [{model: SpotImage}],
+     where: {
+       id: booking.spotId
+     }
+   });
+
+   let spotResult = [];
+  //  for (let spot of spots){
+   const {SpotImages, ...theRest} = await spot.toJSON();
+   const spotRes = {...theRest}
+   spotRes.previewImage = "image url"
+   for (let img of SpotImages){
+     if (img.preview === true){
+       spotRes.previewImage = img.url
+     }
+   }
+  //  spotResult.push(spotRes);
+   prettyRes.Spot = spotRes;
+  // }
+   result.push(prettyRes);
+ }//end of for loop
+
+   res.json({"Bookings":result});
   }
 });
 

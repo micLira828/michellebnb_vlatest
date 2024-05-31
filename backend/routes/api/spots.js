@@ -160,7 +160,7 @@ router.get('/', async(req, res) => {
     for (let spot of spots){
       const {SpotImages, Reviews, ...rest} = await spot.toJSON();
        
-       const prettyRes = {...rest}
+       const prettyRes = {...rest, "avgRating": 0.0}
        
 
       for (let rev of Reviews){
@@ -168,9 +168,9 @@ router.get('/', async(req, res) => {
          ratingsAverage += rev.stars;
        }
 
-      if(ratingsCount < 1){
-         prettyRes.avgRating = 0.0;
-       }
+      // if(ratingsCount < 1){
+      //    prettyRes.avgRating = 0.0;
+      //  }
    
        prettyRes.avgRating = parseFloat((ratingsAverage/ratingsCount).toFixed(1));
 
@@ -217,7 +217,7 @@ router.get('/current', requireAuth, async(req, res) => {
   for (let spot of usersSpots){
     const {SpotImages, Reviews, ...rest} = await spot.toJSON();
     console.log(SpotImages);
-     const prettyRes = {...rest}
+     const prettyRes = {...rest, "avgRating": 0.0}
     
 
     let ratingsAverage = 0;
@@ -264,7 +264,7 @@ router.get('/:spotId', async(req, res) => {
   
      const {Reviews, ...rest} = await spot.toJSON();
     
-      const prettyRes = {...rest}
+      const prettyRes = {...rest, "avgStarRating": 0.0}
   
     let ratingsAverage = 0;
     let ratingsCount = 0;
@@ -274,12 +274,9 @@ router.get('/:spotId', async(req, res) => {
      }
      
      prettyRes.numReviews = ratingsCount;
+     
      if(ratingsCount >= 1){
       prettyRes.avgStarRating = parseFloat((ratingsAverage/ratingsCount).toFixed(1));
-     }
-
-     else{
-     prettyRes.avgStarRating = 0.0;
      }
    
      result.push(prettyRes);

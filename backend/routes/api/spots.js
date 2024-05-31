@@ -155,42 +155,38 @@ router.get('/', async(req, res) => {
 
     });
     const result = [];
-   //  let ratingsAverage = 0;
-   //  let ratingsCount = 0;
-    for (let spot of spots){
+    for (let spot of usersSpots){
       const {SpotImages, Reviews, ...rest} = await spot.toJSON();
-       
-       console.log(...rest)
+      console.log(SpotImages);
        const prettyRes = {...rest, avgRating: 0.0}
-       
-       
+      
+  
       let ratingsAverage = 0;
       let ratingsCount = 0;
       for (let rev of Reviews){
-         ratingsCount++;
-         ratingsAverage += rev.stars;
-       }
-
-
-   
-      if(ratingsCount >= 1){
-       prettyRes.avgRating = +((ratingsAverage / ratingsCount).toFixed(1));
+        ratingsCount++;
+        ratingsAverage += rev.stars;
       }
-
-       prettyRes.previewImage = "image url"
+  
+      if(ratingsCount < 1){
+        prettyRes.avgRating = 0.0;
+       }
+  
+      else{
+        prettyRes.avgRating = parseFloat((ratingsAverage/ratingsCount).toFixed(1));
+      }
+  
+      prettyRes.previewImage = "image url";
       for (let img of SpotImages){
         if(img.preview === true){
          prettyRes.previewImage = img.url
-       }
-      } 
-        
-    
+        }
+      }
+  
       result.push(prettyRes);
     }
-
-   
-   
-    res.json({"Spots":result});
+  
+      res.json({"Spots": result});
 });
 
 router.get('/current', requireAuth, async(req, res) => {

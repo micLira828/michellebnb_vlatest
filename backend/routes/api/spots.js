@@ -92,7 +92,7 @@ const validateReview = [
 
 //Gets all of the spots
 router.get('/', async(req, res) => {
-   let {page, size, minLat, maxLat, minLong, maxLong, minPrice, maxPrice} = req.query
+   let {page, size, minLat, maxLat, minLong, maxLong, minPrice, maxPrice} = req.query;
    size = parseInt(size)
    page = parseInt(page) 
 
@@ -142,8 +142,8 @@ router.get('/', async(req, res) => {
       where.price = {[Op.gt]: minPrice}
    } 
 
-   const previewImage = await SpotImage.findOne(
-      {where: {preview: true}});
+   // const previewImage = await SpotImage.findOne(
+   //    {where: {preview: true}});
 
 
    // const spotImages = spot.getSpotImages
@@ -155,14 +155,17 @@ router.get('/', async(req, res) => {
 
     });
     const result = [];
-    let ratingsAverage = 0;
-    let ratingsCount = 0;
+   //  let ratingsAverage = 0;
+   //  let ratingsCount = 0;
     for (let spot of spots){
       const {SpotImages, Reviews, ...rest} = await spot.toJSON();
        
+       console.log(...rest)
        const prettyRes = {...rest, avgRating: 0.0}
        
-
+       
+      let ratingsAverage = 0;
+      let ratingsCount = 0;
       for (let rev of Reviews){
          ratingsCount++;
          ratingsAverage += rev.stars;

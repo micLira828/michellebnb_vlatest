@@ -168,12 +168,10 @@ router.get('/', async(req, res) => {
          ratingsAverage += rev.stars;
        }
 
-      // if(ratingsCount < 1){
-      //    prettyRes.avgRating = 0.0;
-      //  }
+
    
       if(ratingsCount >= 1){
-       prettyRes.avgRating = parseFloat((ratingsAverage/ratingsCount).toFixed(1));
+       prettyRes.avgRating = +((ratingsAverage / ratingsCount).toFixed(1));
       }
 
        prettyRes.previewImage = "image url"

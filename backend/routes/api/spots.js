@@ -156,9 +156,9 @@ router.get('/', async(req, res) => {
     });
     const result = [];
     for (let spot of spots){
-      const {SpotImages, Reviews, ...rest} = await spot.toJSON();
-      console.log(SpotImages);
-       const prettyRes = {...rest, avgRating: 0.0}
+      const {SpotImages, Reviews, lat, lng, price, ...rest} = await spot.toJSON();
+    
+       const prettyRes = {...rest, lat, lng, avgRating: 0.0}
       
   
       let ratingsAverage = 0;
@@ -183,6 +183,9 @@ router.get('/', async(req, res) => {
         }
       }
   
+      prettyRes.lat = parseFloat(lat);
+      prettyRes.lng = parseFloat(lng)
+      prettyRes.price = parseFloat(price);
       result.push(prettyRes);
     }
   
@@ -214,7 +217,7 @@ router.get('/current', requireAuth, async(req, res) => {
 
   const result = [];
   for (let spot of usersSpots){
-    const {SpotImages, Reviews, ...rest} = await spot.toJSON();
+    const {SpotImages, Reviews, lat, lng, price, ...rest} = await spot.toJSON();
     console.log(SpotImages);
      const prettyRes = {...rest, avgRating: 0.0}
     
@@ -240,7 +243,9 @@ router.get('/current', requireAuth, async(req, res) => {
        prettyRes.previewImage = img.url
       }
     }
-
+    prettyRes.lat = parseFloat(lat);
+    prettyRes.lng = parseFloat(lng)
+    prettyRes.price = parseFloat(price);
     result.push(prettyRes);
   }
 
@@ -263,7 +268,7 @@ router.get('/:spotId', async(req, res) => {
   
      const {Reviews, ...rest} = await spot.toJSON();
     
-      const prettyRes = {...rest, avgStarRating: 0.0}
+      const prettyRes = {...rest, lat, lng, price, avgStarRating: 0.0}
   
     let ratingsAverage = 0;
     let ratingsCount = 0;
@@ -278,6 +283,9 @@ router.get('/:spotId', async(req, res) => {
       prettyRes.avgStarRating = +((ratingsAverage / ratingsCount).toFixed(1));
      }
    
+     prettyRes.lat = parseFloat(lat);
+     prettyRes.lng = parseFloat(lng)
+     prettyRes.price = parseFloat(price);
      result.push(prettyRes);
    
  

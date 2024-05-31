@@ -232,7 +232,7 @@ router.get('/current', requireAuth, async(req, res) => {
      }
 
     else{
-     prettyRes.avgRating = (ratingsAverage/ratingsCount).toFixed(1);
+      prettyRes.avgRating = parseFloat((ratingsAverage/ratingsCount).toFixed(1));
     }
 
     prettyRes.previewImage = "image url";
@@ -275,7 +275,7 @@ router.get('/:spotId', async(req, res) => {
      
      prettyRes.numReviews = ratingsCount;
      if(ratingsCount >= 1){
-      prettyRes.avgStarRating = (ratingsAverage/ratingsCount).toFixed(1);
+      prettyRes.avgStarRating = parseFloat((ratingsAverage/ratingsCount).toFixed(1));
      }
 
      else{

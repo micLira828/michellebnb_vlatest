@@ -266,7 +266,7 @@ router.get('/:spotId', async(req, res) => {
 
    const result = [];
   
-     const {Reviews, ...rest} = await spot.toJSON();
+     const {Reviews, lat, lng, price, ...rest} = await spot.toJSON();
     
       const prettyRes = {...rest, lat, lng, price, avgStarRating: 0.0}
   

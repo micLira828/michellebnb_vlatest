@@ -29,7 +29,7 @@ const validateSignup = [
   check('username')
     .exists({ checkFalsy: true })
     .isLength({ min: 4 })
-    .withMessage('Username is required.'),
+    .withMessage('Username is required'),
   // check('username')
   //   .not()
   //   .isEmail()
@@ -59,13 +59,13 @@ router.post(
     const userWithExistingUserName = await User.findOne({where: {username: username}});
 
     if(userWithExistingEmail){
-      res.json({message: "User already exists", errors: {email:  "User with that email already exists"}});
+      res.status(500).json({message: "User already exists", errors: {email:  "User with that email already exists"}});
     }
 
     if(userWithExistingUserName){
-      res.json({message: "User already exists", errors: {username:  "User with that username already exists"}});
+      res.status(500).json({message: "User already exists", errors: {username:  "User with that username already exists"}});
     }
-
+///Made another comment for another commit
     const user = await User.create({firstName, lastName, email, username, hashedPassword });
     const safeUser = {
       id: user.id,

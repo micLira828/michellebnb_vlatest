@@ -65,7 +65,7 @@ router.post(
     if(userWithExistingUserName){
       res.status(500).json({message: "User already exists", errors: {username:  "User with that username already exists"}});
     }
-
+///Made another comment for another commit
     const user = await User.create({firstName, lastName, email, username, hashedPassword });
     const safeUser = {
       id: user.id,

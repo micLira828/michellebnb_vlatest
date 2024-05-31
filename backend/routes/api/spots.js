@@ -278,7 +278,7 @@ router.get('/:spotId', async(req, res) => {
      prettyRes.numReviews = ratingsCount;
 
      if(ratingsCount >= 1){
-      prettyRes.avgStarRating = parseFloat((ratingsAverage/ratingsCount).toFixed(1));
+      prettyRes.avgStarRating = +((ratingsAverage / ratingsCount).toFixed(1));
      }
    
      result.push(prettyRes);
@@ -351,11 +351,11 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
        city: req.body.city,
        state: req.body.state,
        country: req.body.country,
-       lat: req.body.lat, 
-       lng: req.body.lng,
+       lat: parseFloat(req.body.lat), 
+       lng: parseFloat(req.body.lng),
        name: req.body.name,
        description: req.body.description,
-       price: req.body.price
+       price: parseFloat(req.body.price)
       }
   );
 

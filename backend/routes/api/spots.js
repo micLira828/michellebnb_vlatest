@@ -172,7 +172,7 @@ router.get('/', async(req, res) => {
          prettyRes.avgRating = 0.0;
        }
    
-       prettyRes.avgRating = ratingsAverage/ratingsCount;
+       prettyRes.avgRating = parseFloat((ratingsAverage/ratingsCount).toFixed(1));
 
        prettyRes.previewImage = "image url"
       for (let img of SpotImages){
@@ -232,7 +232,7 @@ router.get('/current', requireAuth, async(req, res) => {
      }
 
     else{
-     prettyRes.avgRating = (ratingsAverage/ratingsCount).toFixed(1);
+      prettyRes.avgRating = parseFloat((ratingsAverage/ratingsCount).toFixed(1));
     }
 
     prettyRes.previewImage = "image url";
@@ -275,7 +275,7 @@ router.get('/:spotId', async(req, res) => {
      
      prettyRes.numReviews = ratingsCount;
      if(ratingsCount >= 1){
-      prettyRes.avgStarRating = (ratingsAverage/ratingsCount).toFixed(1);
+      prettyRes.avgStarRating = parseFloat((ratingsAverage/ratingsCount).toFixed(1));
      }
 
      else{
@@ -466,7 +466,7 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
 
    const spotBooking = await Booking.create(
       { 
-       userId: req.body.userId, 
+       userId: userId, 
        spotId: spotId,
        startDate: req.body.startDate,
        endDate: req.body.endDate

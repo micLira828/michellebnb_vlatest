@@ -172,7 +172,7 @@ router.get('/', async(req, res) => {
          prettyRes.avgRating = 0.0;
        }
    
-       prettyRes.avgRating = (ratingsAverage/ratingsCount).toFixed(1);
+       prettyRes.avgRating = ratingsAverage/ratingsCount;
 
        prettyRes.previewImage = "image url"
       for (let img of SpotImages){

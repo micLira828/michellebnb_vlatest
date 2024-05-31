@@ -49,7 +49,7 @@ router.get('/current', requireAuth, async(req, res) => {
 
  const result = [];
  for (let review of usersReviews){
-   const {User, ReviewImages, ...rest} = await review.toJSON();
+   const {stars, User, ReviewImages, ...rest} = await review.toJSON();
 
    const prettyRes = {User, ReviewImages, ...rest};
    let spot = await Spot.findOne({
@@ -59,7 +59,7 @@ router.get('/current', requireAuth, async(req, res) => {
      }
    });
 
-   let spotResult = [];
+  
   //  for (let spot of spots){
    const {SpotImages, ...theRest} = await spot.toJSON();
    const spotRes = {...theRest}
@@ -71,6 +71,7 @@ router.get('/current', requireAuth, async(req, res) => {
    }
   //  spotResult.push(spotRes);
    prettyRes.Spot = spotRes;
+   prettyRes.stars = parseFloat(stars);
   // }
    result.push(prettyRes);
  }//end of for loop

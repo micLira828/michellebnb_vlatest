@@ -341,8 +341,16 @@ router.get('/:spotId/reviews', async(req, res) => {
       }
    });
 
+   const result = [];
+   for(let review of spot_reviews){
+      const {stars, ...rest} = await review.toJSON();
+      let prettyRes = {...rest}
+      prettyRes.stars = parseFloat(stars);
+      result.push(prettyRes);
+   }
+
   
-   res.json({"Reviews":spot_reviews});
+   res.json({"Reviews":result});
 });
 
 

@@ -337,11 +337,6 @@ router.get('/:spotId/reviews', async(req, res) => {
       }
    });
 
-   // for(rev of spot_reviews){
-   //  const {Users, ReviewImages, ...rest} = rev;
-   //  const reviewObject = {...rest};
-
-   // }
   
    res.json({"Reviews":spot_reviews});
 });

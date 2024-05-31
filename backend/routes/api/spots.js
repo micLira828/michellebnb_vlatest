@@ -155,7 +155,7 @@ router.get('/', async(req, res) => {
 
     });
     const result = [];
-    for (let spot of usersSpots){
+    for (let spot of spots){
       const {SpotImages, Reviews, ...rest} = await spot.toJSON();
       console.log(SpotImages);
        const prettyRes = {...rest, avgRating: 0.0}

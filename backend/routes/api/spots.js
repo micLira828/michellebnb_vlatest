@@ -493,6 +493,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
    const {spotId} = req.params;
   
   const spot = await Spot.findByPk(spotId);
+  
 
   if(!spot){
    res.status(404).json({
@@ -501,6 +502,12 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
  }
 
    const userId = req.user.id;
+
+   // if(userId === spot.ownerId){
+   //    res.status(403).json({
+   //     message: "Spot couldn't be found"
+   //   });
+   //  }
    
    const usersReview = await Review.findOne({where: {userId: userId, spotId: spotId}});
 
@@ -513,7 +520,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
        userId: userId,
        spotId: spotId,
        review: req.body.review,
-       stars: parseFloat(req.body.stars)
+       stars: parseInt(req.body.stars)
       }
   );
 

@@ -55,7 +55,7 @@ router.get('/current', requireAuth, async(req, res, next) =>{
  for (let booking of usersBookings){
    const {...rest} = await booking.toJSON();
 
-   const prettyRes = {price, ...rest};
+   const prettyRes = {...rest};
    let spot = await Spot.findOne({
     include: [{model: SpotImage}],
      where: {
@@ -68,7 +68,7 @@ router.get('/current', requireAuth, async(req, res, next) =>{
     
    const {lat, lng, price, SpotImages, ...theRest} = await spot.toJSON();
 
-   const spotRes = {...theRest}
+   const spotRes = {lat, lng, price, ...theRest}
    spotRes.lat = parseFloat(lat);
    spotRes.lng = parseFloat(lng);
    spotRes.price = parseFloat(price);

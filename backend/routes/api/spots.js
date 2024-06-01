@@ -368,10 +368,7 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
       res.status(403).json({message: 'Spot with name and address already exists'});
    }
 
-    let lat = parseFloat(req.body.lat)
-    let lng = parseFloat(req.body.lng)
-    let price = parseFloat(req.body.price)
-
+  
     const spot = await Spot.create(
       { 
        
@@ -380,17 +377,22 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
        city: req.body.city,
        state: req.body.state,
        country: req.body.country,
-       lat: lat, 
-       lng: lng,
+       lat: req.body.lat, 
+       lng: req.body.lng,
        name: req.body.name,
        description: req.body.description,
        price: price
       }
   );
 
+    const {lat, lng, price, ...rest} = await spot.toJSON();
+    const spotRes = {...rest}
     
+    spotRes.lat = parseFloat(req.body.lat)
+    spotRes.lng = parseFloat(req.body.lng)
+    spotRes.price = parseFloat(req.body.price)
 
-    res.status(201).json(spot);
+    res.status(201).json(spotRes);
  });
 
  router.post('/:spotId/images', requireAuth, async(req, res, next) =>{

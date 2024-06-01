@@ -67,15 +67,16 @@ router.get('/current', requireAuth, async(req, res, next) =>{
   //  for (let spot of spots){
     
    const {lat, lng, price, SpotImages, ...theRest} = await spot.toJSON();
-   const spotRes = {lat, lng, price, ...theRest}
+
+   const spotRes = {...theRest}
+   spotRes.lat = parseFloat(lat);
+   spotRes.lng = parseFloat(lng);
+   spotRes.price = parseFloat(price);
    spotRes.previewImage = "image url"
    for (let img of SpotImages){
      if (img.preview === true){
        spotRes.previewImage = img.url
      }
-     spotRes.lat = parseFloat(lat);
-     spotRes.lng = parseFloat(lng);
-     spotRes.price = parseFloat(price);
    }
   //  spotResult.push(spotRes);
    prettyRes.Spot = spotRes;

@@ -65,6 +65,7 @@ router.get('/current', requireAuth, async(req, res, next) =>{
 
    let spotResult = [];
   //  for (let spot of spots){
+    
    const {lat, lng, price, SpotImages, ...theRest} = await spot.toJSON();
    const spotRes = {lat, lng, price, ...theRest}
    spotRes.previewImage = "image url"
@@ -74,7 +75,7 @@ router.get('/current', requireAuth, async(req, res, next) =>{
      }
      spotRes.lat = parseFloat(lat);
      spotRes.lng = parseFloat(lng);
-     spotRes.lng = parseFloat(price);
+     spotRes.price = parseFloat(price);
    }
   //  spotResult.push(spotRes);
    prettyRes.Spot = spotRes;

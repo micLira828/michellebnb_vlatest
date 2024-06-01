@@ -356,6 +356,17 @@ router.get('/:spotId/reviews', async(req, res) => {
 
 router.post('/', requireAuth, validateSpot, async(req, res) => {
    const {user} = req;
+
+   const existingSpot = await Spot.findOne({
+      where: {
+         name: req.body.name,
+         address: req.body.address
+      }
+   });
+
+   if(existingSpot){
+      res.status(403).json({message: 'Spot with name and address already exists'});
+   }
     const spot = await Spot.create(
       { 
        
@@ -371,6 +382,8 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
        price: parseFloat(req.body.price)
       }
   );
+
+    
 
     res.status(201).json(spot);
  });

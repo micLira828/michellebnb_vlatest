@@ -62,7 +62,7 @@ const validateReview = [
      .withMessage('Review text is required'),
     check('stars')
      .exists({ checkFalsy: true })
-     .isFloat({min: 1.0, max: 5.0})
+     .isInt({min: 1.0, max: 5.0})
      .withMessage('Stars must be an integer from 1 to 5'),
    handleValidationErrors
  ];

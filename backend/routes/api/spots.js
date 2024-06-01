@@ -534,14 +534,15 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
        userId: userId,
        spotId: spotId,
        review: req.body.review,
-       stars: stars
+       stars: req.body.stars
       }
   );
 
   const {stars, ...rest} = await spot_review.toJSON();
-  const reviewRes = {...rest}
+  const reviewRes = {stars, ...rest}
+ 
   
-   reviewRes.stars = parseInt(req.body.stars)
+   reviewRes.stars = parseInt(stars)
 
 
    res.status(201).json(reviewRes);

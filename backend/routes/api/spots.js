@@ -367,6 +367,11 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
    if(existingSpot){
       res.status(403).json({message: 'Spot with name and address already exists'});
    }
+
+    let lat = parseFloat(req.body.lat)
+    let lng = parseFloat(req.body.lng)
+    let price = parseFloat(req.body.price)
+
     const spot = await Spot.create(
       { 
        
@@ -375,11 +380,11 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
        city: req.body.city,
        state: req.body.state,
        country: req.body.country,
-       lat: parseFloat(req.body.lat), 
-       lng: parseFloat(req.body.lng),
+       lat: lat, 
+       lng: lng,
        name: req.body.name,
        description: req.body.description,
-       price: parseFloat(req.body.price)
+       price: price
       }
   );
 
@@ -515,12 +520,6 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
  }
 
    const userId = req.user.id;
-
-   // if(userId === spot.ownerId){
-   //    res.status(403).json({
-   //     message: "Spot couldn't be found"
-   //   });
-   //  }
    
    const usersReview = await Review.findOne({where: {userId: userId, spotId: spotId}});
 
@@ -528,7 +527,9 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
       res.status(500).json({message: "User already has a review for this spot"});
    }
 
+   console.log(req.body.stars);
    const stars = parseInt(req.body.stars);
+   console.log(stars);
 
    const spot_review = await Review.create(
       { 

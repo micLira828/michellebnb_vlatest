@@ -55,7 +55,7 @@ router.get('/current', requireAuth, async(req, res, next) =>{
  for (let booking of usersBookings){
    const {...rest} = await booking.toJSON();
 
-   const prettyRes = {...rest};
+   const prettyRes = {price, ...rest};
    let spot = await Spot.findOne({
     include: [{model: SpotImage}],
      where: {
@@ -65,13 +65,16 @@ router.get('/current', requireAuth, async(req, res, next) =>{
 
    let spotResult = [];
   //  for (let spot of spots){
-   const {SpotImages, ...theRest} = await spot.toJSON();
-   const spotRes = {...theRest}
+   const {lat, lng, price, SpotImages, ...theRest} = await spot.toJSON();
+   const spotRes = {lat, lng, price, ...theRest}
    spotRes.previewImage = "image url"
    for (let img of SpotImages){
      if (img.preview === true){
        spotRes.previewImage = img.url
      }
+     spotRes.lat = parseFloat(lat);
+     spotRes.lng = parseFloat(lng);
+     spotRes.lng = parseFloat(price);
    }
   //  spotResult.push(spotRes);
    prettyRes.Spot = spotRes;

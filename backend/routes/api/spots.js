@@ -528,12 +528,14 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
       res.status(500).json({message: "User already has a review for this spot"});
    }
 
+   const stars = parseInt(req.body.stars);
+
    const spot_review = await Review.create(
       { 
        userId: userId,
        spotId: spotId,
        review: req.body.review,
-       stars: parseInt(req.body.stars)
+       stars: stars
       }
   );
 

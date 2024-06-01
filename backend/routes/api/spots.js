@@ -513,7 +513,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
        userId: userId,
        spotId: spotId,
        review: req.body.review,
-       stars: req.body.stars
+       stars: parseFloat(req.body.stars)
       }
   );
 
@@ -537,8 +537,8 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
     }
    await spot.update(
       { 
-       latitude: req.body.latitude, 
-       longitude: req.body.longitude,
+       lat: parseFloat(req.body.lat), 
+       lng: parseFloat(req.body.lng),
        ownerId: req.body.ownerId,
        address: req.body.address,
        name: req.body.name,
@@ -546,7 +546,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
        city: req.body.city,
        state: req.body.state,
        description: req.body.description,
-       price: req.body.price
+       price: parseFloat(req.body.price)
       }
   );
  

@@ -529,10 +529,7 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
       res.status(500).json({message: "User already has a review for this spot"});
    }
 
-   console.log(req.body.stars);
-   const stars = parseInt(req.body.stars);
-   console.log(stars);
-
+ 
    const spot_review = await Review.create(
       { 
        userId: userId,
@@ -542,8 +539,14 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
       }
   );
 
+  const {stars, ...rest} = await spot_review.toJSON();
+  const reviewRes = {...rest}
+  
+   reviewRes.stars = parseInt(req.body.stars)
 
-   res.status(201).json(spot_review);
+
+   res.status(201).json(reviewRes);
+ 
 });
 
 //Just another comment to push something to dev

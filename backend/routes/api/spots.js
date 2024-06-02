@@ -225,10 +225,13 @@ router.get('/current', requireAuth, async(req, res) => {
 
   const result = [];
   for (let spot of usersSpots){
-    const {SpotImages, Reviews, lat, lng, price, ...rest} = await spot.toJSON();
+    const {SpotImages, Reviews, lat, lng, price, createdAt, updatedAt, ...rest} = await spot.toJSON();
     console.log(SpotImages);
      const prettyRes = {...rest, avgRating: 0.0}
     
+     prettyRes.createdAt = createdAt.toISOString().replace(/T/, ' ').replace(/\..+/, ' ')
+     prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/, ' ')
+
 
     let ratingsAverage = 0;
     let ratingsCount = 0;
@@ -606,7 +609,7 @@ router.delete('/:spotId', requireAuth, async(req, res) => {
     
    await spot.destroy();
    res.json({
-      "message": "Successfully deleted"
+      message: "Successfully deleted"
     });
 });
 

@@ -157,8 +157,8 @@ router.get('/', async(req, res) => {
     
        const prettyRes = {...rest, lat, lng, avgRating: 0.0}
 
-       prettyRes.createdAt = createdAt.toISOString().replace(/T/, ' ').replace(/\..+/, ' ')
-       prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/, ' ')
+       prettyRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'')
+       prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'')
       
   
       let ratingsAverage = 0;
@@ -232,8 +232,8 @@ router.get('/current', requireAuth, async(req, res) => {
     console.log(SpotImages);
      const prettyRes = {...rest, avgRating: 0.0}
     
-     prettyRes.createdAt = createdAt.toISOString().replace(/T/, ' ').replace(/\..+/, ' ')
-     prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/, ' ')
+     prettyRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'')
+     prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'')
 
 
     let ratingsAverage = 0;

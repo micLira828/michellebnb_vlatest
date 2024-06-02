@@ -31,7 +31,7 @@ const today = new Date();
     check('country')
      .exists({ checkFalsy: true })
      .isLength({ min: 6 })
-     .withMessage('Country is required.'),
+     .withMessage('Country is required'),
      check('lat')
      .exists({ checkFalsy: true })
      .isFloat({ min: -90, max: 90 })
@@ -46,9 +46,9 @@ const today = new Date();
      .withMessage('Name must be less than 50 characters'),
       check('description')
      .exists({ checkFalsy: true })
-     .withMessage('Description is Required'),
+     .withMessage('Description is required'),
      check('price')
-     .isFloat({ min: 0, max: 2000})
+     .isFloat({ min: 0})
      .withMessage('Price per day must be a positive number'),
    handleValidationErrors
  ];

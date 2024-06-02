@@ -277,9 +277,12 @@ router.get('/:spotId', async(req, res) => {
 
    const result = [];
   
-     const {Reviews, lat, lng, price, ...rest} = await spot.toJSON();
+     const {Reviews, lat, lng, price, createdAt, updatedAt, ...rest} = await spot.toJSON();
     
-      const prettyRes = {...rest, lat, lng, price, avgStarRating: 0.0}
+      const prettyRes = {...rest, lat, lng, price, createdAt, updatedAt, avgStarRating: 0.0}
+
+      prettyRes.createdAt = createdAt.toISOString().replace(/T/, ' ').replace(/\..+/, ' ')
+      prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/, ' ')
   
     let ratingsAverage = 0;
     let ratingsCount = 0;

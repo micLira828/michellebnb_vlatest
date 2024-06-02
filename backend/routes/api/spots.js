@@ -98,7 +98,8 @@ router.get('/', async(req, res) => {
 
    const where = {};
 
-   if(isNaN(page) || page < 1 || page > 10){
+   if(isNaN(page) ||
+    page < 1){
       page = 1
    }
 
@@ -142,14 +143,6 @@ router.get('/', async(req, res) => {
       where.price = {[Op.gt]: minPrice}
    } 
 
-   // const previewImage = await SpotImage.findOne(
-   //    {where: {preview: true}});
-
-
-   // const spotImages = spot.getSpotImages
-
-   
-
    const spots = await Spot.findAll({
         include: [{model: SpotImage}, {model: Review}],
         where,
@@ -157,6 +150,7 @@ router.get('/', async(req, res) => {
         offset: (page - 1) * size
 
     });
+
     const result = [];
     for (let spot of spots){
       const {SpotImages, Reviews, lat, lng, price, ...rest} = await spot.toJSON();
@@ -191,7 +185,18 @@ router.get('/', async(req, res) => {
       prettyRes.price = parseFloat(price);
       result.push(prettyRes);
     }
-  
+   if((page !== undefined || isNaN(page)) && (size !== undefined || isNaN(size))){
+      const spotRes = {"Spots": result};
+      if(page !== undefined){
+         page = parseInt(page);
+         spotRes.page = page;
+      }
+      if (size !== undefined){
+         size = parseInt(size);
+         spotRes.size = size;
+      }
+      res.json(spotRes);
+   }
       res.json({"Spots": result});
 });
 

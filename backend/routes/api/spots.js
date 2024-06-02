@@ -147,6 +147,9 @@ router.get('/', async(req, res) => {
 
 
    // const spotImages = spot.getSpotImages
+
+   
+
    const spots = await Spot.findAll({
         include: [{model: SpotImage}, {model: Review}],
         where,

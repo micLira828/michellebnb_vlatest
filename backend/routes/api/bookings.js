@@ -166,7 +166,7 @@ router.delete('/:bookingId', requireAuth, async(req, res) =>{
       if(userId !== booking.userId){
         return res.status(403).json({message: "Forbidden"})
      }
-    booking.destroy();
+    await booking.destroy();
 
     res.json({"message": "Successfully deleted"})
 

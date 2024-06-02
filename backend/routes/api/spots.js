@@ -385,7 +385,6 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
       res.status(403).json({message: 'Spot with name and address already exists'});
    }
 
-  
     const spot = await Spot.create(
       { 
        ownerId: user.id,
@@ -401,12 +400,15 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
       }
   );
 
-    const {lat, lng, price, ...rest} = await spot.toJSON();
+    const {lat, lng, price, createdAt, updatedAt, ...rest} = await spot.toJSON();
     const spotRes = {...rest}
     
     spotRes.lat = parseFloat(lat)
     spotRes.lng = parseFloat(lng)
     spotRes.price = parseFloat(price)
+
+    spotRes.createdAt = createdAt.toISOString().replace(/T/, ' ').replace(/\..+/, ' ')
+    spotRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/, ' ')
 
     res.status(201).json(spotRes);
  });

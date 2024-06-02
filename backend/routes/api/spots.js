@@ -432,7 +432,7 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
          spotId: spotId
       });
 
-      res.status.json({"id":spotImage.id, "url":spotImage.url, "preview": spotImage.preview});
+      res.json({"id":spotImage.id, "url":spotImage.url, "preview": spotImage.preview});
    }
 
    else{

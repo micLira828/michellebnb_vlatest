@@ -98,53 +98,53 @@ router.get('/', async(req, res) => {
 
    const where = {};
 
-   if(Number(page) ||
+   if(!page || !Number(page) ||
     page < 1){
       page = 1
    }
 
-   if(Number(size) || size < 1 || size > 20){
+   if(!size || !Number(size) || size < 1 || size > 20){
       size = 20
    }
 
-   if(minLat !== undefined && maxLat !== undefined && 
+   if(minLat && maxLat && 
       Number(minLat) && Number(maxLat)) {
       where.lat = {[Op.gt]: minLat, [Op.lt]:maxLat }
    } 
 
-    else if(minLat !== undefined && Number(minLat)) {
+    else if(minLat && Number(minLat)) {
       where.lat = {[Op.gt]: minLat}
    } 
 
-   else if(maxLat !== undefined && Number(maxLat)) {
+   else if(maxLat && Number(maxLat)) {
       where.lat = {[Op.lt]: maxLat}
    } 
       
-   if (minLong !== undefined && maxLong !== undefined
+   if (minLong && maxLong 
       && Number(minLong) && Number(maxLong)
    ){
       where.lng = {[Op.gt]: minLong, [Op.lt]:maxLong}
    } 
 
-   else if(minLong !== undefined && Number(minLong)) {
+   else if(minLong  && Number(minLong)) {
       where.lng = {[Op.gt]: minLong}
    } 
 
-   else if(maxLong !== undefined) {
+   else if(maxLong && Number(maxLong)) {
       where.lng = {[Op.lt]: maxLong}
    } 
 
-   if (minPrice !== undefined && maxPrice !== undefined
+   if (minPrice  && maxPrice 
       && Number(minPrice) && Number(maxPrice) 
    ){
       where.price = {[Op.gt]: minPrice, [Op.lt]: maxPrice}
    } 
 
-   else if(maxPrice !== undefined && Number(maxPrice)) {
+   else if(maxPrice && Number(maxPrice)) {
       where.price = {[Op.lt]: maxPrice}
    } 
 
-   else if(minPrice !== undefined && Number(minPrice)){
+   else if(minPrice && Number(minPrice)){
       where.price = {[Op.gt]: minPrice}
    } 
 
@@ -193,7 +193,7 @@ router.get('/', async(req, res) => {
       prettyRes.price = parseFloat(price);
       result.push(prettyRes);
     }
-   if((page !== undefined || isNaN(page)) && (size !== undefined || isNaN(size))){
+   if((page !== undefined || Number(page)) && (size !== undefined || Number(size))){
       const spotRes = {"Spots": result};
       if(page !== undefined){
          page = parseInt(page);

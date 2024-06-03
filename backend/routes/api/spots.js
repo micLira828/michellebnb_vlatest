@@ -542,15 +542,15 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
    }
 }
 
-  const {startDate, endDate, ...rest} = await spotBooking.toJSON();
+  const {startDate, endDate, createdAt, updatedAt, ...rest} = await spotBooking.toJSON();
 
   const bookingRes = {...rest};
   bookingRes.startDate = startDate.toISOString().replace(/T/,' ').replace(/\..+/,'').split(' ')[0];
   bookingRes.endDate = endDate.toISOString().replace(/T/,' ').replace(/\..+/,'').split(' ')[0];
+  bookingRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'');
+  bookingRes.updatedAt = updatedAt.toISOString().replace(/T/,' ').replace(/\..+/,'');
 
-  return res.json(bookingRes);
-
- 
+  return res.json(bookingRes); 
 });
 
 router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => {

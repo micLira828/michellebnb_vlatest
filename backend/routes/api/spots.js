@@ -360,9 +360,11 @@ router.get('/:spotId/reviews', async(req, res) => {
 
    const result = [];
    for(let review of spot_reviews){
-      const {stars, ...rest} = await review.toJSON();
+      const {stars, createdAt, updatedAt, ...rest} = await review.toJSON();
       let prettyRes = {...rest}
       prettyRes.stars = parseFloat(stars);
+      prettyRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'')
+      prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'')
       result.push(prettyRes);
    }
 

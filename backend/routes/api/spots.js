@@ -284,9 +284,9 @@ router.get('/:spotId', async(req, res) => {
     
       const prettyRes = {...rest, lat, lng, price, createdAt, updatedAt, avgStarRating: 0.0}
 
-      prettyRes.createdAt = createdAt.toISOString().replace(/T/, ' ').replace(/\..+/, ' ')
-      prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/, ' ')
-  
+      prettyRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'')
+      prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'')
+
     let ratingsAverage = 0;
     let ratingsCount = 0;
      for (let rev of Reviews){
@@ -578,14 +578,27 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
      });
     }
 
+    const existingSpot = await Spot.findOne({
+      where: {
+         name: req.body.name,
+         address: req.body.address
+      }
+   });
+
+    if(existingSpot){
+      res.status(403).json({message: 'Spot with name and address already exists'});
+   }
+
     const userId = req.user.id;
     if(userId !== spot.ownerId){
        return res.status(403).json({message: "Forbidden"})
     }
+
+
    await spot.update(
       { 
-       lat: parseFloat(req.body.lat), 
-       lng: parseFloat(req.body.lng),
+       lat: req.body.lat, 
+       lng: req.body.lng,
        ownerId: req.body.ownerId,
        address: req.body.address,
        name: req.body.name,
@@ -593,11 +606,20 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
        city: req.body.city,
        state: req.body.state,
        description: req.body.description,
-       price: parseFloat(req.body.price)
+       price: req.body.price
       }
   );
+
+  const {lat, lng, price, createdAt, updatedAt, ...rest} = await spot.toJSON();
+   const spotRes = {...rest};
+   spotRes.lat =  parseFloat(spot.lat);
+   spotRes.lng = parseFloat(spot.lng);
+   spotRes.price = parseFloat(spot.price);
+
+   spotRes.createdAt = createdAt.toISOString().replace(/T/, ' ').replace(/\..+/, ' ')
+   spotRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/, ' ')
  
-  res.json(spot);
+  res.json(spotRes);
 });
 
 

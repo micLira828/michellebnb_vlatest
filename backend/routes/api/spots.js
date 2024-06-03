@@ -550,7 +550,7 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
   bookingRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'');
   bookingRes.updatedAt = updatedAt.toISOString().replace(/T/,' ').replace(/\..+/,'');
 
-  return res.json(bookingRes); 
+  return res.status(201).json(bookingRes); 
 });
 
 router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => {

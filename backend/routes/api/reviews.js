@@ -137,10 +137,16 @@ router.put('/:reviewId', requireAuth, validateReview, async(req, res, next) =>{
         userId: req.body.userId, 
         spotId: req.body.spotId,
         review: req.body.review,
-        stars: parseFloat(req.body.stars)
+        stars: req.body.stars
       }
   );
-  return res.json(review);
+
+  const {stars, createdAt, updatedAt, ...rest} = await review.toJSON();
+  const prettyRes = {...rest}
+  prettyRes.stars = parseFloat(stars);
+  prettyRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'')
+  prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'')
+  return res.json(prettyRes);
 });
 
 router.delete('/:reviewId', requireAuth, async(req, res) =>{

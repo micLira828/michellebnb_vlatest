@@ -84,7 +84,7 @@ router.get('/current', requireAuth, async(req, res, next) =>{
    result.push(prettyRes);
  }//end of for loop
 
-   res.json({"Bookings":result});
+   return res.json({"Bookings":result});
   }
 });
 
@@ -115,7 +115,7 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res, next) =>
          err.message = "Sorry, this spot is already booked for the specified dates"
          err.errors = {}
          err.errors.startDate = "Start date conflicts with an existing booking"
-         res.status(403).json(err);
+         return res.status(403).json(err);
       }
 
       if(Date.parse(today) > endDate){
@@ -126,7 +126,7 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res, next) =>
          err.message = "Sorry, this spot is already booked for the specified dates"
          err.errors = {}
          err.errors.endDate = "Enddate conflicts with an existing booking"
-         res.status(403).json(err);
+         return res.status(403).json(err);
       }
 
       if( reqStartDate <= startDate 
@@ -150,7 +150,7 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res, next) =>
     );
 
     
-    res.json(booking);
+    return res.json(booking);
 });
 
 router.delete('/:bookingId', requireAuth, async(req, res) =>{
@@ -158,7 +158,7 @@ router.delete('/:bookingId', requireAuth, async(req, res) =>{
 
     const booking = await Booking.findByPk(bookingId);
     if(!booking){
-        res.status(404).json({
+        return res.status(404).json({
          message: "Booking couldn't be found"
        });
       }
@@ -168,7 +168,7 @@ router.delete('/:bookingId', requireAuth, async(req, res) =>{
      }
     await booking.destroy();
 
-    res.json({message: "Successfully deleted"})
+    return res.json({message: "Successfully deleted"})
 
 });
 

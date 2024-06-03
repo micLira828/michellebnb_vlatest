@@ -49,7 +49,7 @@ router.get('/current', requireAuth, async(req, res) => {
 
  const result = [];
  for (let review of usersReviews){
-   const {stars, User, ReviewImages, ...rest} = await review.toJSON();
+   const {stars, User, createdAt, updatedAt, ReviewImages, ...rest} = await review.toJSON();
 
    const prettyRes = {stars, User, ReviewImages, ...rest};
    let spot = await Spot.findOne({
@@ -75,6 +75,8 @@ router.get('/current', requireAuth, async(req, res) => {
   //  spotResult.push(spotRes);
    prettyRes.Spot = spotRes;
    prettyRes.stars = parseFloat(stars);
+   prettyRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'')
+   prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'')
   // }
    result.push(prettyRes);
  }//end of for loop

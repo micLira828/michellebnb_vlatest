@@ -69,9 +69,15 @@ router.get('/current', requireAuth, async(req, res, next) =>{
    let spotResult = [];
   //  for (let spot of spots){
     
-   const {lat, lng, price,  SpotImages, ...theRest} = await spot.toJSON();
+   const {lat, lng, price, id, ownerId, city, state, country, address, SpotImages} = await spot.toJSON();
 
-   const spotRes = {...theRest}
+   const spotRes = {}
+   spotRes.id = parseInt(id);
+   spotRes.ownerId = parseInt(ownerId);
+   spotRes.city = city;
+   spotRes.state = state;
+   spotRes.country = country;
+   spotRes.address = address;
    spotRes.lat = parseFloat(lat);
    spotRes.lng = parseFloat(lng);
    spotRes.price = parseFloat(price);

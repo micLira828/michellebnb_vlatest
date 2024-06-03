@@ -53,9 +53,12 @@ router.get('/current', requireAuth, async(req, res, next) =>{
 
  const result = [];
  for (let booking of usersBookings){
-   const {...rest} = await booking.toJSON();
+   const {createdAt, updatedAt, ...rest} = await booking.toJSON();
 
    const prettyRes = {...rest};
+   prettyRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'')
+   prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'')
+
    let spot = await Spot.findOne({
     include: [{model: SpotImage}],
      where: {
@@ -66,9 +69,9 @@ router.get('/current', requireAuth, async(req, res, next) =>{
    let spotResult = [];
   //  for (let spot of spots){
     
-   const {lat, lng, price, SpotImages, ...theRest} = await spot.toJSON();
+   const {lat, lng, price,  SpotImages, ...theRest} = await spot.toJSON();
 
-   const spotRes = {lat, lng, price, ...theRest}
+   const spotRes = {...theRest}
    spotRes.lat = parseFloat(lat);
    spotRes.lng = parseFloat(lng);
    spotRes.price = parseFloat(price);

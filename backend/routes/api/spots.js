@@ -350,6 +350,7 @@ router.get('/:spotId/bookings', requireAuth, async(req, res) => {
    }
 
    else{
+      const result = [];
       for(let booking of spot_bookings){
          const {spotId, startDate, endDate} = await booking.toJSON();
          const prettyRes = {};

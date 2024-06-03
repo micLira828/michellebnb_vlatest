@@ -56,8 +56,8 @@ router.get('/current', requireAuth, async(req, res, next) =>{
    const {startDate, endDate, createdAt, updatedAt, ...rest} = await booking.toJSON();
 
    const prettyRes = {...rest};
-   prettyRes.startDate = startDate.toISOString().replace(/T/,' ').replace(/\..+/,'')
-   prettyRes.endDate = endDate.toISOString().replace(/T/,' ').replace(/\..+/,'')
+   prettyRes.startDate = startDate.toISOString().replace(/T/,' ').replace(/\..+/,'').split(' ')[0];
+   prettyRes.endDate = endDate.toISOString().replace(/T/,' ').replace(/\..+/,'').split(' ')[0]
    prettyRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'')
    prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'')
 

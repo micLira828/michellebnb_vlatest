@@ -79,7 +79,7 @@ router.get('/current', requireAuth, async(req, res) => {
    result.push(prettyRes);
  }//end of for loop
 
-   res.json({"Reviews":result});
+   return res.json({"Reviews":result});
   }
 });
 
@@ -103,7 +103,7 @@ router.post('/:reviewId/images', requireAuth, async(req, res, next) =>{
   console.log(images.length);
 
   if(images.length > 10){
-    res.status(403).json({message: "Maximum number of images for this resource was reached"});
+    return res.status(403).json({message: "Maximum number of images for this resource was reached"});
   }
 
   //a comment
@@ -115,7 +115,7 @@ router.post('/:reviewId/images', requireAuth, async(req, res, next) =>{
       reviewId: reviewId
     }
 );
-   res.json({"id": reviewImage.id, "url": reviewImage.url});
+   return res.json({"id": reviewImage.id, "url": reviewImage.url});
 
 });
 
@@ -138,7 +138,7 @@ router.put('/:reviewId', requireAuth, validateReview, async(req, res, next) =>{
         stars: parseFloat(req.body.stars)
       }
   );
-  res.json(review);
+  return res.json(review);
 });
 
 router.delete('/:reviewId', requireAuth, async(req, res) =>{
@@ -154,7 +154,7 @@ router.delete('/:reviewId', requireAuth, async(req, res) =>{
 }
   await review.destroy();
 
-  res.json({message: "Successfully Deleted"})
+  return res.json({message: "Successfully Deleted"})
 
 });
 

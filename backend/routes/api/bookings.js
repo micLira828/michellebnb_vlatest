@@ -108,7 +108,7 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res, next) =>
          message: "Booking couldn't be found"
        });
       }
-
+     //a comment
       const userId = req.user.id;
       if(userId !== booking.userId){
         return res.status(403).json({message: "Forbidden"})

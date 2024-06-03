@@ -161,17 +161,17 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res, next) =>
         }
     );
 
-    const {id, spotId, createdAt, updatedAt} = await booking.toJSON();
-    prettyRes.id = id;
-    prettyRes.userId = parseInt(booking.userId);
-    prettyRes.spotId = parseInt(spotId);
-    prettyRes.startDate = booking.startDate.toISOString().replace(/T/,' ').replace(/\..+/,'').split(' ')[0];
-    prettyRes.endDate = booking.endDate.toISOString().replace(/T/,' ').replace(/\..+/,'').split(' ')[0];
-    prettyRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'');
-    prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'');
+    // const {id, spotId, createdAt, updatedAt} = await booking.toJSON();
+    // prettyRes.id = id;
+    // prettyRes.userId = parseInt(booking.userId);
+    // prettyRes.spotId = parseInt(spotId);
+    // prettyRes.startDate = booking.startDate.toISOString().replace(/T/,' ').replace(/\..+/,'').split(' ')[0];
+    // prettyRes.endDate = booking.endDate.toISOString().replace(/T/,' ').replace(/\..+/,'').split(' ')[0];
+    // prettyRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'');
+    // prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'');
    
     
-    return res.json(prettyRes);
+    return res.json(booking);
 });
 
 router.delete('/:bookingId', requireAuth, async(req, res) =>{

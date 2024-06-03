@@ -151,6 +151,7 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res, next) =>
             res.status(403).json(err);
       }
 
+    
       await booking.update(
         { 
          userId: req.body.userId, 
@@ -160,15 +161,15 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res, next) =>
         }
     );
 
-
-    const prettyRes = {};
-    prettyRes.id = booking.id;
-    prettyRes.userId = booking.userId;
-    prettyRes.spotId = booking.spotId;
-    prettyRes.startDate = booking.startDate;
-    prettyRes.endDate = booking.endDate;
-    prettyRes.createdAt = booking.createdAt;
-    prettyRes.updatedAt = booking.updatedAt;
+    const {id, spotId, createdAt, updatedAt} = await booking.toJSON();
+    prettyRes.id = id;
+    prettyRes.userId = parseInt(booking.userId);
+    prettyRes.spotId = parseInt(spotId);
+    prettyRes.startDate = booking.startDate.toISOString().replace(/T/,' ').replace(/\..+/,'').split(' ')[0];
+    prettyRes.endDate = booking.endDate.toISOString().replace(/T/,' ').replace(/\..+/,'').split(' ')[0];
+    prettyRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'');
+    prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'');
+   
     
     return res.json(prettyRes);
 });

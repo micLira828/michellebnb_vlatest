@@ -107,23 +107,26 @@ router.get('/', async(req, res) => {
       size = 20
    }
 
-   if(minLat !== undefined && maxLat !== undefined) {
+   if(minLat !== undefined && maxLat !== undefined && 
+      Number(minLat) && Number(maxLat)) {
       where.lat = {[Op.gt]: minLat, [Op.lt]:maxLat }
    } 
 
-    else if(minLat !== undefined) {
+    else if(minLat !== undefined && Number(minLat)) {
       where.lat = {[Op.gt]: minLat}
    } 
 
-   else if(maxLat !== undefined) {
+   else if(maxLat !== undefined && Number(maxLat)) {
       where.lat = {[Op.lt]: maxLat}
    } 
       
-   if (minLong !== undefined && maxLong !== undefined){
+   if (minLong !== undefined && maxLong !== undefined
+      && Number(minLong) && Number(maxLong)
+   ){
       where.lng = {[Op.gt]: minLong, [Op.lt]:maxLong}
    } 
 
-   else if(minLong !== undefined) {
+   else if(minLong !== undefined && Number(minLong)) {
       where.lng = {[Op.gt]: minLong}
    } 
 
@@ -131,15 +134,17 @@ router.get('/', async(req, res) => {
       where.lng = {[Op.lt]: maxLong}
    } 
 
-   if (minPrice !== undefined && maxPrice !== undefined){
+   if (minPrice !== undefined && maxPrice !== undefined
+      && Number(minPrice) && Number(maxPrice) 
+   ){
       where.price = {[Op.gt]: minPrice, [Op.lt]: maxPrice}
    } 
 
-   else if(maxPrice !== undefined) {
+   else if(maxPrice !== undefined && Number(maxPrice)) {
       where.price = {[Op.lt]: maxPrice}
    } 
 
-   else if(minPrice !== undefined) {
+   else if(minPrice !== undefined && Number(minPrice)){
       where.price = {[Op.gt]: minPrice}
    } 
 

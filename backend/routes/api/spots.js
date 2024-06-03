@@ -557,14 +557,16 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
       }
   );
 
-  const {stars, ...rest} = await spot_review.toJSON();
-  const reviewRes = {stars, ...rest}
+  const {stars,  createdAt, updatedAt, ...rest} = await spot_review.toJSON();
+  const reviewRes = {...rest}
  
   
    reviewRes.stars = parseInt(stars)
+   reviewRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'')
+   reviewRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'')
 
 
-   res.status(201).json(reviewRes);
+   return res.status(201).json(reviewRes);
  
 });
 

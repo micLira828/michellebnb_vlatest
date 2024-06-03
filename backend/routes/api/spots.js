@@ -98,12 +98,12 @@ router.get('/', async(req, res) => {
 
    const where = {};
 
-   if(isNaN(page) ||
+   if(Number(page) ||
     page < 1){
       page = 1
    }
 
-   if(isNaN(size) || size < 1 || size > 20){
+   if(Number(size) || size < 1 || size > 20){
       size = 20
    }
 

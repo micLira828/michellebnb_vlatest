@@ -342,14 +342,8 @@ router.get('/:spotId/bookings', requireAuth, async(req, res) => {
       prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'');
       prettyRes.spotId = parseInt(spotId);
       prettyRes.userId = parseInt(userId);
-   
-      const {id, firstName, lastName} = await User.toJSON();
-      const userRes = {};
-      userRes.id = parseInt(id);
-      userRes.firstName = firstName;
-      userRes.lastName = lastName;
-      prettyRes.User = userRes;
-       result.push(prettyRes);
+      prettyRes.User = User;
+      result.push(prettyRes);
      }
      return res.json({"Bookings":result});
    }

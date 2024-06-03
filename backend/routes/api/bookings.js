@@ -167,8 +167,8 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res, next) =>
     prettyRes.spotId = booking.spotId;
     prettyRes.startDate = booking.startDate;
     prettyRes.endDate = booking.endDate;
-    prettyRes.createdAt = booking.createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'');
-    prettyRes.updatedAt = booking.updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'');
+    prettyRes.createdAt = booking.createdAt;
+    prettyRes.updatedAt = booking.updatedAt;
     
     return res.json(prettyRes);
 });

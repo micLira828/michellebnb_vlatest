@@ -115,12 +115,11 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res, next) =>
      }
 
     
-     const reqStartDate = Date.parse(req.body.startDate); 
-     const reqEndDate = Date.parse(req.body.endDate);
+     const reqStartDate = req.body.startDate; 
+     const reqEndDate = req.body.endDate;
 
       let {startDate, endDate} = booking;
-      startDate = Date.parse(startDate);
-      endDate = Date.parse(endDate);
+      
 
       if(reqStartDate === endDate){
          err.message = "Sorry, this spot is already booked for the specified dates"
@@ -129,7 +128,7 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res, next) =>
          return res.status(403).json(err);
       }
 
-      if(Date.parse(today) > endDate){
+      if(today.toString() > endDate){
         res.json({message: "Past bookings cannot be modified"})
       }
 

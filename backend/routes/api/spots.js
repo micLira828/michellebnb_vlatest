@@ -334,8 +334,9 @@ router.get('/:spotId/bookings', requireAuth, async(req, res) => {
    if(userId === spot.ownerId){
       const result = [];
      for (let booking of spot_bookings){
-      const {spotId, userId, startDate, endDate, createdAt, updatedAt, User} = await booking.toJSON();
+      const {id, spotId, userId, startDate, endDate, createdAt, updatedAt, User} = await booking.toJSON();
       const prettyRes = {};
+      prettyRes.id = parseInt(id);
       prettyRes.startDate = startDate.toISOString().replace(/T/,' ').replace(/\..+/,'').split(' ')[0]; 
       prettyRes.endDate = endDate.toISOString().replace(/T/,' ').replace(/\..+/,'').split(' ')[0];
       prettyRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'');

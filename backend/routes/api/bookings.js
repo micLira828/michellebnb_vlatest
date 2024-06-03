@@ -120,7 +120,6 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res, next) =>
 
       let {startDate, endDate} = booking;
       
-
       if(reqStartDate === endDate){
          err.message = "Sorry, this spot is already booked for the specified dates"
          err.errors = {}
@@ -161,16 +160,13 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res, next) =>
     );
 
 
-    const prettyRes = {};
-    prettyRes.id = booking.id;
-    prettyRes.userId = booking.userId;
-    prettyRes.spotId = booking.spotId;
-    prettyRes.startDate = booking.startDate.toISOString().replace(/T/,' ').replace(/\..+/,'').split(' ')[0];
-    prettyRes.endDate = booking.endDate.toISOString().replace(/T/,' ').replace(/\..+/,'').split(' ')[0];
-    prettyRes.createdAt = booking.createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'');
-    prettyRes.updatedAt = booking.updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'');
+    const {createdAt, updatedAt, ...rest} = await booking.toJSON();
+    const prettyRes = {...rest};
+
+    prettyRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'');
+    prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'');
     
-    return res.json(booking);
+    return res.json(prettyRes);
 });
 
 router.delete('/:bookingId', requireAuth, async(req, res) =>{

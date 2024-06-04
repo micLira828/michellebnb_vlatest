@@ -113,13 +113,13 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res, next) =>
       if(userId !== booking.userId){
         return res.status(403).json({message: "Forbidden"})
      }
-
+      const bookings = await Booking.findAll();
     
      const reqStartDate = req.body.startDate; 
      const reqEndDate = req.body.endDate;
 
-      let {startDate, endDate} = booking;
-      
+     for (let bking in bookings){
+      const {startDate, endDate} = bking; 
       if(reqStartDate === endDate){
          err.message = "Sorry, this spot is already booked for the specified dates"
          err.errors = {}
@@ -149,20 +149,22 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res, next) =>
             res.status(403).json(err);
       }
 
-    
+     }
       await booking.update(
         { 
-         userId: userId, 
+         userId: req.body.userId, 
          spotId: req.body.spotId,
-         startDate: reqStartDate,
-         endDate: reqEndDate
+         startDate: req.body.startDate,
+         endDate: req.body.endDate
         }
     );
 
 
-    const {createdAt, updatedAt, ...rest} = await booking.toJSON();
+    const {startDate, endDate, createdAt, updatedAt, ...rest} = await booking.toJSON();
     const prettyRes = {...rest};
 
+    prettyRes.startDate = startDate.toISOString().replace(/T/,' ').replace(/\..+/,'').split(" ")[0];
+    prettyRes.endDate = endDate.toISOString().replace(/T/,' ').replace(/\..+/,'').split(" ")[0];
     prettyRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'');
     prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'');
     

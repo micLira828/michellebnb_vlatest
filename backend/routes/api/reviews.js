@@ -29,11 +29,8 @@ const validateReview = [
 
 router.get('/current', requireAuth, async(req, res) => {
      
-  console.log(req.url);
   const { user } = req;
 
-
-  
   if (user) {
     const safeUser = {
       id: user.id,
@@ -102,7 +99,7 @@ router.post('/:reviewId/images', requireAuth, async(req, res, next) =>{
     return res.status(403).json({message: "Forbidden"})
  }
   const images = await review.getReviewImages();
-  console.log(images.length);
+ 
 
   if(images.length >= 10){
     return res.status(403).json({message: "Maximum number of images for this resource was reached"});

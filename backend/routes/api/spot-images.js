@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.delete('/:imageId', requireAuth, async(req, res, next) =>{
    const {imageId} = req.params;
-   console.log(imageId);
+  
    const user = req.user;
 
  

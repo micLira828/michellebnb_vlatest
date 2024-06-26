@@ -16,7 +16,7 @@ router.delete('/:imageId', requireAuth, async(req, res, next) =>{
     }
 
    const idOfReview = reviewImage.reviewId;
-   console.log(idOfReview)
+  
    const review = await Review.findByPk(idOfReview)
    
     const userId = req.user.id;

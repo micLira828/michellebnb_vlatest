@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express-validator": "^7.1.0"
+    "express-validator": "^7.1.0",
+    "js-cookie": "^3.0.5"
   }
 }

@@ -50,24 +50,15 @@ export const login = (user) => async (dispatch) => {
   return response;
 };
 
-export const logout = (user) => async (dispatch) => {
-    const {id, firstName, lastName, email, username} = user;
-    const response = await csrfFetch("/api/session", {
-      method: "DELETE",
-      body: JSON.stringify({
-        id,
-        firstName,
-        lastName,
-        email,
-        username
-      })
-    });
-    const data = await response.json();
-    dispatch(removeUser(data.user));
-    return response;
-  };
 
-  // frontend/src/store/session.js
+export const logout = () => async (dispatch) => {
+  const response = await csrfFetch('/api/session', {
+    method: 'DELETE'
+  });
+  dispatch(removeUser());
+  return response;
+};
+
 
 export const restoreUser = () => async (dispatch) => {
     const response = await csrfFetch("/api/session");

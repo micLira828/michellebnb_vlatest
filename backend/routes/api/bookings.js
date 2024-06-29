@@ -53,9 +53,14 @@ router.get('/current', requireAuth, async(req, res, next) =>{
 
  const result = [];
  for (let booking of usersBookings){
-   const {...rest} = await booking.toJSON();
+   const {startDate, endDate, createdAt, updatedAt, ...rest} = await booking.toJSON();
 
    const prettyRes = {...rest};
+   prettyRes.startDate = startDate.toISOString().replace(/T/,' ').replace(/\..+/,'').split(' ')[0];
+   prettyRes.endDate = endDate.toISOString().replace(/T/,' ').replace(/\..+/,'').split(' ')[0];
+   prettyRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'');
+   prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'');
+
    let spot = await Spot.findOne({
     include: [{model: SpotImage}],
      where: {
@@ -65,8 +70,19 @@ router.get('/current', requireAuth, async(req, res, next) =>{
 
    let spotResult = [];
   //  for (let spot of spots){
-   const {SpotImages, ...theRest} = await spot.toJSON();
-   const spotRes = {...theRest}
+    
+   const {lat, lng, price, id, ownerId, city, state, country, address, SpotImages} = await spot.toJSON();
+
+   const spotRes = {}
+   spotRes.id = parseInt(id);
+   spotRes.ownerId = parseInt(ownerId);
+   spotRes.city = city;
+   spotRes.state = state;
+   spotRes.country = country;
+   spotRes.address = address;
+   spotRes.lat = parseFloat(lat);
+   spotRes.lng = parseFloat(lng);
+   spotRes.price = parseFloat(price);
    spotRes.previewImage = "image url"
    for (let img of SpotImages){
      if (img.preview === true){
@@ -79,7 +95,7 @@ router.get('/current', requireAuth, async(req, res, next) =>{
    result.push(prettyRes);
  }//end of for loop
 
-   res.json({"Bookings":result});
+   return res.json({"Bookings":result});
   }
 });
 
@@ -92,60 +108,69 @@ router.put('/:bookingId', requireAuth, validateBooking, async(req, res, next) =>
          message: "Booking couldn't be found"
        });
       }
-
+     //a comment
       const userId = req.user.id;
       if(userId !== booking.userId){
         return res.status(403).json({message: "Forbidden"})
      }
-
+      const bookings = await Booking.findAll();
     
-     const reqStartDate = Date.parse(req.body.startDate); 
-     const reqEndDate = Date.parse(req.body.endDate);
+     const reqStartDate = req.body.startDate; 
+     const reqEndDate = req.body.endDate;
 
-      let {startDate, endDate} = booking;
-      startDate = Date.parse(startDate);
-      endDate = Date.parse(endDate);
-
+     for (let bking in bookings){
+      const {startDate, endDate} = bking; 
       if(reqStartDate === endDate){
          err.message = "Sorry, this spot is already booked for the specified dates"
          err.errors = {}
-         err.errors.startDate = "Start date conflicts with an existing booking"
-         res.status(403).json(err);
+         err.errors.startDate = "End date conflicts with an existing booking"
+         return res.status(403).json(err);
       }
 
-      if(Date.parse(today) > endDate){
+      if(today.toString() > endDate){
         res.json({message: "Past bookings cannot be modified"})
       }
 
       if(reqEndDate === startDate){
          err.message = "Sorry, this spot is already booked for the specified dates"
          err.errors = {}
-         err.errors.endDate = "Enddate conflicts with an existing booking"
-         res.status(403).json(err);
+         err.errors.endDate = "Start date conflicts with an existing booking"
+         return res.status(403).json(err);
       }
 
-      if( reqStartDate <= startDate 
-         && reqEndDate >= endDate){
+      if( reqStartDate < startDate 
+         && reqEndDate > endDate){
             const err = new Error();
             err.message = "Sorry, this spot is already booked for the specified dates"
             err.errors = {}
             err.errors.startDate = "Start date conflicts with an existing booking"
             err.errors.endDate = "End date conflicts with an existing booking";
 
-            res.status(403).json(err);
+            return res.status(403).json(err);
       }
+     }
 
       await booking.update(
         { 
-         userId: req.body.userId, 
+         userId: userId, 
          spotId: req.body.spotId,
-         startDate: req.body.startDate,
-         endDate: req.body.endDate
+         startDate: Date(req.body.startDate),
+         endDate: Date(req.body.endDate)
         }
     );
 
+
+    const {startDate, endDate, createdAt, updatedAt, ...rest} = await booking.toJSON();
+    const prettyRes = {...rest};
+
+   
+
+    prettyRes.startDate = startDate.toISOString().replace(/T/,' ').replace(/\..+/,'').split(" ")[0];
+    prettyRes.endDate = endDate.toISOString().replace(/T/,' ').replace(/\..+/,'').split(" ")[0];
+    prettyRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'');
+    prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'');
     
-    res.json(booking);
+    return res.json(prettyRes);
 });
 
 router.delete('/:bookingId', requireAuth, async(req, res) =>{
@@ -153,7 +178,7 @@ router.delete('/:bookingId', requireAuth, async(req, res) =>{
 
     const booking = await Booking.findByPk(bookingId);
     if(!booking){
-        res.status(404).json({
+        return res.status(404).json({
          message: "Booking couldn't be found"
        });
       }
@@ -161,9 +186,9 @@ router.delete('/:bookingId', requireAuth, async(req, res) =>{
       if(userId !== booking.userId){
         return res.status(403).json({message: "Forbidden"})
      }
-    booking.destroy();
+    await booking.destroy();
 
-    res.json({"message": "Successfully deleted"})
+    return res.json({message: "Successfully deleted"})
 
 });
 

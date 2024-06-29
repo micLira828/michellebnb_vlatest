@@ -12,19 +12,19 @@ module.exports = {
         userId: 1,
         spotId: 3,
         review: 'Beautiful place!',
-        stars: 4.5
+        stars: 4
       },
       {
         userId: 1,
         spotId: 1,
         review: 'Cozy, but could not figure out coffee machine and wifi',
-        stars: 3.5
+        stars: 3
       },
       {
         userId: 1,
         spotId: 3,
         review: 'Great location, cozy room, great, amnenities, and polite staff. Overall great experience!',
-        stars: 5.0
+        stars: 5
       },
     ], {});
     

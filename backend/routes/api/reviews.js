@@ -21,19 +21,16 @@ const validateReview = [
     .withMessage('Review text is required'),
   check('stars')
     .exists({ checkFalsy: true })
-    .isFloat({min: 1.0, max: 5.0})
-    .withMessage('Stars must be from 1 to 5'),
+    .isInt({min: 1.0, max: 5.0})
+    .withMessage('Stars must be an integer from 1 to 5'),
   handleValidationErrors
 ];
 
 
 router.get('/current', requireAuth, async(req, res) => {
      
-  console.log(req.url);
   const { user } = req;
 
-
-  
   if (user) {
     const safeUser = {
       id: user.id,
@@ -49,9 +46,9 @@ router.get('/current', requireAuth, async(req, res) => {
 
  const result = [];
  for (let review of usersReviews){
-   const {User, ReviewImages, ...rest} = await review.toJSON();
+   const {stars, User, createdAt, updatedAt, ReviewImages, ...rest} = await review.toJSON();
 
-   const prettyRes = {User, ReviewImages, ...rest};
+   const prettyRes = {stars, User, ReviewImages, ...rest};
    let spot = await Spot.findOne({
     include: [{model: SpotImage}],
      where: {
@@ -59,10 +56,13 @@ router.get('/current', requireAuth, async(req, res) => {
      }
    });
 
-   let spotResult = [];
+  
   //  for (let spot of spots){
-   const {SpotImages, ...theRest} = await spot.toJSON();
-   const spotRes = {...theRest}
+   const {id, ownerId, address, city, state, country, lat, lng, name, price, SpotImages} = await spot.toJSON();
+   const spotRes = {id, ownerId, address, city, state, country, lat, lng, name, price}
+   spotRes.lat = parseFloat(lat);
+   spotRes.lng = parseFloat(lng);
+   spotRes.price = parseFloat(price);
    spotRes.previewImage = "image url"
    for (let img of SpotImages){
      if (img.preview === true){
@@ -71,11 +71,14 @@ router.get('/current', requireAuth, async(req, res) => {
    }
   //  spotResult.push(spotRes);
    prettyRes.Spot = spotRes;
+   prettyRes.stars = parseFloat(stars);
+   prettyRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'')
+   prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'')
   // }
    result.push(prettyRes);
  }//end of for loop
 
-   res.json({"Reviews":result});
+   return res.json({"Reviews":result});
   }
 });
 
@@ -96,10 +99,10 @@ router.post('/:reviewId/images', requireAuth, async(req, res, next) =>{
     return res.status(403).json({message: "Forbidden"})
  }
   const images = await review.getReviewImages();
-  console.log(images.length);
+ 
 
-  if(images.length > 10){
-    res.status(403).json({message: "Maximum number of images for this resource was reached"});
+  if(images.length >= 10){
+    return res.status(403).json({message: "Maximum number of images for this resource was reached"});
   }
 
   //a comment
@@ -111,7 +114,7 @@ router.post('/:reviewId/images', requireAuth, async(req, res, next) =>{
       reviewId: reviewId
     }
 );
-   res.json({"id": reviewImage.id, "url": reviewImage.url});
+   return res.json({"id": reviewImage.id, "url": reviewImage.url});
 
 });
 
@@ -129,12 +132,18 @@ router.put('/:reviewId', requireAuth, validateReview, async(req, res, next) =>{
     await review.update(
       { 
         userId: req.body.userId, 
-       spotId: req.body.spotId,
-       review: req.body.review,
-       stars: req.body.stars
+        spotId: req.body.spotId,
+        review: req.body.review,
+        stars: req.body.stars
       }
   );
-  res.json(review);
+
+  const {stars, createdAt, updatedAt, ...rest} = await review.toJSON();
+  const prettyRes = {...rest}
+  prettyRes.stars = parseFloat(stars);
+  prettyRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'')
+  prettyRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'')
+  return res.json(prettyRes);
 });
 
 router.delete('/:reviewId', requireAuth, async(req, res) =>{
@@ -148,9 +157,9 @@ router.delete('/:reviewId', requireAuth, async(req, res) =>{
  if(userId !== review.userId){
   return res.status(403).json({message: "Forbidden"})
 }
-  review.destroy();
+  await review.destroy();
 
-  res.json({message: "Successfully Deleted"})
+  return res.json({message: "Successfully deleted"})
 
 });
 

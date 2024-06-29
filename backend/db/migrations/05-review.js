@@ -32,7 +32,7 @@ module.exports = {
         type: Sequelize.TEXT
       } ,
       stars: {
-        type:Sequelize.DECIMAL},
+        type:Sequelize.INTEGER},
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

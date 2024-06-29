@@ -15,3 +15,8 @@ ul li{
     position: absolute;
     right: 5%;
 }
+
+.modals{
+    display: flex;
+    flex-direction: column;
+}

@@ -11,7 +11,18 @@ function LoginFormModal() {
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [buttonOut, setButtonOut] = useState(true);
   const { closeModal } = useModal();
+  
+
+  useEffect (() => {
+    
+    setErrors({});
+    if(password.length >= 4 && credential.length >= 6){
+      setButtonOut(false);
+    }
+  }, [password, credential])
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -20,27 +31,16 @@ function LoginFormModal() {
       .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
-
-        if (data && data.errors) {
-          setErrors(data.errors);
+        if (data && data.message) {
+          const newErrors = {};
+          newErrors.credential = data.message;
+          setErrors(newErrors);
         }
+        console.log(errors);
       });
   };
 
-  useEffect(() => {
-    const newErrors = {}
-
-    if(credential && credential.length < 4){
-      newErrors.credential = "Username or email must be at least 4 characters"
-    }
-
-    if(password && password.length < 6){
-      newErrors.password = "Password must be at least 6 characters"
-    }
-
-    setErrors(newErrors);
-  }, [credential, password])
-
+ 
   return (
     <>
       <h1>Log In</h1>
@@ -54,7 +54,6 @@ function LoginFormModal() {
             required
           />
         </label>
-         {errors.credential ? <p className = 'errors'>{errors.credential}</p> : null}
         <label>
           Password
           <input
@@ -64,8 +63,10 @@ function LoginFormModal() {
             required
           />
         </label>
-        {errors.password ? <p className = 'errors'>{errors.password}</p>: null}
-        <button disabled = {Object.values(errors).length || !password || !credential ? true:false }type="submit">Log In</button>
+        {errors.credential && (
+          <p className = "errors">{errors.credential}</p>
+        )}
+        <button disabled = {buttonOut?true:false}type="submit">Log In</button>
       </form>
     </>
   );

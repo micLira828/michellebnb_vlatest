@@ -18,6 +18,7 @@ function LoginFormModal() {
   useEffect (() => {
     
     setErrors({});
+    setButtonOut(true);
     if(password.length >= 4 && credential.length >= 6){
       setButtonOut(false);
     }
@@ -64,7 +65,7 @@ function LoginFormModal() {
           />
         </label>
         {errors.credential && (
-          <p className = "errors">{errors.credential}</p>
+          <p className = "errors">The provided credentials were invalid</p>
         )}
         <button disabled = {buttonOut?true:false}type="submit">Log In</button>
       </form>

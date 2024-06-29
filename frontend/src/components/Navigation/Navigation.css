@@ -1,0 +1,17 @@
+ul{
+    display: flex;
+    justify-content: space-between;
+}
+ul li{
+    list-style-type: none;
+}
+
+.homeIcon{
+    position: absolute;
+    left: 5%;
+}
+
+.profileButton{
+    position: absolute;
+    right: 5%;
+}

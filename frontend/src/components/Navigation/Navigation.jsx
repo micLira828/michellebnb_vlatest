@@ -3,6 +3,7 @@
 import { NavLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
+import { FaHotel } from "react-icons/fa6";
 import './Navigation.css';
 
 function Navigation({ isLoaded }) {
@@ -10,11 +11,13 @@ function Navigation({ isLoaded }) {
 
   return (
     <ul>
-      <li>
-        <NavLink to="/">Home</NavLink>
+      <li className = 'homeIcon'>
+        <NavLink to="/">
+          <FaHotel className = "airbnbLogo"/>
+        </NavLink>
       </li>
       {isLoaded && (
-        <li>
+        <li className = 'profileButton'>
           <ProfileButton user={sessionUser} />
         </li>
       )}

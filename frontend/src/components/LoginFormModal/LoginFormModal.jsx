@@ -1,6 +1,6 @@
 // frontend/src/components/LoginFormModal/LoginFormModal.jsx
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import * as sessionActions from '../../store/session';
 import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
@@ -20,11 +20,26 @@ function LoginFormModal() {
       .then(closeModal)
       .catch(async (res) => {
         const data = await res.json();
+
         if (data && data.errors) {
           setErrors(data.errors);
         }
       });
   };
+
+  useEffect(() => {
+    const newErrors = {}
+
+    if(credential && credential.length < 4){
+      newErrors.credential = "Username or email must be at least 4 characters"
+    }
+
+    if(password && password.length < 6){
+      newErrors.password = "Password must be at least 6 characters"
+    }
+
+    setErrors(newErrors);
+  }, [credential, password])
 
   return (
     <>
@@ -39,6 +54,7 @@ function LoginFormModal() {
             required
           />
         </label>
+         {errors.credential ? <p className = 'errors'>{errors.credential}</p> : null}
         <label>
           Password
           <input
@@ -48,10 +64,8 @@ function LoginFormModal() {
             required
           />
         </label>
-        {errors.credential && (
-          <p>{errors.credential}</p>
-        )}
-        <button type="submit">Log In</button>
+        {errors.password ? <p className = 'errors'>{errors.password}</p>: null}
+        <button disabled = {Object.values(errors).length || !password || !credential ? true:false }type="submit">Log In</button>
       </form>
     </>
   );

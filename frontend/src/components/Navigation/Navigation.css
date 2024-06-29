@@ -16,6 +16,9 @@ ul li{
     right: 5%;
 }
 
+.airbnbLogo{
+    color: red;
+}
 .modals{
     display: flex;
     flex-direction: column;

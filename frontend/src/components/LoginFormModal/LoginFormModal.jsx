@@ -30,6 +30,9 @@ function LoginFormModal() {
     setErrors({});
     return dispatch(sessionActions.login({ credential, password }))
       .then(closeModal)
+      .then(() => {
+        document.cookie = `credential=${credential}; password=${password}`
+      })
       .catch(async (res) => {
         const data = await res.json();
         if (data && data.message) {

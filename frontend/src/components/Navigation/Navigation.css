@@ -23,3 +23,8 @@ ul li{
     display: flex;
     flex-direction: column;
 }
+
+.user-info{
+    display: flex;
+    flex-direction: column;
+}

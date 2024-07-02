@@ -6,6 +6,10 @@ ul li{
     list-style-type: none;
 }
 
+.toggleMenuList{
+    display: flex;
+    flex-direction: column;
+}
 .homeIcon{
     position: absolute;
     left: 5%;

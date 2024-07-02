@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllSpots } from '../../store/spot';
 import Card from './Card'
+import './Spots.css'
 
 const Spots = () => {
     const dispatch = useDispatch();
@@ -15,11 +16,11 @@ const Spots = () => {
       }, [dispatch]);
 
     return (
-        <>
+        <div className = "spots">
              {spotsList?.map((spot) => (
                  <Card key = {spot.id} spot={spot}/>
             ))}
-        </>
+        </div>
     );
 }
 

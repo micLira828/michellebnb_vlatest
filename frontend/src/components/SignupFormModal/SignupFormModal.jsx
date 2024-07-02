@@ -36,17 +36,13 @@ function SignupFormPage() {
         })
       ).catch(async (res) => {
         const data = await res.json();
-        if (data?.errors) {
-          setErrors(data.errors);
+        console.log(data);
+        if (data?.message) {
+          setErrors(data.message);
         }
       });
     }
-
-    return setErrors({
-      username: "Username should be 6 or more characters",
-      password: "Password should be 4 or more characters",
-      confirmPassword: "Confirm Password field must be the same as the Password field"
-    });
+    return errors;
   };
 
   useEffect(() => {
@@ -124,7 +120,7 @@ function SignupFormPage() {
           />
         </label>
         {errors.confirmPassword && <p className="errors">{errors.confirmPassword}</p>}
-        <button disabled = {buttonOut ? true: false} type="submit">Sign Up</button>
+        <button disabled = {buttonOut ? true : false} type="submit">Sign Up</button>
       </form>
     </>
   );

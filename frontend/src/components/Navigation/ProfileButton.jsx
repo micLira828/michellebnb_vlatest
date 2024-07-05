@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { FaUserCircle } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 import * as sessionActions from '../../store/session';
 import OpenModalMenuItem from '../OpenModalMenuItem';
 import LoginFormModal from '../LoginFormModal';
@@ -51,6 +52,8 @@ function ProfileButton({ user }) {
      {showMenu ? (
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
+          <>
+          <Link to = 'spots/new'><button>Create a spot</button></Link>
           <ul className = "toggleMenuList">
             <li>Hello, {user.firstName}.</li>
             <li>{user.username}</li>
@@ -60,6 +63,7 @@ function ProfileButton({ user }) {
               <button onClick={logout}>Log Out</button>
             </li>
           </ul>
+          </>
         ) : (
           <div className = "modals">
             <OpenModalMenuItem

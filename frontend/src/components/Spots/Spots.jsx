@@ -7,18 +7,16 @@ import './Spots.css'
 const Spots = () => {
     const dispatch = useDispatch();
 
-    const spots = useSelector((state) => state.spot);
-    const spotsList = Object.values(spots);
-
-
+    const spots = useSelector((state) => state.spots.allSpots);
+    
     useEffect(() => {
         dispatch(getAllSpots());
       }, [dispatch]);
 
     return (
         <div className = "spots">
-             {spotsList?.map((spot) => (
-                 <Card key = {spot.id} spot={spot}/>
+             {spots?.map((spot) => (
+                 <Card key = {spot.name} spot={spot}/>
             ))}
         </div>
     );

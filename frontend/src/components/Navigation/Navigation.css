@@ -5,7 +5,10 @@ ul{
 ul li{
     list-style-type: none;
 }
-
+.userMenu{
+    list-style-type: none;
+    display: flex;
+}
 .toggleMenuList{
     display: flex;
     flex-direction: column;

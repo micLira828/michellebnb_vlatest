@@ -4,9 +4,12 @@ import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Spots from './components/Spots';
+import CreateSpotForm from './components/Spots/CreateSpotForm';
 import SignupFormPage from './components/SignupFormModal';
 import Navigation from './components/Navigation';
+
 import * as sessionActions from './store/session';
+import SpotDetails from './components/Spots/SpotDetails';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -22,7 +25,6 @@ function Layout() {
     <>
       <Navigation isLoaded={isLoaded} />
       {isLoaded && <Outlet />}
-      <Spots />
     </>
   );
 }
@@ -33,11 +35,19 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <h1>Welcome!</h1>
+        element: <Spots />
       },
       {
         path: "signup",
         element: <SignupFormPage />
+      },
+      {
+        path: "spots/:spotId",
+        element: <SpotDetails/>
+      },
+      {
+        path: "spots/new",
+        element: <CreateSpotForm/>
       }
     ]
   }

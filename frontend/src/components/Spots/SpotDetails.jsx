@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import {getOneSpot} from '../../store/spot'
+import {getOneSpot} from '../../store/spot';
+import Reviews from '../Reviews/Reviews';
 
 const SpotDetails = () => {
     const dispatch = useDispatch();
     let {spotId} = useParams();
     let spot = useSelector((state) => state.spots.byId[spotId]);
+ 
 
     const [isLoaded, setIsLoaded] = useState(false);
     useEffect(() => {
@@ -33,6 +35,7 @@ const SpotDetails = () => {
         {/* <p>{spot.Owner.firstName}</p> */}
         <div className = "calloutBox">
         <p>{spot.price} per night</p>
+        <Reviews spot = {spot}/>
         <button onClick= {() => alert("Feature coming soon!")}>Reserve</button>
         </div>
     </>)

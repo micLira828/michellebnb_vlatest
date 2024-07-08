@@ -1,8 +1,12 @@
+import { body } from "express-validator";
 import { csrfFetch } from "./csrf";
 
 export const GET_ALL_SPOTS = "spots/getAllSpots";
 export const GET_ONE_SPOT = "spots/getOneSpot";
 export const ADD_SPOT = "spots/postSpot";
+export const EDIT_SPOT = "spots/updateSpot";
+export const DELETE_SPOT = "spots/removeSpot";
+
 
 //regular action creator
 const loadSpots = (spots) => {
@@ -27,6 +31,23 @@ export const addSpot = (spot) => {
   };
 };
 
+export const deleteSpot = (spot) => {
+  return {
+    type: DELETE_SPOT,
+    payload: spot
+  };
+};
+
+  //regular action creator
+  export const editSpot = (spot) => {
+    return {
+      type: EDIT_SPOT,
+      payload:spot
+    };
+  };
+
+ 
+
 
 // thunk action creator
 export const getAllSpots = () => async (dispatch) => {
@@ -35,25 +56,43 @@ export const getAllSpots = () => async (dispatch) => {
 
     if(response.ok){
       const data = await response.json();
-      // console.log('The data is', data.Spots);
       dispatch(loadSpots(data.Spots));
       return data;
     }
     
   };
 
-  // thunk action creator
-export const getOneSpot = (spotId) => async (dispatch) => {
+  export const getOneSpot = (spotId) => async (dispatch) => {
 
-  const response = await fetch(`/api/spots/${spotId}`);
-  if (response.ok) {
-    const data = await response.json();
-    console.log('The data is', data)
-    dispatch(loadSpot(data));
+    const response = await fetch(`/api/spots/${spotId}`);
+    if (response.ok) {
+      const data = await response.json();
+      console.log('The data is', data)
+      dispatch(loadSpot(data));
   
-    return data;
-  }
-};
+      return data;
+    }
+  };
+  
+
+export const removeSpot = (spot) => async(dispatch) => {
+    const options = {
+      method: 'DELETE',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(spot)
+    }
+
+    const response = await csrfFetch(`/api/spots/${spot.id}`, options);
+
+    if(response.ok){
+      const data = await response.toJSON();
+      dispatch(deleteSpot(data))
+    }
+    else{
+      throw response;
+    }
+    
+}
 
 export const postSpot = (spot) => async(dispatch) => {
 
@@ -86,6 +125,27 @@ export const postSpot = (spot) => async(dispatch) => {
    }
  }
 
+ export const updateSpot = (spot) => async(dispatch) => {
+
+  console.log('The spot is', spot);
+  let options = {
+    method: 'PUT',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(spot)
+  }
+
+  console.log(spot.id);
+ 
+  const response = await csrfFetch(`/api/spots/${spot.id}`, options);
+  // console.log(await response.json())
+
+  
+  if(response.ok){
+    const data = await response.json();
+    dispatch(editSpot(data))
+    return data;
+  }
+ }
   // state object
 const initialState = {
   byId: {},
@@ -130,6 +190,34 @@ const spotsReducer = (state = initialState, action) => {
      newState.allSpots = [...state.allSpots, spot];
      return newState;
     }
+    case EDIT_SPOT: {
+      newState = {...state};
+      //Add new spot to byId 
+      const spot = action.payload;
+      const updatedSpots = newState.allSpots.filter(spt => {
+        return spt.id !== spot.id;
+      });
+
+      updatedSpots.push(spot);
+      newState.allSpots = updatedSpots;
+      console.log(updatedSpots);
+      return newState;
+    }
+
+    case DELETE_SPOT: {
+      newState = {...state}
+
+      let spot = action.payload;
+
+      const newAllSpotsArr = newState.allSpots.filter(sp => {
+         return sp.id !== spot.id;
+      })
+
+      newState.allSpots = newAllSpotsArr;
+      delete newState.byId[spot.id];
+      return newState;
+    }
+    
 
     default:
       return state;

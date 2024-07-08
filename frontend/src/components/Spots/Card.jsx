@@ -8,7 +8,9 @@ const Card = ({spot}) => {
           <p><em>{spot.city}, {spot.state}</em> <br></br>
           <strong>${spot.price} night </strong><br></br>
           {spot.avgRating ? spot.avgRating: "New"}</p>
-          <NavLink to ={`spots/${spot.id}`}>View Spot Details</NavLink>
+          <NavLink target = '_blank' to ={`spots/${spot.id}`}>View Spot Details</NavLink>
+          <NavLink to ={`spots/${spot.id}/edit`}>Edit Spot Details</NavLink>
+          <NavLink to ={`spots/${spot.id}/delete`}>Delete</NavLink>
         </div>
     );
 }

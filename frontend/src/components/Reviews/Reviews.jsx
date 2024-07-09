@@ -1,7 +1,6 @@
 import { useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ReviewCard from './ReviewCard';
-import { NavLink} from 'react-router-dom';
 import { getSpotReviews } from '../../store/review';
 import CreateReview from './CreateReview';
 const Reviews = (spot) => {

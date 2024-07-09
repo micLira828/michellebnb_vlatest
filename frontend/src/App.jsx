@@ -13,6 +13,8 @@ import Navigation from './components/Navigation';
 import * as sessionActions from './store/session';
 import SpotDetails from './components/Spots/SpotDetails';
 import UpdateSpotForm from './components/Spots/UpdateSpotForm';
+import DeleteReview from './components/Reviews/DeleteReview';
+import UpdateReview from './components/Reviews/UpdateReview';
 
 
 function Layout() {
@@ -45,17 +47,21 @@ const router = createBrowserRouter([
         path: "signup",
         element: <SignupFormPage />
       },
+     
       {
         path: "spots/:spotId",
-        element: <SpotDetails/>
+        element: <SpotDetails/>,
       },
       {
         path: "spots/:spotId/edit",
         element: <UpdateSpotForm/>},
         {
-          path: "spots/:spotId/delete",
-          element: <DeleteSpot/>
-        },
+          path: "/reviews/:reviewId/edit",
+          element: <UpdateReview/>},
+      {
+        path: "spots/:spotId/delete",
+        element: <DeleteSpot/>
+      },
       {
         path: "spots/new",
         element: <CreateSpotForm/>
@@ -63,8 +69,10 @@ const router = createBrowserRouter([
       {
         path: "reviews/new",
         element: <CreateReview/>},
-      
-      
+      {
+        path: "/reviews/:reviewId/delete",
+        element: <DeleteReview/>
+      },
     ]
   }
 ]);

@@ -1,11 +1,32 @@
 .card{
-    display: flex;
-    flex-flow: column wrap;
-    align-items: center;
+    width: 300px;
+    overflow: hidden;
+    box-shadow: 0px 0px 15px -5px;
+    display: flex; 
+    flex-direction: column;
     text-align: center;
-    border-radius: 10px;
-    justify-content: center;
-    margin: 1.5%;
-    padding: 1%;
-    background-color: #ccc;
+ 
 }
+    
+.card-img img{
+    overflow: hidden;
+    height: 200px;
+    width: 100%;
+}
+
+.spotCard{
+    text-decoration: none;
+    color: black;
+}
+
+img{
+    width: 25%;
+    height: 25%;
+}
+
+
+/* .image_container .inner{
+    width: 200px;
+    height: 200px;
+    background-color: white;
+} */

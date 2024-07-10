@@ -86,6 +86,7 @@ export const removeSpot = (spot) => async(dispatch) => {
 
     if(response.ok){
       const data = await response.toJSON();
+      console.log('The data is', data)
       dispatch(deleteSpot(data))
     }
     else{

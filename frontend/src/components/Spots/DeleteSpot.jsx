@@ -7,9 +7,6 @@ const DeleteSpot = () =>  {
     let spot = useSelector((state) => state.spots.byId[spotId]);
     const dispatch = useDispatch();
     dispatch(removeSpot(spot));
-    return<>
-    <h2>Spot Deleted</h2>
-    </>
 }
 
 export default DeleteSpot;

@@ -1,9 +1,9 @@
 .spots{
    margin-top: 7%;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
+   display: grid;
+   grid-template-columns: 1fr 1fr 1fr;
 }
+
 
 .spotContainer{
     display: flex;

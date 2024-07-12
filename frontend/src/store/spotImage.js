@@ -7,12 +7,12 @@ export const ADD_SPOT_IMAGE = "spots/postSpotImage";
 
 
 //regular action creator
-const loadSpotImages = (spotImages) => {
-    return {
-      type: GET_ALL_SPOT_IMAGES,
-      payload: spotImages
-    };
-  };
+// const loadSpotImages = (spotImages) => {
+//     return {
+//       type: GET_ALL_SPOT_IMAGES,
+//       payload: spotImages
+//     };
+//   };
 
 export const addSpotImage = (spotImage) => {
   return {
@@ -34,18 +34,21 @@ export const addSpotImage = (spotImage) => {
  
 
 
-// thunk action creator
-export const getAllSpotImages = (spot) => async (dispatch) => {
-    const response = await fetch(`/api/spots/${spot.id}/images`);
+// // thunk action creator
+// export const getAllSpotImages = (spot) => async (dispatch) => {
 
-
-    if(response.ok){
-      const data = await response.json();
-      dispatch(loadSpotImages(data.SpotImages));
-      return data;
-    }
+//     console.log(`The spot is, ${spot}`)
+//     console.log(`The spot id is, ${spot.id}`)
+//     const response = await fetch(`/api/spots/${spot.id}/images`);
     
-  };
+
+//     if(response.ok){
+//       const data = await response.json();
+//       dispatch(loadSpotImages(data));
+//       return data;
+//     }
+    
+//   };
 
 
 export const postSpotImage = (image, spotId) => async(dispatch) => {
@@ -105,20 +108,20 @@ const initialState = {};
 const spotImagesReducer = (state = initialState, action) => {
    let newState;
   switch (action.type) {
-    case GET_ALL_SPOT_IMAGES: {
-      newState = {...state};
-      let spotImages = action.payload
-      newState.allSpotImages = spotImages
-      let newById = {}
-      for(let image of spotImages){
-        /*Adding key value pair 
-        where spot id is key and 
-        spot is value*/
-        newById[image.id] = image
-      }
-      newState.byId = newById;
-      return newState;
-    }
+    // case GET_ALL_SPOT_IMAGES: {
+    //   newState = {...state};
+    //   let spotImages = action.payload
+    //   newState.allSpotImages = spotImages
+    //   let newById = {}
+    //   for(let image of spotImages){
+    //     /*Adding key value pair 
+    //     where spot id is key and 
+    //     spot is value*/
+    //     newById[image.id] = image
+    //   }
+    //   newState.byId = newById;
+    //   return newState;
+    // }
     
     case ADD_SPOT_IMAGE: {
      newState = {...state};

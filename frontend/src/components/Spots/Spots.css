@@ -4,7 +4,12 @@
     grid-template-columns: 1fr 1fr 1fr;
  }
  
- 
+ .card-img{
+    width: max-content;
+ }
+ .card-img img{
+    width: 100%;
+ }
  .spotContainer{
      display: flex;
      flex-direction: column;

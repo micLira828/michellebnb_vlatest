@@ -11,7 +11,7 @@ import DeleteSpotModal from '../DeleteSpotModal';
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getAllSpotImages } from "../../store/spotImage";
+
 import cottage from './cottage.jpg'
 import cozyAirbnb from './cozy_airbnb.jpg'
 import bedroom from './bedroom.jpg'
@@ -19,25 +19,13 @@ import Reviews from "../Reviews/Reviews";
 
 
 const Card = ({spot}) => {// optional: callback function that will be called once the modal is closed}) => {
-
-
-  const dispatch = useDispatch();
-     
-    const spotImages = useSelector((state) => state.spotImages.allSpotImages);
-
-    useEffect(() => {
-        dispatch(getAllSpotImages(spot));
-      }, [dispatch]);
-
-  const previewImages = spotImages && spotImages.length >= 4 ? spotImages.filter((image) => {return image.preview === true}) : undefined;
-  const chosenPreviewImage = spotImages && spotImages.length >= 4 ? previewImages[0] : undefined;
-
+  const chosenPreviewImage = spot.previewImage;
   return (
       <Link className = "spotCard" to ={`spots/${spot.id}`}>
         <Tippy content = {spot.name}>
         <div className = 'card'>
           <div className = "card-img">
-           <img src = {chosenPreviewImage ? chosenPreviewImage : image}/>
+           {chosenPreviewImage ? <img src = {chosenPreviewImage}/> : <img src = {image}/>}
           </div>
          <div className = 'cardBody'>
           <div className="mainCardInfo">

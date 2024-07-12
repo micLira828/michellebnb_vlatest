@@ -1,0 +1,22 @@
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width:fit-content;
+}
+
+.test{
+    display: flex;
+}
+
+input{
+    width: 100%;
+}
+
+.labelContainer{
+    display: flex;
+    flex-direction: column;
+}
+
+

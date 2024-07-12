@@ -11,7 +11,7 @@ import DeleteSpotModal from '../DeleteSpotModal';
 const Card = ({spot}) => {// optional: callback function that will be called once the modal is closed}) => {
   const {closeModal} = useModal();
   return (
-      <Link className = "spotCard" target = '_blank' to ={`spots/${spot.id}`}>
+      <Link className = "spotCard" to ={`spots/${spot.id}`}>
         <Tippy content = {spot.name}>
         <div className = 'card'>
           <div className = "card-img">

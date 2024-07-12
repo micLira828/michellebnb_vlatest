@@ -428,7 +428,7 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
 
     spotRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'')
     spotRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'')
-
+   
     return res.status(201).json(spotRes);
  });
 

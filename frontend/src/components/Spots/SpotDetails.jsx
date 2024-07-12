@@ -2,15 +2,22 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getOneSpot } from "../../store/spot";
-import cottage from './cottage.jpg'
+// import cottage from './cottage.jpg'
 import cozyAirbnb from './cozy_airbnb.jpg'
-import bedroom from './bedroom.jpg'
-import Reviews from "../Reviews/Reviews";
+// import bedroom from './bedroom.jpg'
+// import Reviews from "../Reviews/Reviews";
+
+
 
 const SpotDetails = () => {
   const dispatch = useDispatch();
   let { spotId } = useParams();
+  console.log('The spot id now is', spotId)
   let spot = useSelector((state) => state.spots.byId[spotId]);
+  console.log('The details for the spot are', spot);
+
+
+let spotImages = spot ? spot.SpotImages : undefined;
 
   const [isLoaded, setIsLoaded] = useState(false);
   useEffect(() => {
@@ -18,7 +25,8 @@ const SpotDetails = () => {
       await dispatch(getOneSpot(spotId));
       setIsLoaded(true);
     };
-    if (!spot) {
+
+    if (!spot || !spotImages) {
       getData();
     } else {
       setIsLoaded(true);
@@ -29,6 +37,17 @@ const SpotDetails = () => {
     return <h1>Loading...</h1>;
   }
 
+  
+
+  console.log('The spot images is', spotImages)
+  console.log('The id of the first spot images is', spotImages[0].id)
+ 
+  
+
+  const previewImages = spotImages.filter((image) => {return image.preview === true});
+  const chosenPreviewImage = previewImages[0];
+  const fourAlternateImages = previewImages.filter((image) => {return image.id !== chosenPreviewImage.id});
+  console.log('The four alternate images are', fourAlternateImages);
   return (
     <>
       <div className="spotContainer">
@@ -38,23 +57,19 @@ const SpotDetails = () => {
             {spot.city} {spot.state}, {spot.country}
           </h4>
         </div>
-        <div className = "imageBox">
+       
+    <div className = "imageBox">
             <div className = "previewImage">
-                <img src = {cozyAirbnb}/>
+                {chosenPreviewImage ?
+                <img alt = "image" src = {chosenPreviewImage.url}/>:<img src = {cozyAirbnb}/>}
             </div>
             <div className = "fourAlternateImages">
-                <div className = "sideImage">
-                <img src = {cottage}/>
-                </div>
-                <div className = "sideImage">
-                    <img src = {bedroom}/>
-                </div>
-                <div className = "sideImage">
-                    <img src = {bedroom}/>
-                </div>
-                <div className = "sideImage">
-                    <img src = {cottage}/>
-                </div>
+                {fourAlternateImages.map(image => 
+                     <div key = {image.id} className = "sideImage">
+                     <img alt = "image" src = {image.url}/>
+                     </div>
+                )
+                }
             </div>
         </div>
         <main>

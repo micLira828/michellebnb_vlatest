@@ -1,6 +1,9 @@
 import {useState} from 'react';
 import {useDispatch} from 'react-redux'
+import {useSelector} from 'react-redux'
 import { postSpot} from '../../store/spot';
+import { postSpotImage} from '../../store/spotImage';
+
 const CreateSpotForm = () => {
     const [address, setAddress] = useState('');
     const [city, setCity] = useState('');
@@ -11,10 +14,21 @@ const CreateSpotForm = () => {
     const [description, setDescription] = useState('');
     const [lat, setLat] = useState(0.0);
     const [lng, setLng] = useState(0.0);
+    const [image1, setImage1] = useState('');
+    const [image2, setImage2] = useState('');
+    const [image3, setImage3] = useState('');
+    const [image4, setImage4] = useState('');
+    const [image5, setImage5] = useState('');
+
     const dispatch = useDispatch();
-  
-    const handleSubmit = (e) => {
+
+    const handleSubmit = async(e) => {
         e.preventDefault();
+        const SpotImages = [image1, image2, image3, image4, image5]
+        const newArr = [];
+
+      
+
         const form = {
             name,
             address,
@@ -26,8 +40,12 @@ const CreateSpotForm = () => {
             description,
             price
         }
-        console.log(form);
-        dispatch(postSpot(form));
+        
+        const newSpot = await dispatch(postSpot(form));
+        for(let pic of SpotImages){
+            const SpotImage = {"url": pic, "preview": true}
+            dispatch(postSpotImage(SpotImage, newSpot.id));
+        }
     }
 
   
@@ -56,6 +74,16 @@ const CreateSpotForm = () => {
                 <legend><strong>Set a base price for your spot</strong></legend>
                 <input  onChange={(e) => setPrice(e.target.value)} value = {price}  type = "decimal"/>
             </fieldset>
+                
+                <h3>Add your spot images</h3>
+                <>
+                <input value = {image1} onChange = {(e) => {setImage1(e.target.value)}} type = "url"/>
+                <input value = {image2} onChange = {(e) => {setImage2(e.target.value)}} type = "url"/>
+                <input value = {image3} onChange = {(e) => {setImage3(e.target.value)}} type = "url"/>
+                <input value = {image4} onChange = {(e) => {setImage4(e.target.value)}} type = "url"/>
+                <input value = {image5} onChange = {(e) => {setImage5(e.target.value)}} type = "url"/>
+                </>
+                  
             <button type = 'submit'>Create a spot</button>
         </form>
         </>

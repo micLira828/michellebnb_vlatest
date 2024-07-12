@@ -50,7 +50,7 @@ export const deleteSpot = (spot) => {
 
 
 // thunk action creator
-export const getAllSpots = () => async (dispatch) => {
+export const getAllSpots = (spotId) => async (dispatch) => {
     const response = await fetch('/api/spots/');
 
 
@@ -63,8 +63,10 @@ export const getAllSpots = () => async (dispatch) => {
   };
 
   export const getOneSpot = (spotId) => async (dispatch) => {
-
+    
+    console.log("There are" , spotId, " apples")
     const response = await fetch(`/api/spots/${spotId}`);
+
     if (response.ok) {
       const data = await response.json();
       console.log('The data is', data)
@@ -95,7 +97,7 @@ export const removeSpot = (spot) => async(dispatch) => {
     
 }
 
-export const postSpot = (spot) => async(dispatch) => {
+export const postSpot = (spot, SpotImages) => async(dispatch) => {
 
   const {name, address, city, state, country, description, lat, lng, price} = spot;
 
@@ -111,16 +113,16 @@ export const postSpot = (spot) => async(dispatch) => {
        description: description,
        price: parseFloat(price),
        lat: parseFloat(lat),
-       lng: parseFloat(lng)
+       lng: parseFloat(lng),
+       SpotImages: SpotImages
     })
    }
    
    const response = await csrfFetch('/api/spots', options);
-   console.log(await response.json())
-   
- 
+
    if(response.ok){
      const data = await response.json();
+     console.log('Thunk', data)
      dispatch(addSpot(data))
      return data;
    }

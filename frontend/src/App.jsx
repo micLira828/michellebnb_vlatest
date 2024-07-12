@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import DeleteSpot from './components/Spots/DeleteSpot';
+
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Spots from './components/Spots';
 import CreateSpotForm from './components/Spots/CreateSpotForm';
@@ -58,10 +58,6 @@ const router = createBrowserRouter([
         {
           path: "/reviews/:reviewId/edit",
           element: <UpdateReview/>},
-      {
-        path: "spots/:spotId/delete",
-        element: <DeleteSpot/>
-      },
       {
         path: "spots/new",
         element: <CreateSpotForm/>

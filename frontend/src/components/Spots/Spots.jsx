@@ -6,6 +6,7 @@ import OpenModalButton from '../OpenModalButton';
 import DeleteSpotModal from '../DeleteSpotModal';
 import Card from './Card'
 import './Spots.css'
+import { Link } from 'react-router-dom';
 
 const Spots = () => {
     const dispatch = useDispatch();
@@ -22,6 +23,7 @@ const Spots = () => {
              {spots?.map((spot) => (
                 <div key = {spot.name}>
                  <Card  spot={spot}/>
+                 <Link to = {`spots/${spot.id}/edit`} ><button>Update Spot</button></Link>
                  <OpenModalButton 
                  modalComponent = {<DeleteSpotModal spotId = {spot.id}/>}
                  buttonText = {'Delete Spot'}

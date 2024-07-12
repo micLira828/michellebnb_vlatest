@@ -6,10 +6,18 @@ form{
     width:fit-content;
 }
 
-.test{
+h2{
+    text-align: center;
+    top: 250px;
+}
+
+.flexContainer{
     display: flex;
 }
 
+.description{
+     width: 100%;
+}
 input{
     width: 100%;
 }

@@ -67,7 +67,7 @@ function LoginFormModal() {
         {errors.credential && (
           <p className = "errors">The provided credentials were invalid</p>
         )}
-        <button disabled = {buttonOut?true:false}type="submit">Log In</button>
+        <button className = "redRectangular" disabled = {buttonOut?true:false}type="submit">Log In</button>
       </form>
     </>
   );

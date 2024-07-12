@@ -17,7 +17,7 @@ const DeleteSpotModal = ({spotId}) =>{
     return (<>
         <p>Are you sure you want to
         remove the spot from the listings?</p>
-        <button onClick = {deleteTheSpot}>Yes(Delete Spot)</button>
+        <button className = "redRectangular" onClick = {deleteTheSpot}>Yes(Delete Spot)</button>
         <button onClick = {closeModal}>No(Keep Spot)</button>
     </>)
     

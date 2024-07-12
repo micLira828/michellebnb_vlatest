@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getOneSpot } from "../../store/spot";
-// import cottage from './cottage.jpg'
+import cottage from './cottage.jpg'
 import cozyAirbnb from './cozy_airbnb.jpg'
-// import bedroom from './bedroom.jpg'
-// import Reviews from "../Reviews/Reviews";
+import bedroom from './bedroom.jpg'
+import Reviews from "../Reviews/Reviews";
 
 
 
@@ -38,16 +38,15 @@ let spotImages = spot ? spot.SpotImages : undefined;
   }
 
   
-
   console.log('The spot images is', spotImages)
-  console.log('The id of the first spot images is', spotImages[0].id)
+  // console.log('The id of the first spot images is', spotImages[0].id)
  
   
+  const previewImages = spotImages.length >= 4 ? spotImages.filter((image) => {return image.preview === true}) : undefined;
+  const chosenPreviewImage = spotImages.length >= 4 ? previewImages[0] : undefined;
+  const fourAlternateImages =  spotImages.length >= 4 ? previewImages.filter((image) => {return image.id !== chosenPreviewImage.id}) : undefined;
+  // console.log('The four alternate images are', fourAlternateImages);
 
-  const previewImages = spotImages.filter((image) => {return image.preview === true});
-  const chosenPreviewImage = previewImages[0];
-  const fourAlternateImages = previewImages.filter((image) => {return image.id !== chosenPreviewImage.id});
-  console.log('The four alternate images are', fourAlternateImages);
   return (
     <>
       <div className="spotContainer">
@@ -64,11 +63,25 @@ let spotImages = spot ? spot.SpotImages : undefined;
                 <img alt = "image" src = {chosenPreviewImage.url}/>:<img src = {cozyAirbnb}/>}
             </div>
             <div className = "fourAlternateImages">
-                {fourAlternateImages.map(image => 
+                {fourAlternateImages ? fourAlternateImages.map(image => 
                      <div key = {image.id} className = "sideImage">
                      <img alt = "image" src = {image.url}/>
                      </div>
-                )
+                ):
+                (<>
+                <div className = "sideImage">
+                <img alt = "image" src = {cottage}/>
+                </div>
+                <div className = "sideImage">
+                <img alt = "image" src = {bedroom}/>
+                </div>
+                <div className = "sideImage">
+                <img alt = "image" src = {cottage}/>
+                </div>
+                <div className = "sideImage">
+                <img alt = "image" src = {bedroom}/>
+                </div>
+                </>)
                 }
             </div>
         </div>
@@ -82,7 +95,7 @@ let spotImages = spot ? spot.SpotImages : undefined;
           </div>
           <div className="calloutBox">
             <h4>{spot.price} night</h4>
-            <button onClick={() => alert("Feature coming soon!")}>
+            <button className = "redRectangular" onClick={() => alert("Feature coming soon!")}>
               Reserve
             </button>
           </div>

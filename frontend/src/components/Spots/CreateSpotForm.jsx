@@ -53,27 +53,38 @@ const CreateSpotForm = () => {
         <>
          <h2>Create a new spot</h2>
         <form onSubmit={handleSubmit}>
-            <fieldset>
-                <legend><strong>Where is your form located?</strong></legend>
+            <h3>Where&apos;s your place located?</h3>
+            <p>
+                Guests will only get your exact address once they have booked a
+                reservation
+            </p>
                 <input value = {address}  onChange={(e) => setAddress(e.target.value)} placeholder = "address" type ="text"></input>
                 <input value = {country}  onChange={(e) => setCountry (e.target.value)}placeholder = "country" type ="text"></input>
                 <input  value = {city}  onChange={(e) => setCity(e.target.value)} placeholder = "city" type ="text"></input>
                 <input  value = {state}  onChange={(e) => setState(e.target.value)} placeholder = "state" type ="text" ></input>
                 <input  onChange={(e) => setLat(e.target.value)} value = {lat}  placeholder = "latitude" type = "decimal"/>
                 <input  onChange={(e) => setLng(e.target.value)} value = {lng}  placeholder = "longitude" type = "decimal"/>
-            </fieldset>
-            <fieldset>
-                <legend><strong>Describe your place to guests</strong></legend>
-                <textarea  onChange={(e) => setDescription(e.target.value)} value = {description}  rows = "10" cols = "20"></textarea>
-            </fieldset>
-            <fieldset>
-                <legend><strong>Create a title for your spot</strong></legend>
+
+                <h3>Describe your place to guests</h3>
+                <p>Mention the best features of your space,
+                    any special amenities like fast wifi or parking,
+                    and what you love about the neighborhood
+                </p>
+                <textarea  className = "description" onChange={(e) => setDescription(e.target.value)} value = {description}  rows = "10" cols = "20"></textarea>
+
+
+                <h3>Create a title for your spot</h3>
+                <p>Catch guests' attention with a spot 
+                    title that highlights what makes
+                    this place special</p>
                 <input   onChange={(e) => setName(e.target.value)} value = {name}  type = "text"></input>
-            </fieldset>
-            <fieldset>
-                <legend><strong>Set a base price for your spot</strong></legend>
+
+                <h3>Set a base price for your spot</h3>
+                <p>Competitive pricing can help
+                your listing stand out and rank higher 
+                in search results
+                </p>
                 <input  onChange={(e) => setPrice(e.target.value)} value = {price}  type = "decimal"/>
-            </fieldset>
                 
                 <h3>Add your spot images</h3>
                 <>
@@ -84,7 +95,7 @@ const CreateSpotForm = () => {
                 <input value = {image5} onChange = {(e) => {setImage5(e.target.value)}} type = "url"/>
                 </>
                   
-            <button type = 'submit'>Create a spot</button>
+            <button className = "redRectangular" type = 'submit'>Create a spot</button>
         </form>
         </>
     )

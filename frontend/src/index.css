@@ -5,3 +5,9 @@ body{
     align-items: center;
     justify-content: center;
 }
+
+.redRectangular{
+    background-color: red;
+    color: white;
+    border-radius: 0;
+}

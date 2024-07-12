@@ -42,7 +42,7 @@ const UpdateSpotForm = () => {
 
   return (
     <>
-      <h2>Create a new spot</h2>
+      <h2>Update your spot</h2>
       <form onSubmit={handleSubmit}>
         <h3>Where`&apos;`s your place located?</h3>
         <p>
@@ -64,7 +64,7 @@ const UpdateSpotForm = () => {
             placeholder={`${address}`}
             type="text"
           ></input>
-        <div className="test">
+        <div className="flexContainer">
           <div className = "labelContainer">
           <label htmlFor="city">City</label>
             <input
@@ -84,6 +84,8 @@ const UpdateSpotForm = () => {
              </label>
             </div>
             <div>
+            <div className="flexContainer">
+            <div className="labelContainer">
             <label htmlFor = "lat">Latitude</label>
             <input
           onChange={(e) => setLat(e.target.value)}
@@ -91,7 +93,8 @@ const UpdateSpotForm = () => {
           placeholder={`${lat}`}
           type="decimal"
         />
-   
+         </div>
+         <div class = "labelContainer">
         <label htmlFor="lng"> Longitude</label>
         <input
           onChange={(e) => setLng(e.target.value)}
@@ -101,6 +104,8 @@ const UpdateSpotForm = () => {
           "decimal"
         />
         </div>
+        </div>
+        </div>
        
          <h3>Describe your place to guests</h3>
          <p>Mention the best features of your space,
@@ -108,7 +113,7 @@ const UpdateSpotForm = () => {
             and what you love about the neighborhood
          </p>
          <label htmlFor="description">Description</label>
-          <textarea
+          <textarea className = "description"
             onChange={(e) => setDescription(e.target.value)}
             value={description}
             rows="10"
@@ -140,7 +145,7 @@ const UpdateSpotForm = () => {
           />
 
          
-        <button type="submit">Update the spot</button>
+        <button className = "redRectangular" type="submit">Update the spot</button>
       </form>
     </>
   );

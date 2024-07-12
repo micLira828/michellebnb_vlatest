@@ -8,7 +8,6 @@
  .spotContainer{
      display: flex;
      flex-direction: column;
-     
  }
  
  .titleContainer{
@@ -32,6 +31,12 @@
  .fourAlternateImages{
      display: grid;
      grid-template-columns: 1fr 1fr;
+ }
+
+
+
+ .sideImage img{
+    width: 100%;
  }
  
  .spotContainer{

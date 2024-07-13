@@ -66,7 +66,7 @@ module.exports = {
         },
         {
             url: 'https://media.houseandgarden.co.uk/photos/6410983736539c3c1f21fdc2/master/w_1600%2Cc_limit/Massey_HG_MtHarry2_138-production_digital.jpg',
-            spotId: 3,
+            spotId: 1,
             preview: true
         },
         {

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getOneSpot } from "../../store/spot";
+import { FaStar } from "react-icons/fa";
 import cottage from './cottage.jpg'
 import cozyAirbnb from './cozy_airbnb.jpg'
 import bedroom from './bedroom.jpg'
@@ -94,7 +95,10 @@ let spotImages = spot ? spot.SpotImages : undefined;
             <Reviews spot = {spot} /> 
           </div>
           <div className="calloutBox">
+            <div className = "topRow">
             <h4>{spot.price} night</h4>
+            <h4><FaStar />{`${spot.avgStarRating}  .  ${spot.numReviews} reviews`}</h4>
+             </div>
             <button className = "redRectangular" onClick={() => alert("Feature coming soon!")}>
               Reserve
             </button>

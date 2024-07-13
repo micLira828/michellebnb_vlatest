@@ -2,11 +2,15 @@ import { useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ReviewCard from './ReviewCard';
 import { getSpotReviews } from '../../store/review';
-import CreateReview from './CreateReview';
+import OpenModalButton from '../OpenModalButton';
+import { useModal } from '../../context/Modal';
 import { FaStar } from "react-icons/fa";
 import './Reviews.css';
+import CreateReviewModal from './CreateReviewModal';
 const Reviews = ({spot}) => {
   const dispatch = useDispatch();
+
+  const {closeModal} = useModal();
 
   let sessionUser = useSelector((state) => state.session.user);
 
@@ -29,12 +33,15 @@ const Reviews = ({spot}) => {
          <h3><FaStar />{`${spot.avgStarRating}  .  ${spot.numReviews} reviews`}</h3>
         </div>
        {sessionUser && spot.ownerId !== sessionUser.id 
-       && !usersReview ? (<button className = "redRectangular">Post a Review</button>) : ""}
+       && !usersReview ? ( <OpenModalButton className = "modalRedRectangular"
+        modalComponent = {<CreateReviewModal spot = {spot}/>}
+        buttonText = {'Post a Review'}
+        onModalClose={closeModal}/>) 
+       : ""}
         {spotReviews.map((review) => <ReviewCard review = {review} key = {review.id}/>)}
       </div>
     {/* if user id matches current users if and if there is a user */}
    
-   <CreateReview spot = {spot}/>
     </>
   )
 }

@@ -28,7 +28,8 @@ const Reviews = ({spot}) => {
         <div className = "ratingsSummary">
          <h3><FaStar />{`${spot.avgStarRating}  .  ${spot.numReviews} reviews`}</h3>
         </div>
-       {sessionUser && !usersReview ? (<button className = "redRectangular">Post a Review</button>) : ""}
+       {sessionUser && spot.ownerId !== sessionUser.id 
+       && !usersReview ? (<button className = "redRectangular">Post a Review</button>) : ""}
         {spotReviews.map((review) => <ReviewCard review = {review} key = {review.id}/>)}
       </div>
     {/* if user id matches current users if and if there is a user */}

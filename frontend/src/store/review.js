@@ -96,14 +96,14 @@ export const removeReview = (review) => async(dispatch) => {
 }
 
 export const postReview = (spot, review) => async(dispatch) => {
-  console.log('The post thunk spot is', spot.spot.id)
+  console.log('Mary had', spot, 'lambs')
   let options = {
      method: 'POST',
      headers: {'Content-Type': 'application/json'},
      body: JSON.stringify(review)
    }
 
-   const response = await csrfFetch(`/api/spots/${spot.spot.id}/reviews`, options);
+   const response = await csrfFetch(`/api/spots/${spot.id}/reviews`, options);
    console.log(await response.json())
    
  

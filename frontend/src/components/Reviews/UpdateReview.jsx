@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux'
 import { useParams } from 'react-router-dom';
 import { updateReview} from '../../store/review';
+import { Link } from 'react-router-dom';
 const UpdateReview = () => {
 
     let {reviewId} = useParams();
@@ -36,7 +37,7 @@ const UpdateReview = () => {
                 <input  value = {rating}  onChange={(e) => setRating(e.target.value)} placeholder = {`${rating}`}  type ="text" ></input>
                 <input  onChange={(e) => setStars(e.target.value)} value = {stars}  placeholder = {`${stars}`}  type = "decimal"/>
             </fieldset>
-            <button link to = {`/reviews/${rating.id}/edit`} type = 'submit'>Update the Review</button>
+            <Link to = {`/reviews/${rating.id}/edit`} type = 'submit'>Update the Review</Link>
         </form>
         </>
     )

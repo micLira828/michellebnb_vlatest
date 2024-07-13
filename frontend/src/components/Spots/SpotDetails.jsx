@@ -91,7 +91,7 @@ let spotImages = spot ? spot.SpotImages : undefined;
               Hosted by:{spot.Owner.firstName} {spot.Owner.lastName}
             </h3>
             <p>{spot.description}</p>
-            <Reviews spot = {spot}/> 
+            <Reviews spot = {spot} /> 
           </div>
           <div className="calloutBox">
             <h4>{spot.price} night</h4>

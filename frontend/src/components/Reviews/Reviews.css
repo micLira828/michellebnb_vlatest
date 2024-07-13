@@ -4,3 +4,9 @@
     align-items: flex-start;
     justify-content: center;
 }
+
+.ratingsSummary{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 0;
+}

@@ -48,10 +48,10 @@ export const deleteReview = (review) => {
   };
 
  // thunk action creator
-export const getSpotReviews = (spot) => async (dispatch) => {
+export const getSpotReviews = ({spot}) => async (dispatch) => {
    
-  console.log(spot.spot.id);
-    const spotId = spot.spot.id;
+  console.log('Spot apples', spot);
+    const spotId = spot.id;
     const response = await fetch(`/api/spots/${spotId}/reviews`);
     if(response.ok){
       const data = await response.json();

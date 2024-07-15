@@ -15,6 +15,7 @@ import SpotDetails from './components/Spots/SpotDetails';
 import UpdateSpotForm from './components/Spots/UpdateSpotForm';
 import DeleteReview from './components/Reviews/DeleteReview';
 import UpdateReview from './components/Reviews/UpdateReview';
+import ManageSpots from './components/Spots/ManageSpots';
 
 
 function Layout() {
@@ -47,13 +48,16 @@ const router = createBrowserRouter([
         path: "signup",
         element: <SignupFormPage />
       },
-     
       {
-        path: "spots/:spotId",
+        path: "/spots/current",
+        element: <ManageSpots/>,
+      },
+      {
+        path: "/spots/:spotId",
         element: <SpotDetails/>,
       },
       {
-        path: "spots/:spotId/edit",
+        path: "/spots/:spotId/edit",
         element: <UpdateSpotForm/>},
         {
           path: "/reviews/:reviewId/edit",

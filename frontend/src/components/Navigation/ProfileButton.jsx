@@ -56,9 +56,8 @@ function ProfileButton({ user }) {
           <Link to = 'spots/new'><button>Create a spot</button></Link>
           <ul className = "toggleMenuList">
             <li>Hello, {user.firstName}.</li>
-            <li>{user.username}</li>
-            <li>{user.firstName} {user.lastName}</li>
             <li>{user.email}</li>
+            <li><Link to = {`/spots/current`}>Manage Spots</Link></li>
             <li>
               <button onClick={logout}>Log Out</button>
             </li>

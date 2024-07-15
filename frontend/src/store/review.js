@@ -74,7 +74,7 @@ export const getOneReview = (reviewId) => async (dispatch) => {
   }
 };
 
-export const removeReview = (review) => async(dispatch) => {
+export const removeReview = (review) => async (dispatch) => {
     const options = {
       method: 'DELETE',
       headers: {'Content-Type': 'application/json'},
@@ -84,6 +84,7 @@ export const removeReview = (review) => async(dispatch) => {
     console.log('The review is', review);
 
     const response = await csrfFetch(`/api/reviews/${review.id}`, options);
+    console.log(response);
 
     if(response.ok){
       const data = await response.toJSON();

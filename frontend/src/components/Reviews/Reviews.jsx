@@ -29,6 +29,7 @@ const Reviews = ({spot}) => {
       <div className = "reviews">
         <div className = "ratingsSummary">
           <div className = "avgStarRating"><FaStar />{spot.avgStarRating.toFixed(1)} </div>
+          <div> .</div>
           <div className = "numberOfReviews">{spot.numReviews} {spot.numReviews === 1 ? 'review' : 'reviews'}</div>
         </div>
        {sessionUser && spot.ownerId !== sessionUser.id 

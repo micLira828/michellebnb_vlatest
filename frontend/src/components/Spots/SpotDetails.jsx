@@ -97,6 +97,7 @@ let spotImages = spot ? spot.SpotImages : undefined;
           <div className="calloutBox">
             <div className = "topRow">
             <div><FaStar />{spot.avgStarRating.toFixed(1)}</div>
+            <div>.</div>
             <div> {spot.numReviews} {spot.numReviews === 1 ? 'review' : 'reviews'}</div>
              </div>
              <h4>${spot.price} night</h4>

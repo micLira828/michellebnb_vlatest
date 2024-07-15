@@ -123,7 +123,7 @@ export const postReview = (spot, review) => async(dispatch) => {
     body: JSON.stringify(review)
   }
 
-  console.log(review.id);
+  console.log(review);
  
   const response = await csrfFetch(`/api/reviews/${review.id}`, options);
   // console.log(await response.json())
@@ -131,6 +131,7 @@ export const postReview = (spot, review) => async(dispatch) => {
   
   if(response.ok){
     const data = await response.json();
+    console.log('The data is', data)
     dispatch(editReview(data))
     return data;
   }

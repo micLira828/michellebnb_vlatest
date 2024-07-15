@@ -22,15 +22,14 @@ const Reviews = ({spot}) => {
    dispatch(getSpotReviews({spot}));
   }, [dispatch, spot])
 
-  const usersReview = spotReviews.find(review => {return review.userId === sessionUser.id})
+  const usersReview = sessionUser ? spotReviews.find(review => {return review.userId === sessionUser.id}) : undefined;
 
-  console.log('The current users id is', sessionUser.id)
-  console.log('The usersReview is', usersReview)
   return (
     <>
       <div className = "reviews">
         <div className = "ratingsSummary">
-         <h3><FaStar />{`${spot.avgStarRating}  .  ${spot.numReviews} reviews`}</h3>
+          <div className = "avgStarRating"><FaStar />{spot.avgStarRating.toFixed(1)} </div>
+          <div className = "numberOfReviews">{spot.numReviews} {spot.numReviews === 1 ? 'review' : 'reviews'}</div>
         </div>
        {sessionUser && spot.ownerId !== sessionUser.id 
        && !usersReview ? ( <OpenModalButton className = "modalRedRectangular"

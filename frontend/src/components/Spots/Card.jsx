@@ -2,7 +2,7 @@ import {Link} from 'react-router-dom';
 import Tippy from '@tippyjs/react';
 import image from './cozy_airbnb.jpg'
 import 'tippy.js/dist/tippy.css'; // optional
-import { useModal } from '../../context/Modal';
+import { useModal } from '../../context/Modal'
 import { FaStar } from "react-icons/fa";
 import OpenModalButton from '../OpenModalButton';
 import DeleteSpotModal from '../DeleteSpotModal';
@@ -20,6 +20,7 @@ import Reviews from "../Reviews/Reviews";
 
 const Card = ({spot}) => {// optional: callback function that will be called once the modal is closed}) => {
   const chosenPreviewImage = spot.previewImage;
+  const {closeModal} = useModal();
   return (
       <Link className = "spotCard" to ={`spots/${spot.id}`}>
         <Tippy content = {spot.name}>
@@ -35,16 +36,20 @@ const Card = ({spot}) => {// optional: callback function that will be called onc
           <div className = "ratings">
             <span>
            <FaStar />
-            {spot.avgRating ? spot.avgRating: "New"}
+            {spot.avgRating ? spot.avgRating.toFixed(1): "New"}
             </span>
           </div>
             {/* <div class = 'buttonGroup'>
              <NavLink to ={`spots/${spot.id}/edit`}>Edit Spot Details</NavLink>
             </div> */}
-        
+           
            {/* <NavLink to ={`spots/${spot.id}/delete`}>Delete</NavLink> */}
          </div>
-        
+         <Link to = {`spots/${spot.id}/edit`} ><button>Update Spot</button></Link>
+                 <OpenModalButton 
+                 modalComponent = {<DeleteSpotModal spotId = {spot.id}/>}
+                 buttonText = {'Delete Spot'}
+                 onModalClose={closeModal}/>
         </div>
         </Tippy>
         </Link>

@@ -4,7 +4,8 @@ import { useModal } from "../../context/Modal";
 import { useSelector } from "react-redux";
 import moment from 'moment'
 import DeleteReviewModal from "../DeleteReviewModal/DeleteReviewModal";
-const ReviewCard = ({review}) => {
+import UpdateReviewModal from "../UpdateReviewModal";
+const ReviewCard = ({review, spot}) => {
 
     const {closeModal} = useModal();
     const sessionUser = useSelector((state) => state.session.user);
@@ -16,8 +17,11 @@ const ReviewCard = ({review}) => {
     <h4>{review.User.firstName}</h4>
     <h4>{verbalDate}</h4>
      <p>{review.review}</p>
-     {sessionUser.id === review.userId ? (<>
-     <NavLink to = {`/reviews/${review.id}/edit`}><button>Edit a Review</button></NavLink>
+     {sessionUser && sessionUser.id === review.userId ? (<>
+        <OpenModalButton 
+                 modalComponent = {<UpdateReviewModal reviewId = {review.id}/>}
+                 buttonText = {'Update Review'}
+                 onModalClose={closeModal}/>
      <OpenModalButton 
                  modalComponent = {<DeleteReviewModal reviewId = {review.id}/>}
                  buttonText = {'Delete Review'}

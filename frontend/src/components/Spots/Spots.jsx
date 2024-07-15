@@ -12,7 +12,7 @@ const Spots = () => {
     const dispatch = useDispatch();
      
     const spots = useSelector((state) => state.spots.allSpots);
-    const {closeModal} = useModal();
+
     
     useEffect(() => {
         dispatch(getAllSpots());
@@ -23,11 +23,6 @@ const Spots = () => {
              {spots?.map((spot) => (
                 <div key = {spot.name}>
                  <Card  spot={spot}/>
-                 <Link to = {`spots/${spot.id}/edit`} ><button>Update Spot</button></Link>
-                 <OpenModalButton 
-                 modalComponent = {<DeleteSpotModal spotId = {spot.id}/>}
-                 buttonText = {'Delete Spot'}
-                 onModalClose={closeModal}/>
                  </div>
             ))}
         </div>

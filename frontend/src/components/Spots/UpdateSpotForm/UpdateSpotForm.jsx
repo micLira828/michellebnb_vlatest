@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {updateSpot} from "../../../store/spot";
 import './UpdateSpotModal.css';
 const UpdateSpotForm = () => {
   const {spotId} = useParams();
+  const navigate = useNavigate();
   console.log('The spotId is', spotId);
   let spot = useSelector((state) => state.spots.byId[spotId]);
   console.log(`The spot of ${spotId} is`, spot)
@@ -21,7 +22,7 @@ const UpdateSpotForm = () => {
   const [lng, setLng] = useState(spot.lng);
 
   console.log("the longitude is", lng)
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     const form = {
       id: spot.id,
@@ -37,7 +38,8 @@ const UpdateSpotForm = () => {
     }
     console.log(form);
     
-    dispatch(updateSpot(form));
+    const editedSpot = await dispatch(updateSpot(form));
+    navigate(`spots/${editedSpot.id}`);
   };
 
   return (

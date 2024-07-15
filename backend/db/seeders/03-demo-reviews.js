@@ -9,19 +9,19 @@ if (process.env.NODE_ENV === 'production') {
 module.exports = {
   async up (queryInterface, Sequelize) {
       await Review.bulkCreate([{
-        userId: 1,
+        userId: 2,
         spotId: 3,
         review: 'Beautiful place!',
         stars: 4
       },
       {
-        userId: 1,
+        userId: 3,
         spotId: 1,
         review: 'Cozy, but could not figure out coffee machine and wifi',
         stars: 3
       },
       {
-        userId: 1,
+        userId: 2,
         spotId: 3,
         review: 'Great location, cozy room, great, amnenities, and polite staff. Overall great experience!',
         stars: 5

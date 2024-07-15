@@ -137,15 +137,14 @@ export const postSpot = (spot, SpotImages) => async(dispatch) => {
     body: JSON.stringify(spot)
   }
 
-  console.log(spot.id);
- 
+
   const response = await csrfFetch(`/api/spots/${spot.id}`, options);
   // console.log(await response.json())
 
   
   if(response.ok){
     const data = await response.json();
-    dispatch(editSpot(data))
+    dispatch(editSpot(data));
     return data;
   }
  }
@@ -176,7 +175,7 @@ const spotsReducer = (state = initialState, action) => {
     case GET_ONE_SPOT: {
       newState = {...state};
       const spot = action.payload;
-      console.log(spot);
+      console.log('the reducers spot is', spot);
       let newById = {};
       newById[spot.id] = spot;
       newState.byId = newById;

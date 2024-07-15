@@ -27,8 +27,6 @@ const CreateSpotForm = () => {
         const SpotImages = [image1, image2, image3, image4, image5]
         const newArr = [];
 
-      
-
         const form = {
             name,
             address,
@@ -46,6 +44,8 @@ const CreateSpotForm = () => {
             const SpotImage = {"url": pic, "preview": true}
             dispatch(postSpotImage(SpotImage, newSpot.id));
         }
+
+        navigate(`spots/${newSpot.id}`);
     }
 
   

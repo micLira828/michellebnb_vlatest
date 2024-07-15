@@ -10,6 +10,7 @@ const UpdateSpotForm = () => {
   let spot = useSelector((state) => state.spots.byId[spotId]);
   console.log(`The spot of ${spotId} is`, spot)
   const dispatch = useDispatch();
+  let sessionUser = useSelector((state) => state.session.user);
   
   const [address, setAddress] = useState(spot.address);
   const [city, setCity] = useState(spot.city);
@@ -25,28 +26,30 @@ const UpdateSpotForm = () => {
   const handleSubmit = async(e) => {
     e.preventDefault();
     const form = {
-      id: spot.id,
-      name,
-      address,
-      city,
-      country,
-      state,
-      lat,
-      lng,
-      description,
-      price,
+      "id": spot.id,
+      "ownerId": sessionUser.id,
+      "spotImages": spot.SpotImages,
+      "name" : name,
+      "address" : address,
+      "city": city,
+      "country": country,
+      "state" : state,
+      "lat" : lat,
+      "lng" : lng,
+      "description": description,
+      "price" : price
     }
     console.log(form);
     
-    const editedSpot = await dispatch(updateSpot(form));
-    navigate(`spots/${editedSpot.id}`);
-  };
+    const editedSpot =  await dispatch(updateSpot(form));
+    navigate(`/spots/${editedSpot.id}`);
+  }
 
   return (
     <>
       <h2>Update your spot</h2>
       <form onSubmit={handleSubmit}>
-        <h3>Where`&apos;`s your place located?</h3>
+        <h3>Where&apos;s your place located?</h3>
         <p>
           Guests will only get your exact address once they have booked a
           reservation
@@ -96,7 +99,7 @@ const UpdateSpotForm = () => {
           type="decimal"
         />
          </div>
-         <div class = "labelContainer">
+         <div className = "labelContainer">
         <label htmlFor="lng"> Longitude</label>
         <input
           onChange={(e) => setLng(e.target.value)}

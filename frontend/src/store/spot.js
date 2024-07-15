@@ -130,16 +130,14 @@ export const postSpot = (spot, SpotImages) => async(dispatch) => {
 
  export const updateSpot = (spot) => async(dispatch) => {
 
-  console.log('The spot is', spot);
   let options = {
     method: 'PUT',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify(spot)
   }
 
-
+  console.log('the thunk spot is so', spot)
   const response = await csrfFetch(`/api/spots/${spot.id}`, options);
-  // console.log(await response.json())
 
   
   if(response.ok){

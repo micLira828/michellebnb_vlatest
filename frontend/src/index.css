@@ -1,1 +1,13 @@
 /* TODO: Add sitewide styles */
+body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.redRectangular{
+    background-color: red;
+    color: white;
+    border-radius: 0;
+}

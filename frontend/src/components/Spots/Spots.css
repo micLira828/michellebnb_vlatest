@@ -1,9 +1,100 @@
 .spots{
+    margin-top: 7%;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-}
+ }
+ 
+ 
+ .card-img img{
+    width: 100%;
+ }
+ .spotContainer{
+     display: flex;
+     flex-direction: column;
+ }
+ 
+ .titleContainer{
+     text-align: justify;
+ 
+ }
+ 
+ .imageBox{
+     display: flex;
+ }
+ .previewImage{
+    width: 500px;
+    height: 400px;
+ }
+ 
+ .previewImage img{
+     width: 100%;
+     height: 100%;
+ }
+ 
+ .fourAlternateImages{
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+ }
 
 
-Card{
-    display: flex;
-}
+
+ .sideImage img{
+    width: 100%;
+ }
+ 
+ .spotContainer{
+     display: flex;
+     margin-inline: auto;
+     width: 1000px;
+ }
+ .spotContainer main{
+     display: flex;
+     gap: 15px;
+ }
+ 
+ .mainInfo{
+     display: flex;
+     flex-direction: column;
+     align-items: left;
+     inline-size: 600px;
+     overflow: hidden;
+ }
+ 
+ .calloutBox{
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     flex-direction: column;
+     width: 100%;
+     height: 50%;
+     border: 1px solid black;
+     border-radius: 10px;
+     padding-bottom: 10px;
+ }
+ 
+ img{
+     width: 200p;
+     height: 200px;
+ } 
+ 
+ .spotCard{
+     text-decoration: none;
+     color: black;
+ }
+ 
+ .cardBody{
+     display: flex;
+  }
+  
+  .ratings{
+     display: flex;
+     align-items: center;
+     text-align: justify;
+     left: 100px;
+ }
+ 
+ .mainCardInfo h4{
+     left: 0;
+     margin-right: 100px;
+ 
+ }

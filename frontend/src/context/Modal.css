@@ -9,6 +9,7 @@
     align-items: center;
   }
   
+  
   #modal-background {
     position: fixed;
     top: 0;
@@ -16,6 +17,11 @@
     left: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.7);
+  }
+
+  .modalRedRectangular{
+    background-color: red;
+    color: white;
   }
   
   #modal-content {

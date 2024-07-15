@@ -1,0 +1,30 @@
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width:fit-content;
+}
+
+h2{
+    text-align: center;
+    top: 250px;
+}
+
+.flexContainer{
+    display: flex;
+}
+
+.description{
+     width: 100%;
+}
+input{
+    width: 100%;
+}
+
+.labelContainer{
+    display: flex;
+    flex-direction: column;
+}
+
+

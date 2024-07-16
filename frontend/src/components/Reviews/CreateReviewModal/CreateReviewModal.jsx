@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import {useDispatch} from 'react-redux'
+import { useModal } from '../../../context/Modal';
 import reviewsReducer, { postReview} from '../../../store/review';
 import { FaRegStar, FaStar } from "react-icons/fa";
 import './CreateReviewModal.css';
@@ -7,6 +8,7 @@ import './CreateReviewModal.css';
 const CreateReviewModal = ({spot}) => {
     const [stars, setStars] = useState(0);
     const [review, setReview] = useState('');
+    const {closeModal} = useModal();
     
     const dispatch = useDispatch();
    
@@ -19,8 +21,8 @@ const CreateReviewModal = ({spot}) => {
            review
         }
         console.log(form);
-        console.log('Marys spot is', spot)
-        dispatch(postReview(spot, form));
+      
+        dispatch(postReview(spot, form)).then(closeModal);
     }
 
   

@@ -22,7 +22,7 @@ const Card = ({spot}) => {// optional: callback function that will be called onc
   const chosenPreviewImage = spot.previewImage;
   const {closeModal} = useModal();
   return (
-      <Link className = "spotCard" to ={`spots/${spot.id}`}>
+      <Link className = "spotCard" to ={`/spots/${spot.id}`}>
         <Tippy content = {spot.name}>
         <div className = 'card'>
           <div className = "card-img">

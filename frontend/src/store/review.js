@@ -75,6 +75,7 @@ export const getOneReview = (reviewId) => async (dispatch) => {
 };
 
 export const removeReview = (review) => async (dispatch) => {
+  const reviewId = review.id;
     const options = {
       method: 'DELETE',
       headers: {'Content-Type': 'application/json'},
@@ -83,12 +84,13 @@ export const removeReview = (review) => async (dispatch) => {
 
     console.log('The review is', review);
 
-    const response = await csrfFetch(`/api/reviews/${review.id}`, options);
+    const response = await csrfFetch(`/api/reviews/${reviewId}`, options);
     console.log(response);
 
     if(response.ok){
-      const data = await response.toJSON();
-      dispatch(deleteReview(data))
+      const data = await response.json();
+      console.log('The data is', data)
+      dispatch(deleteReview(reviewId))
     }
     else{
       throw response;
@@ -97,7 +99,7 @@ export const removeReview = (review) => async (dispatch) => {
 }
 
 export const postReview = (spot, review) => async(dispatch) => {
-  console.log('Mary had', spot, 'lambs')
+  
   let options = {
      method: 'POST',
      headers: {'Content-Type': 'application/json'},
@@ -105,9 +107,7 @@ export const postReview = (spot, review) => async(dispatch) => {
    }
 
    const response = await csrfFetch(`/api/spots/${spot.id}/reviews`, options);
-   console.log(await response.json())
-   
- 
+
    if(response.ok){
      const data = await response.json();
      dispatch(addReview(data))
@@ -127,7 +127,7 @@ export const postReview = (spot, review) => async(dispatch) => {
   console.log(review);
  
   const response = await csrfFetch(`/api/reviews/${review.id}`, options);
-  // console.log(await response.json())
+
 
   
   if(response.ok){
@@ -199,14 +199,14 @@ const reviewsReducer = (state = initialState, action) => {
     case DELETE_REVIEW: {
       newState = {...state}
 
-      let review = action.payload;
+      let reviewId = action.payload;
 
       const newAllReviewsArr = newState.allReviews.filter(rev => {
-         return rev.id !== review.id;
+         return rev.id !== reviewId;
       })
 
       newState.allReviews = newAllReviewsArr;
-      delete newState.byId[review.id];
+      delete newState.byId[reviewId];
       return newState;
     }
     

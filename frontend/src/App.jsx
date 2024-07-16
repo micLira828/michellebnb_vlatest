@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import Spots from './components/Spots';
 import CreateSpotForm from './components/Spots/CreateSpotForm';
-import CreateReview from './components/Reviews/CreateReview';
 import SignupFormPage from './components/SignupFormModal';
 import Navigation from './components/Navigation';
 
@@ -66,9 +65,6 @@ const router = createBrowserRouter([
         path: "spots/new",
         element: <CreateSpotForm/>
       },
-      {
-        path: "reviews/new",
-        element: <CreateReview/>},
       {
         path: "/reviews/:reviewId/delete",
         element: <DeleteReview/>

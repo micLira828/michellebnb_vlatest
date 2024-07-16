@@ -282,8 +282,6 @@ router.get('/:spotId', async(req, res) => {
    if(!spot){
       return res.status(404).json({message: "Spot couldn't be found"})
    }
-
-   const result = [];
   
      const {Reviews, lat, lng, price, createdAt, updatedAt, ...rest} = await spot.toJSON();
     
@@ -308,10 +306,10 @@ router.get('/:spotId', async(req, res) => {
      prettyRes.lat = parseFloat(lat);
      prettyRes.lng = parseFloat(lng)
      prettyRes.price = parseFloat(price);
-     result.push(prettyRes);
+    
    
  
-    return res.json(result);
+    return res.json(prettyRes);
   
 });
 
@@ -430,7 +428,7 @@ router.post('/', requireAuth, validateSpot, async(req, res) => {
 
     spotRes.createdAt = createdAt.toISOString().replace(/T/,' ').replace(/\..+/,'')
     spotRes.updatedAt = updatedAt.toISOString().replace(/T/, ' ').replace(/\..+/,'')
-
+   
     return res.status(201).json(spotRes);
  });
 

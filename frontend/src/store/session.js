@@ -39,9 +39,12 @@ export const signup = (user) => async (dispatch) => {
       password
     })
   });
-  const data = await response.json();
-  dispatch(setUser(data.user));
-  return response;
+  if(response.ok){
+    const data = await response.json();
+    console.log(data);
+    dispatch(setUser(data.user));
+    return response;
+  }
 };
 // ...
 
@@ -62,6 +65,7 @@ export const login = (user) => async (dispatch) => {
       dispatch(setUser(data.user));
       return response;
     }
+   
 }
 
 
@@ -80,27 +84,19 @@ export const restoreUser = () => async (dispatch) => {
     dispatch(setUser(data.user));
     return response;
   };
- 
+  // ...
 
 const initialState = { user: null };
 
 export const sessionReducer = (state = initialState, action) => {
   switch (action.type) {
-
     case SET_USER:{
       return { ...state, user: action.payload };
     }
     case REMOVE_USER:{
       return { ...state, user: null };
     }
-    case SET_USER: {
-      return { ...state, user: action.payload };
-    }
-    case REMOVE_USER: {
-      return { ...state, user: null };
-    }
-    case SET_ERRORS:
-      {
+    case SET_ERRORS:{
        const errors = {...action.payload}
        return errors;
       }

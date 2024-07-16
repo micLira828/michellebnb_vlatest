@@ -1,0 +1,21 @@
+.reviews, .review{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.ratingsSummary{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 0;
+}
+
+.topRow{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+/* .topRow div:nth-child(1){
+    justify-self: flex-start;
+} */

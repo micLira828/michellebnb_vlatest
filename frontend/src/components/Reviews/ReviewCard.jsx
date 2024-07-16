@@ -14,7 +14,7 @@ const ReviewCard = ({review, spot}) => {
     
     
     return (<div className = "review">
-    <h4>{review.User.firstName}</h4>
+    <h4>{review?.User?.firstName}</h4>
     <h4>{verbalDate}</h4>
      <p>{review.review}</p>
      {sessionUser && sessionUser.id === review.userId ? (<>

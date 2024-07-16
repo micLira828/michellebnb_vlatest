@@ -42,6 +42,7 @@ const UpdateSpotForm = () => {
     console.log(form);
     
     const editedSpot =  await dispatch(updateSpot(form));
+    console.log(editedSpot);
     navigate(`/spots/${editedSpot.id}`);
   }
 

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import * as sessionActions from '../../store/session';
+// import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import './LoginForm.css';
@@ -23,6 +24,23 @@ function LoginFormModal() {
       setButtonOut(false);
     }
   }, [password, credential])
+
+  const logInAsDemo = () => {
+      
+      const user = {"credential": "demo@user.io", "password": "password"}
+      return dispatch(sessionActions.login(user))
+      .then(closeModal)
+      .catch(async (res) => {
+        const data = await res.json();
+        if (data && data.message) {
+          const newErrors = {};
+          newErrors.credential = data.message;
+          setErrors(newErrors);
+        }
+        console.log(errors);
+      });
+  }
+  
 
 
   const handleSubmit = (e) => {
@@ -72,6 +90,7 @@ function LoginFormModal() {
         )}
         <button className = "redRectangular" disabled = {buttonOut?true:false}type="submit">Log In</button>
       </form>
+      <button onClick = {logInAsDemo}>Log In as Demo User</button>
     </>
   );
 }

@@ -615,7 +615,8 @@ router.post('/:spotId/reviews', requireAuth, validateReview, async(req, res) => 
       return res.status(403).json({message: 'Spot with name and address already exists'});
    }
 
-    const userId = req.user.id;
+   console.log(req.user, 'had a little lamb')
+    const userId = req.body.ownerId;
     if(userId !== spot.ownerId){
        return res.status(403).json({message: "Forbidden"})
     }

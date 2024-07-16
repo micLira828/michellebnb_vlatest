@@ -78,6 +78,7 @@ export const getAllSpots = (spotId) => async (dispatch) => {
   
 
 export const removeSpot = (spot) => async(dispatch) => {
+    const spotId = spot.id;
     const options = {
       method: 'DELETE',
       headers: {'Content-Type': 'application/json'},
@@ -87,9 +88,9 @@ export const removeSpot = (spot) => async(dispatch) => {
     const response = await csrfFetch(`/api/spots/${spot.id}`, options);
 
     if(response.ok){
-      const data = await response.toJSON();
+      const data = await response.json();
       console.log('The data is', data)
-      dispatch(deleteSpot(data))
+      dispatch(deleteSpot(spotId))
     }
     else{
       throw response;
@@ -207,14 +208,14 @@ const spotsReducer = (state = initialState, action) => {
     case DELETE_SPOT: {
       newState = {...state}
 
-      let spot = action.payload;
+      let spotId = action.payload;
 
       const newAllSpotsArr = newState.allSpots.filter(sp => {
-         return sp.id !== spot.id;
+         return sp.id !== spotId;
       })
 
       newState.allSpots = newAllSpotsArr;
-      delete newState.byId[spot.id];
+      delete newState.byId[spotId];
       return newState;
     }
     

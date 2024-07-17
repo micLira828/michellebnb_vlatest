@@ -1,6 +1,6 @@
 import {useState} from 'react';
-import {useDispatch} from 'react-redux'
-import {useSelector} from 'react-redux'
+import {useDispatch} from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { postSpot} from '../../store/spot';
 import { postSpotImage} from '../../store/spotImage';
 
@@ -19,13 +19,14 @@ const CreateSpotForm = () => {
     const [image3, setImage3] = useState('');
     const [image4, setImage4] = useState('');
     const [image5, setImage5] = useState('');
+    const navigate = useNavigate();
 
     const dispatch = useDispatch();
 
     const handleSubmit = async(e) => {
         e.preventDefault();
         const SpotImages = [image1, image2, image3, image4, image5]
-        const newArr = [];
+      
 
         const form = {
             name,
@@ -74,7 +75,7 @@ const CreateSpotForm = () => {
 
 
                 <h3>Create a title for your spot</h3>
-                <p>Catch guests' attention with a spot 
+                <p>Catch guests&apos; attention with a spot 
                     title that highlights what makes
                     this place special</p>
                 <input   onChange={(e) => setName(e.target.value)} value = {name}  type = "text"></input>

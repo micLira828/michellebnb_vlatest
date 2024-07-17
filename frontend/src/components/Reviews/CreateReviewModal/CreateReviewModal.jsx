@@ -1,8 +1,8 @@
 import {useState} from 'react';
 import {useDispatch} from 'react-redux'
 import { useModal } from '../../../context/Modal';
-import reviewsReducer, { postReview} from '../../../store/review';
-import { FaRegStar, FaStar } from "react-icons/fa";
+import { postReview} from '../../../store/review';
+import { FaStar } from "react-icons/fa";
 import './CreateReviewModal.css';
 
 const CreateReviewModal = ({spot}) => {

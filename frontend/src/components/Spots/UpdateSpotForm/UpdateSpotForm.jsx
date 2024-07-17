@@ -128,7 +128,7 @@ const UpdateSpotForm = () => {
          
 
           <h3>Create a title for your spot</h3>
-          <p>Catch guests' attention with a spot 
+          <p>Catch guests&apos; attention with a spot 
             title that highlights what makes
             this place special</p>
             <label htmlFor="title">Title</label>

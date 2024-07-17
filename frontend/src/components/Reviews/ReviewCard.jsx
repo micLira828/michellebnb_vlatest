@@ -1,11 +1,10 @@
-import { NavLink } from "react-router-dom"
 import OpenModalButton from "../OpenModalButton";
 import { useModal } from "../../context/Modal";
 import { useSelector } from "react-redux";
 import moment from 'moment'
 import DeleteReviewModal from "../DeleteReviewModal/DeleteReviewModal";
 import UpdateReviewModal from "../UpdateReviewModal";
-const ReviewCard = ({review, spot}) => {
+const ReviewCard = ({review}) => {
 
     const {closeModal} = useModal();
     const sessionUser = useSelector((state) => state.session.user);

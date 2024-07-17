@@ -1,4 +1,3 @@
-import {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux'
 import {removeReview} from '../../store/review';
 import { useModal } from '../../context/Modal';

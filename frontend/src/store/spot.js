@@ -1,4 +1,3 @@
-import { body } from "express-validator";
 import { csrfFetch } from "./csrf";
 
 export const GET_ALL_SPOTS = "spots/getAllSpots";
@@ -50,7 +49,7 @@ export const deleteSpot = (spot) => {
 
 
 // thunk action creator
-export const getAllSpots = (spotId) => async (dispatch) => {
+export const getAllSpots = () => async (dispatch) => {
     const response = await fetch('/api/spots/');
 
 

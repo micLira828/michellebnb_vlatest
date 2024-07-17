@@ -1,4 +1,3 @@
-import { body } from "express-validator";
 import { csrfFetch } from "./csrf";
 
 export const GET_ALL_SPOT_IMAGES = "spots/getAllSpotImages";

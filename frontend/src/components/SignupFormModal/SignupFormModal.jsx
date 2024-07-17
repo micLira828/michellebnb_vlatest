@@ -20,7 +20,7 @@ function SignupFormPage() {
   const [buttonOut, setButtonOut] = useState(true);
 
 
-  if (sessionUser) return <Navigate to="/" replace={true} />;
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -55,6 +55,8 @@ function SignupFormPage() {
         setButtonOut(false);
     }
   }, [email, username, firstName, lastName, password, confirmPassword])
+
+  if (sessionUser) return <Navigate to="/" replace={true} />;
   
   return (
     <>

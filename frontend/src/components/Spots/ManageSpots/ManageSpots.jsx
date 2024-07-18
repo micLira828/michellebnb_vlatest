@@ -25,8 +25,10 @@ const ManageSpots = () => {
       }, [dispatch]);
 
     return (
+        <>
+        <h2>Manage Spots</h2>
         <div className = "spots">
-             {usersSpots ? usersSpots.map((spot) => (
+             {usersSpots.length < 1 ? usersSpots.map((spot) => (
                 <div key = {spot.name}>
                  <Card  spot={spot}/>
                  <Link to = {`/spots/${spot.id}/edit`} ><button>Update Spot</button></Link>
@@ -37,9 +39,10 @@ const ManageSpots = () => {
                  </div>
             )) : (<>
             <h2>Hey there! You have no spots yet!</h2>
-            <Link to = "spots/new">Create one here</Link>
+            <Link to = "/spots/new">Create one here</Link>
             </>)}
         </div>
+        </>
     );
 }
 

@@ -28,7 +28,7 @@ const ManageSpots = () => {
         <>
         <h2>Manage Spots</h2>
         <div className = "spots">
-             {usersSpots.length < 1 ? usersSpots.map((spot) => (
+             {usersSpots.length >= 1 ? usersSpots.map((spot) => (
                 <div key = {spot.name}>
                  <Card  spot={spot}/>
                  <Link to = {`/spots/${spot.id}/edit`} ><button>Update Spot</button></Link>
@@ -37,10 +37,10 @@ const ManageSpots = () => {
                  buttonText = {'Delete Spot'}
                  onModalClose={closeModal}/>
                  </div>
-            )) : (<>
-            <h2>Hey there! You have no spots yet!</h2>
+            )) : (<div className = "noSpots">
+            <h3>Hey there! You have no spots yet!</h3>
             <Link to = "/spots/new">Create one here</Link>
-            </>)}
+            </div>)}
         </div>
         </>
     );

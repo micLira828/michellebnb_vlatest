@@ -96,9 +96,12 @@ let spotImages = spot ? spot.SpotImages : undefined;
           </div>
           <div className="calloutBox">
             <div className = "topRow">
-            <div><FaStar />{spot.avgStarRating.toFixed(1)}</div>
+            <div><FaStar />{spot.avgStarRating > 0.0 ? spot.avgStarRating.toFixed(1): 'New'}</div>
+            {spot.numReviews > 0?
+             <>
             <div>.</div>
             <div> {spot.numReviews} {spot.numReviews === 1 ? 'review' : 'reviews'}</div>
+            </>: ""}
              </div>
              <h4>${spot.price} night</h4>
             <button className = "redRectangular" onClick={() => alert("Feature coming soon!")}>

@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {useDispatch} from 'react-redux'
 import { useModal } from '../../../context/Modal';
 import { postReview} from '../../../store/review';
@@ -9,9 +9,16 @@ const CreateReviewModal = ({spot}) => {
     const [stars, setStars] = useState(0);
     const [review, setReview] = useState('');
     const {closeModal} = useModal();
+    const [buttonOut, setButtonOut] = useState(true);
     
     const dispatch = useDispatch();
    
+    useEffect(() => {
+        setButtonOut(true);
+        if(review.length >= 10 && stars){
+            setButtonOut(false);
+        }
+    }, [review, stars])
   
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -30,7 +37,7 @@ const CreateReviewModal = ({spot}) => {
         <div className = "reviewsModalContainer">
          <h2>How was your stay?</h2>
         <form onSubmit={handleSubmit}>
-            <textarea value = {review}  onChange={(e) => setReview (e.target.value)} placeholder = "Review" type ="text" />
+            <textarea placeholder = "Leave your review here..." value = {review}  onChange={(e) => setReview (e.target.value)} type ="text" />
             <div className = "starsBar">
             {[1, 2, 3, 4, 5].map((star, idx) => {
                 return (   
@@ -49,9 +56,10 @@ const CreateReviewModal = ({spot}) => {
                 )
             })}
             </div>
+            <label>Stars</label>
         
                 {/* <input value = {stars}  onChange={(e) => setStars(e.target.value)} placeholder = "Stars" type ="number"></input> */}
-           <button type = 'submit'>Create a Review</button>
+           <button disabled = {buttonOut ? true: false} type = 'submit'>Submit Your Review</button>
         </form>
         </div>
     )

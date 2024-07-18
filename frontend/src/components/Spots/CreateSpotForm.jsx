@@ -46,7 +46,7 @@ const CreateSpotForm = () => {
             dispatch(postSpotImage(SpotImage, newSpot.id));
         }
 
-        navigate(`spots/${newSpot.id}`);
+        navigate(`/spots/${newSpot.id}`);
     }
 
   

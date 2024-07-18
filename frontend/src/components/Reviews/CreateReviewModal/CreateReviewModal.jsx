@@ -56,6 +56,7 @@ const CreateReviewModal = ({spot}) => {
                 )
             })}
             </div>
+            <label>Stars</label>
         
                 {/* <input value = {stars}  onChange={(e) => setStars(e.target.value)} placeholder = "Stars" type ="number"></input> */}
            <button disabled = {buttonOut ? true: false} type = 'submit'>Submit Your Review</button>

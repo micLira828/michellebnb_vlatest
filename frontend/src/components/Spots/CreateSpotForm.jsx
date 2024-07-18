@@ -12,8 +12,8 @@ const CreateSpotForm = () => {
     const [name, setName] = useState('');
     const [price, setPrice] = useState('');
     const [description, setDescription] = useState('');
-    const [lat, setLat] = useState(0.0);
-    const [lng, setLng] = useState(0.0);
+    const [lat, setLat] = useState('');
+    const [lng, setLng] = useState('');
     const [image1, setImage1] = useState('');
     const [image2, setImage2] = useState('');
     const [image3, setImage3] = useState('');
@@ -63,8 +63,8 @@ const CreateSpotForm = () => {
                 <input value = {country}  onChange={(e) => setCountry (e.target.value)}placeholder = "country" type ="text"></input>
                 <input  value = {city}  onChange={(e) => setCity(e.target.value)} placeholder = "city" type ="text"></input>
                 <input  value = {state}  onChange={(e) => setState(e.target.value)} placeholder = "state" type ="text" ></input>
-                <input  onChange={(e) => setLat(e.target.value)} value = {lat}  placeholder = "latitude" type = "decimal"/>
-                <input  onChange={(e) => setLng(e.target.value)} value = {lng}  placeholder = "longitude" type = "decimal"/>
+                <input  onChange={(e) => setLat(e.target.value)} value = {lat}  placeholder = "lat" type = "decimal"/>
+                <input  onChange={(e) => setLng(e.target.value)} value = {lng}  placeholder = "lng" type = "decimal"/>
 
                 <h3>Describe your place to guests</h3>
                 <p>Mention the best features of your space,

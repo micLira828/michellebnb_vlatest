@@ -2,15 +2,19 @@ import { useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ReviewCard from './ReviewCard';
 import { getSpotReviews } from '../../store/review';
+
 import OpenModalButton from '../OpenModalButton';
-import { useModal } from '../../context/Modal';
+// import { useModal } from '../../context/Modal';
 import { FaStar } from "react-icons/fa";
 import './Reviews.css';
 import CreateReviewModal from './CreateReviewModal';
 const Reviews = ({spot}) => {
   const dispatch = useDispatch();
 
-  const {closeModal} = useModal();
+  // const {closeModal} = useModal();
+
+  // const [showModal, setShowModal] = useState(false);
+  // const ulRef = useRef();
 
   let sessionUser = useSelector((state) => state.session.user);
 
@@ -41,7 +45,7 @@ const Reviews = ({spot}) => {
        && !usersReview ? ( <><OpenModalButton className = "modalRedRectangular"
         modalComponent = {<CreateReviewModal spot = {spot}/>}
         buttonText = {'Post a Review'}
-        onModalClose={closeModal}/></>) 
+       /></>) 
        : ""}
         {spotReviews.map((review) => <ReviewCard review = {review} key = {review.id}/>)}
         {spotReviews.length < 1 ? <p>Be the first to post a review!</p> : ""}

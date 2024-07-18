@@ -41,9 +41,10 @@ const Reviews = ({spot}) => {
        && !usersReview ? ( <><OpenModalButton className = "modalRedRectangular"
         modalComponent = {<CreateReviewModal spot = {spot}/>}
         buttonText = {'Post a Review'}
-        onModalClose={closeModal}/> <p>Be the first to post a review!</p></>) 
+        onModalClose={closeModal}/></>) 
        : ""}
         {spotReviews.map((review) => <ReviewCard review = {review} key = {review.id}/>)}
+        {spotReviews.length < 1 ? <p>Be the first to post a review!</p> : ""}
       </div>
     {/* if user id matches current users if and if there is a user */}
    

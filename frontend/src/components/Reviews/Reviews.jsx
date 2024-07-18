@@ -28,15 +28,20 @@ const Reviews = ({spot}) => {
     <>
       <div className = "reviews">
         <div className = "ratingsSummary">
-          <div className = "avgStarRating"><FaStar />{spot.avgStarRating.toFixed(1)} </div>
-          <div> .</div>
-          <div className = "numberOfReviews">{spot.numReviews} {spot.numReviews === 1 ? 'review' : 'reviews'}</div>
+          <div className = "avgStarRating"><FaStar />{spot.avgStarRating > 0.0 ? spot.avgStarRating.toFixed(1): 'New'} </div>
+          {spot.numReviews > 0 ? 
+          (<>
+           <div> .</div>
+           <div className = "numberOfReviews">{spot.numReviews} {spot.numReviews === 1 ? 'review' : 'reviews'}</div>
+           </>) : ""
+          }
+         
         </div>
        {sessionUser && spot.ownerId !== sessionUser.id 
-       && !usersReview ? ( <OpenModalButton className = "modalRedRectangular"
+       && !usersReview ? ( <><OpenModalButton className = "modalRedRectangular"
         modalComponent = {<CreateReviewModal spot = {spot}/>}
         buttonText = {'Post a Review'}
-        onModalClose={closeModal}/>) 
+        onModalClose={closeModal}/> <p>Be the first to post a review!</p></>) 
        : ""}
         {spotReviews.map((review) => <ReviewCard review = {review} key = {review.id}/>)}
       </div>
